@@ -3,8 +3,6 @@
 
 #include "pieces.c"
 
-bool validateMove();
-
 void movePiece();
 
 void upgradePiece();
