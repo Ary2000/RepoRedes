@@ -51,7 +51,37 @@ bool movePiece(piece *p, int newRow, int newColumn){
 }
 
 bool validatePawnMove(piece *p, int newRow, int newColumn){
-    return true;
+    if (p->white)
+    {
+        if (newColumn != p->column)
+        {
+            return false;
+        }else if (4 == newRow && p->row == 2)
+        {
+            return true;
+        }else if (p->row + 1 == newRow)
+        {
+            return true;
+        }else{
+            return false;
+        }
+        
+        
+        
+    }else{
+        if (newColumn != p->column)
+        {
+            return false;
+        }else if (5 == newRow && p->row == 7)
+        {
+            return true;
+        }else if (p->row - 1 == newRow)
+        {
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
 
 bool validateBishopMove(piece *p, int newRow, int newColumn){
@@ -59,15 +89,36 @@ bool validateBishopMove(piece *p, int newRow, int newColumn){
 }
 
 bool validateKnightMove(piece *p, int newRow, int newColumn){
-    return true;
+    if (p->column+2 == newColumn && (p->row+1==newRow || p->row-1==newRow))
+    {
+        return true;
+    }else if (p->column-2 == newColumn && (p->row+1==newRow || p->row-1==newRow))
+    {
+        return true;
+    }else if (p->row+2 == newRow && (p->column+1==newColumn || p->column-1==newColumn))
+    {
+        return true;
+    }else if (p->row-2 == newRow && (p->column+1==newColumn || p->column-1==newColumn))
+    {
+        return true;
+    }else{
+        return false;
+    }
 }
 
 bool validateRookMove(piece *p, int newRow, int newColumn){
-    return true;
+    return p->column != newColumn && p->row == newRow || p->column == newColumn && p->row != newRow;
 }
 
 bool validateKingMove(piece *p, int newRow, int newColumn){
-    return true;
+    int column = p->column;
+    int row = p->row;
+    if(column == newColumn && row == newRow){
+        return false;
+    }
+    column = column-newColumn;
+    row = row-newRow;
+    return column<2&&row<2&&-2<column&&-2<row;
 }
 
 #endif
