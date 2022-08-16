@@ -197,6 +197,8 @@ void newGame(){
     while (id < 8){
         chessPieces[id] = newPieces(id, whiteLine, column, pt, true);
         chessPieces[id+16] = newPieces(id+16, blackLine, column, pt, false);
+        board[whiteLine][column] = id;
+        board[blackLine][column] = id+16;
         column++;
         id++;
     }
@@ -207,6 +209,8 @@ void newGame(){
     while (id < 10){
         chessPieces[id] = newPieces(id, whiteLine, column, pt, true);
         chessPieces[id+16] = newPieces(id+16, blackLine, column, pt, false);
+        board[whiteLine][column] = id;
+        board[blackLine][column] = id+16;
         column = 8;
         id++;
     }
@@ -215,6 +219,8 @@ void newGame(){
     while (id < 10){
         chessPieces[id] = newPieces(id, whiteLine, column, pt, true);
         chessPieces[id+16] = newPieces(id+16, blackLine, column, pt, false);
+        board[whiteLine][column] = id;
+        board[blackLine][column] = id+16;
         column = 7;
         id++;
     }
@@ -223,16 +229,22 @@ void newGame(){
     while (id < 10){
         chessPieces[id] = newPieces(id, whiteLine, column, pt, true);
         chessPieces[id+16] = newPieces(id+16, blackLine, column, pt, false);
+        board[whiteLine][column] = id;
+        board[blackLine][column] = id+16;
         column = 6;
         id++;
     }
     pt = Queen;
-    chessPieces[id] = newPieces(id, 4, 1, pt, true);
-    chessPieces[id+16] = newPieces(id+16, 4, 8, pt, false);
+    chessPieces[id] = newPieces(id, 4, whiteLine, pt, true);
+    chessPieces[id+16] = newPieces(id+16, 4, blackLine, pt, false);
+    board[whiteLine][column] = id;
+    board[blackLine][column] = id+16;
     id++;
     pt = King;
-    chessPieces[id] = newPieces(id, 5, 1, pt, true);
-    chessPieces[id+16] = newPieces(id+16, 5, 8, pt, false);
+    chessPieces[id] = newPieces(id, 5, whiteLine, pt, true);
+    chessPieces[id+16] = newPieces(id+16, 5, blackLine, pt, false);
+    board[whiteLine][column] = id;
+    board[blackLine][column] = id+16;
 }
 
 bool loadGame();
