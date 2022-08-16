@@ -5,8 +5,74 @@
 #include <stdbool.h>
 #include <math.h> //https://www.aprenderaprogramar.com/index.php?option=com_content&view=article&id=909:funciones-matematicas-en-c-redondeo-valor-absoluto-potencia-trigonometricas-raiz-cuadrada-cu00520f&catid=82&Itemid=210
 
-int board[8][8];
+int board[9][9];
 piece* chessPieces[32];
+
+bool checkColumn(int column, int actualRow, int newRow){
+    bool up = true;
+    bool valid = true;
+    if(actualRow > newRow){
+        up = false;
+    }
+    while (actualRow != newRow)
+    {
+        if (up){
+            actualRow++;
+        }else{
+            actualRow--;
+        }
+        
+        if(board[actualRow][column] != 0){
+            valid = false;
+            break;
+        }
+    }    
+    return valid;
+}
+
+bool checkRow(int row, int actualColumn, int newColumn){
+    bool left = true;
+    bool valid = true;
+    if(actualColumn > newColumn){
+        left = false;
+    }
+    while (actualColumn != newColumn)
+    {
+        if (left){
+            actualColumn--;
+        }else{
+            actualColumn++;
+        }
+        if(board[row][actualColumn] != 0){
+            valid = false;
+            break;
+        }
+    }    
+    return valid;
+}
+
+bool checkDiagonal(int actualRow, int newRow, int actualColumn, int newColumn){
+    bool valid = true;
+    while (actualRow != newRow)
+    {
+        if (actualRow < newRow){
+            actualRow++;
+        }else{
+            actualRow--;
+        }
+        if(actualColumn < newColumn){
+            actualColumn++;
+        }else{
+            actualColumn--;
+        }
+        if(board[actualRow][actualColumn] != 0){
+            valid = false;
+            break;
+        }
+    }
+    
+    return valid;
+}
 
 bool validatePawnMove(piece *p, int newRow, int newColumn, bool rivalPiece){
     if (p->white)
@@ -40,10 +106,10 @@ bool validatePawnMove(piece *p, int newRow, int newColumn, bool rivalPiece){
 }
 
 bool validateBishopMove(piece *p, int newRow, int newColumn){
+    bool valid = checkDiagonal(p->row, newRow, p->column, newColumn);
     int tempRow = p->row - newRow;
     int tempColumn = p->column - newColumn;
-    if (fabs (tempColumn) == fabs (tempRow))
-    {
+    if (fabs (tempColumn) == fabs (tempRow) && valid){
         return true;
     }
     
@@ -69,13 +135,19 @@ bool validateKnightMove(piece *p, int newRow, int newColumn){
 }
 
 bool validateRookMove(piece *p, int newRow, int newColumn){
-    return (p->column != newColumn && p->row == newRow) || (p->column == newColumn && p->row != newRow);
+    bool valid;
+    if(newColumn == p->column){
+        valid = checkColumn(newColumn, p->row, newRow);
+    }else{
+        valid = checkRow(newRow, p->column, newColumn);
+    }
+    return ((p->column != newColumn && p->row == newRow) || (p->column == newColumn && p->row != newRow)) && valid;
 }
 
 bool validateKingMove(piece *p, int newRow, int newColumn){
     int column = p->column-newColumn;
     int row = p->row-newRow;
-    return column<2&&row<2&&-2<column&&-2<row;
+    return column <= 1 && row <= 1 && -1 <= column && -1 <= row;
 }
 
 bool movePiece(piece *p, int newRow, int newColumn){
@@ -114,11 +186,53 @@ bool movePiece(piece *p, int newRow, int newColumn){
     return valid;
 }
 
-void upgradePiece();
+bool upgradePiece();
 
 void newGame(){
-    enum pieceType pt = Queen;
-    chessPieces[0] = newPieces(0, 5, 4, pt, true);
+    enum pieceType pt = Pawn;
+    int id = 0;
+    int column = 1;
+    int whiteLine = 2;
+    int blackLine = 7;
+    while (id < 8){
+        chessPieces[id] = newPieces(id, whiteLine, column, pt, true);
+        chessPieces[id+16] = newPieces(id+16, blackLine, column, pt, false);
+        column++;
+        id++;
+    }
+    whiteLine = 1;
+    blackLine = 8;
+    column = 1;
+    pt = Rook;
+    while (id < 10){
+        chessPieces[id] = newPieces(id, whiteLine, column, pt, true);
+        chessPieces[id+16] = newPieces(id+16, blackLine, column, pt, false);
+        column = 8;
+        id++;
+    }
+    column = 2;
+    pt = Knight;
+    while (id < 10){
+        chessPieces[id] = newPieces(id, whiteLine, column, pt, true);
+        chessPieces[id+16] = newPieces(id+16, blackLine, column, pt, false);
+        column = 7;
+        id++;
+    }
+    column = 3;
+    pt = Bishop;
+    while (id < 10){
+        chessPieces[id] = newPieces(id, whiteLine, column, pt, true);
+        chessPieces[id+16] = newPieces(id+16, blackLine, column, pt, false);
+        column = 6;
+        id++;
+    }
+    pt = Queen;
+    chessPieces[id] = newPieces(id, 4, 1, pt, true);
+    chessPieces[id+16] = newPieces(id+16, 4, 8, pt, false);
+    id++;
+    pt = King;
+    chessPieces[id] = newPieces(id, 5, 1, pt, true);
+    chessPieces[id+16] = newPieces(id+16, 5, 8, pt, false);
 }
 
 bool loadGame();
