@@ -8,12 +8,12 @@
 int board[8][8];
 piece* chessPieces[32];
 
-bool validatePawnMove(piece *p, int newRow, int newColumn){
+bool validatePawnMove(piece *p, int newRow, int newColumn, bool rivalPiece){
     if (p->white)
     {
-        if (newColumn != p->column && p->row +1 == newRow)
+        if ((newColumn-1 == p->column || newColumn+1 != p->column) && p->row +1 == newRow && rivalPiece)
         {
-            return false;
+            return true;
         }else if (4 == newRow && p->row == 2)
         {
             return true;
@@ -82,6 +82,12 @@ bool movePiece(piece *p, int newRow, int newColumn){
     if(p->column == newColumn && p->row == newRow){
         return false;
     }
+    int temp = board[newRow][newColumn];
+    if (temp != 0){
+        if(chessPieces[temp]->white == p->white){
+            return false;
+        }
+    }
     enum pieceType pt = p->pieceType;
     bool valid = false;
     switch (pt)
@@ -102,12 +108,8 @@ bool movePiece(piece *p, int newRow, int newColumn){
         valid = validateKingMove(p, newRow, newColumn);
         break;
     default:
-        valid = validatePawnMove(p, newRow, newColumn);
+        valid = validatePawnMove(p, newRow, newColumn, temp != 0);
         break;
-    }
-    int temp = board[newRow][newColumn];
-    if (temp != 0 && chessPieces[temp]->white == p->white){
-        valid = false;
     }
     return valid;
 }
@@ -120,5 +122,7 @@ void newGame(){
 }
 
 bool loadGame();
+
+void clearBoard();
 
 #endif
