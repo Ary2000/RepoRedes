@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <math.h> //https://www.aprenderaprogramar.com/index.php?option=com_content&view=article&id=909:funciones-matematicas-en-c-redondeo-valor-absoluto-potencia-trigonometricas-raiz-cuadrada-cu00520f&catid=82&Itemid=210
 
+int boardID;
 int board[9][9];
 piece* chessPieces[32];
 
