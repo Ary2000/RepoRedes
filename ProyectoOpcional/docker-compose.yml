@@ -1,0 +1,10 @@
+version: '3'
+services:
+  frontend:
+    build: ./front-end
+    ports:
+      - "4001:3000"
+  api:
+    build: ./flask-server
+    ports:
+      - "80:5000"
