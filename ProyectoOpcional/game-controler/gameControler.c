@@ -56,7 +56,7 @@ bool checkRow(int row, int actualColumn, int newColumn){
 
 bool checkDiagonal(int actualRow, int newRow, int actualColumn, int newColumn){
     bool valid = true;
-    while (actualRow != newRow)
+    while (fabs (actualRow - newRow) != 1)
     {
         if (actualRow < newRow){
             actualRow++;
