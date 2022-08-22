@@ -3,11 +3,13 @@
 
 #include "pieces.c"
 #include <stdbool.h>
+#include <stdio.h>
 #include <math.h> //https://www.aprenderaprogramar.com/index.php?option=com_content&view=article&id=909:funciones-matematicas-en-c-redondeo-valor-absoluto-potencia-trigonometricas-raiz-cuadrada-cu00520f&catid=82&Itemid=210
 
 int boardID;
-int board[9][9];
-piece* chessPieces[32];
+int board[9][9] = {0};
+piece* chessPieces[33];
+bool whiteTurn;
 
 bool checkColumn(int column, int actualRow, int newRow){
     bool up = true;
@@ -34,7 +36,7 @@ bool checkColumn(int column, int actualRow, int newRow){
 bool checkRow(int row, int actualColumn, int newColumn){
     bool left = true;
     bool valid = true;
-    if(actualColumn > newColumn){
+    if(actualColumn < newColumn){
         left = false;
     }
     while (actualColumn != newColumn)
@@ -78,26 +80,38 @@ bool checkDiagonal(int actualRow, int newRow, int actualColumn, int newColumn){
 bool validatePawnMove(piece *p, int newRow, int newColumn, bool rivalPiece){
     if (p->white)
     {
-        if ((newColumn-1 == p->column || newColumn+1 != p->column) && p->row +1 == newRow && rivalPiece)
+        if (p->column != newColumn)
+        {
+            if ((newColumn-1 == p->column || newColumn+1 == p->column) && p->row +1 == newRow && rivalPiece)
+            {
+                return true;
+            }else{
+                return false;
+            }
+            
+        }else if (4 == newRow && p->row == 2 && !rivalPiece)
         {
             return true;
-        }else if (4 == newRow && p->row == 2)
-        {
-            return true;
-        }else if (p->row + 1 == newRow)
+        }else if (p->row + 1 == newRow  && !rivalPiece)
         {
             return true;
         }else{
             return false;
         } 
     }else{
-        if (newColumn != p->column)
+        if (p->column != newColumn)
         {
-            return false;
-        }else if (5 == newRow && p->row == 7)
+            if ((newColumn-1 == p->column || newColumn+1 == p->column) && p->row -1 == newRow && rivalPiece)
+            {
+                return true;
+            }else{
+                return false;
+            }
+            
+        }else if (5 == newRow && p->row == 7  && !rivalPiece)
         {
             return true;
-        }else if (p->row - 1 == newRow)
+        }else if (p->row - 1 == newRow  && !rivalPiece)
         {
             return true;
         }else{
@@ -156,6 +170,7 @@ bool movePiece(piece *p, int newRow, int newColumn){
         return false;
     }
     int temp = board[newRow][newColumn];
+    /*printf("temp = %i \n", temp);*/
     if (temp != 0){
         if(chessPieces[temp]->white == p->white){
             return false;
@@ -184,6 +199,12 @@ bool movePiece(piece *p, int newRow, int newColumn){
         valid = validatePawnMove(p, newRow, newColumn, temp != 0);
         break;
     }
+    if(valid){
+        board[p->row][p->column] = 0;
+        newPosition(p, newRow, newColumn);
+        board[newRow][newColumn] = p->id;
+        whiteTurn = !whiteTurn;
+    }
     return valid;
 }
 
@@ -191,11 +212,12 @@ bool upgradePiece();
 
 void newGame(){
     enum pieceType pt = Pawn;
-    int id = 0;
+    whiteTurn = true;
+    int id = 1;
     int column = 1;
     int whiteLine = 2;
     int blackLine = 7;
-    while (id < 8){
+    while (id <= 8){
         chessPieces[id] = newPieces(id, whiteLine, column, pt, true);
         chessPieces[id+16] = newPieces(id+16, blackLine, column, pt, false);
         board[whiteLine][column] = id;
@@ -207,7 +229,7 @@ void newGame(){
     blackLine = 8;
     column = 1;
     pt = Rook;
-    while (id < 10){
+    while (id <= 10){
         chessPieces[id] = newPieces(id, whiteLine, column, pt, true);
         chessPieces[id+16] = newPieces(id+16, blackLine, column, pt, false);
         board[whiteLine][column] = id;
@@ -217,7 +239,7 @@ void newGame(){
     }
     column = 2;
     pt = Knight;
-    while (id < 10){
+    while (id <= 12){
         chessPieces[id] = newPieces(id, whiteLine, column, pt, true);
         chessPieces[id+16] = newPieces(id+16, blackLine, column, pt, false);
         board[whiteLine][column] = id;
@@ -227,7 +249,7 @@ void newGame(){
     }
     column = 3;
     pt = Bishop;
-    while (id < 10){
+    while (id <= 14){
         chessPieces[id] = newPieces(id, whiteLine, column, pt, true);
         chessPieces[id+16] = newPieces(id+16, blackLine, column, pt, false);
         board[whiteLine][column] = id;
@@ -250,6 +272,15 @@ void newGame(){
 
 bool loadGame();
 
-void clearBoard();
+void clearBoard(){
+    piece* p;
+    for (int i = 0; i < 32; i++)
+    {
+        p = chessPieces[i];
+        chessPieces[i] = NULL;
+        free(p);
+    }
+    
+}
 
 #endif
