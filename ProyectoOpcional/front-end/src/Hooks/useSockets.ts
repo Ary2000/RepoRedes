@@ -1,9 +1,18 @@
-import { useRef } from "react"
-import io, { ManagerOptions, SocketOptions } from 'socket.io-client'
+import { useEffect, useRef } from "react"
+import io, { ManagerOptions, SocketOptions, Socket } from 'socket.io-client'
 
+// https://www.youtube.com/watch?v=-aTWWl4klYE&t=553s&ab_channel=TheNerdyCanuck
 export const useSocket = (
     uri: string,
     opts?: Partial<ManagerOptions & SocketOptions> | undefined
-) => {
-    const { current: socket } = useRef(io(uri, opts))
+): Socket => {
+    const { current: socket } = useRef(io(uri, opts));
+
+    useEffect(() => {
+        return () => {
+            if(socket) socket.close();
+        }
+    }, [socket]);
+
+    return socket;
 }

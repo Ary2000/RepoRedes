@@ -2,8 +2,20 @@ from http import client
 from flask import Flask, render_template, request
 import socket
 import threading
+from flask_cors import CORS
+from elasticsearch import Elasticsearch
 
 app = Flask(__name__)
+CORS(app)
+
+# ELASTIC_PASSWORD = "TKtXX7XfDRHtHcSZ78R1Z6tu"
+
+# CLOUD_ID = "Elasticsearch:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvOjQ0MyQ3MmYzMTdhY2U1NTk0MTEyODNiNDRjMWIzNzdiNDA3NyRjNWMxNTMyZTdmYTE0OWZmOGQxYzJhMTI3NGQ1MWMxMg=="
+
+# client = Elasticsearch(
+#     cloud_id=CLOUD_ID,
+#     basic_auth=("elastic", ELASTIC_PASSWORD)
+# )
 
 # Members API Route
 
@@ -40,7 +52,10 @@ def crearJuego():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # client.info()
+    client.info()
+
+    app.run(host='0.0.0.0', port=PORT)
     #ADDR = (SERVER, PORT)
     #client = socket.socket(socket.AF_INET)
     # client.connect(ADDR)
