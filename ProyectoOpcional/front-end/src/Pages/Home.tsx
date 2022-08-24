@@ -1,12 +1,20 @@
 import React, { useState, useRef } from 'react'
-import e, * as express from 'express'
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 // Tutorial de routing https://www.youtube.com/watch?v=2aumoR0-jmQ&ab_channel=TheNerdyCanuck
 
-export interface HomePageProps {}
+export interface boardInterface {
+  data:{
+    board: {
+      id_board: number,
+      status: number;
+    }
+  }
+}
 
 export const Home = () => {
+  const [mensajeBusqueda, setMensajeBusqueda] = useState("Codigo de partida");
   const navigate = useNavigate();
   let codigo = "";
 
@@ -15,8 +23,21 @@ export const Home = () => {
     navigate('/anfitrion/');
   }
 
-  function unirsePartida() {
-    navigate('/anfitrion/' + codigo)
+  async function unirsePartida() {
+    let resultado: boardInterface = await axios.get("http://127.0.0.1:80/searchBoardAnfitrion/" + codigo).then();
+    switch(resultado.data.board.status) {
+      case -1:{
+        setMensajeBusqueda("Esta tabla no existe");
+        break;
+      }
+      case 0: {
+        setMensajeBusqueda("Esta tabla ya termino");
+        break;
+      }
+      case 1: {
+        navigate('/anfitrion/' + String(resultado.data.board.status))
+      }
+    }
   }
 
   function buscarPartida() {
@@ -34,7 +55,7 @@ export const Home = () => {
         flexDirection: 'column'}}>
         {/* https://images.chesscomfiles.com/uploads/v1/landing/370.8012fd8a.1052x270o.2672a973fb4d.jpg */}
         <img src={require('../imagenes/crazychess.jpg')}/>
-        <h2>Codigo de partida</h2>
+        <h2>{mensajeBusqueda}</h2>
         <input
         onChange={(e) => {
           codigo = e.target.value
