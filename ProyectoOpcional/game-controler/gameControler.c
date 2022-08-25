@@ -197,6 +197,9 @@ bool movePiece(piece *p, int newRow, int newColumn){
         break;
     default:
         valid = validatePawnMove(p, newRow, newColumn, temp != 0);
+        if(valid && newRow == 8){
+            upgradePiece(p);
+        }
         break;
     }
     if(valid){
@@ -208,9 +211,15 @@ bool movePiece(piece *p, int newRow, int newColumn){
     return valid;
 }
 
-bool upgradePiece();
+bool kingAtRisk();
+
+void upgradePiece(piece *p){
+    enum pieceType pt = Queen;
+    promote(p, pt);
+}
 
 void newGame(){
+    boardID = rand() % 1000;
     enum pieceType pt = Pawn;
     whiteTurn = true;
     int id = 1;
