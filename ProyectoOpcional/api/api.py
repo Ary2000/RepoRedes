@@ -1,20 +1,30 @@
 from http import client
+from logging import BASIC_FORMAT
+from sys import flags
 from flask import Flask, render_template, request
 import socket
 import threading
 from flask_cors import CORS
 from elasticsearch import Elasticsearch
+from formatos import BASETABLE
 
 app = Flask(__name__)
 CORS(app)
 
-ELASTIC_PASSWORD = "TKtXX7XfDRHtHcSZ78R1Z6tu"
+# ELASTIC_PASSWORD = "TKtXX7XfDRHtHcSZ78R1Z6tu"
 
-CLOUD_ID = "Elasticsearch:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvOjQ0MyQ3MmYzMTdhY2U1NTk0MTEyODNiNDRjMWIzNzdiNDA3NyRjNWMxNTMyZTdmYTE0OWZmOGQxYzJhMTI3NGQ1MWMxMg=="
+# CLOUD_ID = "Elasticsearch:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvOjQ0MyQ3MmYzMTdhY2U1NTk0MTEyODNiNDRjMWIzNzdiNDA3NyRjNWMxNTMyZTdmYTE0OWZmOGQxYzJhMTI3NGQ1MWMxMg=="
+
+# client = Elasticsearch(
+#     cloud_id=CLOUD_ID,
+#     basic_auth=("elastic", ELASTIC_PASSWORD)
+# )
 
 client = Elasticsearch(
-    cloud_id=CLOUD_ID,
-    basic_auth=("elastic", ELASTIC_PASSWORD)
+    "https://localhost:9200",
+    ca_certs="C:/Users/aryel/OneDrive/Desktop/TEC/http_ca.crt",
+    basic_auth=("elastic", "5X4s2E9ImjCX35eZl97cS1i4"),
+    verify_certs=False
 )
 
 client.info()
@@ -31,9 +41,15 @@ DISCONNECT_MESSAGE = "Disconect!"
 # Este va a ser la ruta donde se va a presentar la pagina principal del api
 
 
-@app.route('/admin/<tabla>')
+@app.route("/prueba/<info>")
+def prueba(info):
+    print("Aqui se paso")
+    pass
+
+
+@app.route("/")
 def index():
-    return render_template("index.html")
+    pass
 
 
 @app.route("/members")
@@ -43,45 +59,64 @@ def members():
 
 @app.route("/crear")
 # Funcion que se encarga de crear un juego
+# https://stackoverflow.com/questions/66049377/insert-new-document-using-python-elastic-client-raises-illegal-argument-exceptio
 def crearJuego():
-    pass
+    bodyTable = BASETABLE
+    res = client.index(index="boards", body=bodyTable)
+    return res._body
 
 
 @app.route("/doesBoardExist/<id_board>")
 def boardExist(id_board):
-    id_board = int(id_board)
-    query = client.search(
-        index="boards",
-        query={
-            "bool": {
-                "must": [
-                    {
-                        "match": {
-                            "board.id_board": id_board
-                        }
-                    },
-                    {
-                        "match": {
-                            "board.status": 1
-                        }
-                    },
-                    {
-                        "match": {
-                            "board.whiteTurn": 1
-                        }
-                    }
-                ]
-            }
-        }
-    )
+    query = client.exists(index="boards", id=id_board)
     if len(query._body["hits"]["hits"]) > 0:
         return query._body["hits"]["hits"][0]["_source"]["board"]["status"]
     return -1
 
+# query = client.search(
+    #     index="boards",
+    #     query={
+    #         "bool": {
+    #             "must": [
+    #                 {
+    #                     "match": {
+    #                         "board.id_board": id_board
+    #                     }
+    #                 },
+    #                 {
+    #                     "match": {
+    #                         "board.status": 1
+    #                     }
+    #                 },
+    #                 {
+    #                     "match": {
+    #                         "board.whiteTurn": 1
+    #                     }
+    #                 }
+    #             ]
+    #         }
+    #     }
+    # )
+
 
 @app.route("/searchBoardAnfitrion/<id_board>")
 def searchBoard(id_board):
-    id_board = int(id_board)
+    query = client.exists(index="boards", id=id_board)
+    if query.body == True:
+        query = client.get(
+            index="boards",
+            id=id_board
+        )
+        return query.body["_source"]
+    return {
+        "board": {
+            "status": -1
+        }
+    }
+
+
+@app.route("/searchBoardInvitado")
+def searchBoardGuest():
     query = client.search(
         index="boards",
         query={
@@ -89,17 +124,12 @@ def searchBoard(id_board):
                 "must": [
                     {
                         "match": {
-                            "board.id_board": id_board
-                        }
-                    },
-                    {
-                        "match": {
                             "board.status": 1
                         }
                     },
                     {
                         "match": {
-                            "board.whiteTurn": 1
+                            "board.whiteTurn": 0
                         }
                     }
                 ]

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Chessboard } from "react-chessboard";
 import { useParams } from "react-router-dom";
@@ -9,6 +9,10 @@ export const Anfitrion = (props) => {
   const colorDesactivado = "red";
   const [mensaje, setMensaje] = useState(mensajeDefault);
   const [positions, setPositions] = useState({});
+
+  useEffect(() => {
+    getBoard();
+  }, []);
 
   const { idTablero } = useParams();
 
@@ -75,8 +79,12 @@ export const Anfitrion = (props) => {
           positionPiece += "e";
           break;
         }
-        case 7: {
+        case 6: {
           positionPiece += "f";
+          break;
+        }
+        case 7: {
+          positionPiece += "g";
           break;
         }
         case 8: {
@@ -89,8 +97,6 @@ export const Anfitrion = (props) => {
     });
     setPositions(positionsTemp);
   }
-
-  getBoard();
 
   return (
     <div

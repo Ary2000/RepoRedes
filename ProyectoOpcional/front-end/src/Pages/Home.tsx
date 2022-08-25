@@ -4,10 +4,16 @@ import axios from "axios";
 
 // Tutorial de routing https://www.youtube.com/watch?v=2aumoR0-jmQ&ab_channel=TheNerdyCanuck
 
+export interface createBoardInterface {
+  data:{
+    _id: string
+  }
+}
+
 export interface boardInterface {
   data:{
     board: {
-      id_board: number,
+      id_board?: number,
       status: number;
     }
   }
@@ -18,9 +24,9 @@ export const Home = () => {
   const navigate = useNavigate();
   let codigo = "";
 
-  function crearPartida() {
-    // Pide el numero del tablero
-    navigate('/anfitrion/');
+  async function crearPartida() {
+    let resultado: createBoardInterface = await axios.get("http://localhost:80/crear").then();
+    navigate('/anfitrion/' + resultado.data._id);
   }
 
   async function unirsePartida() {
@@ -40,8 +46,21 @@ export const Home = () => {
     }
   }
 
-  function buscarPartida() {
-    navigate('/invitado/')
+  async function buscarPartida() {
+    let resultado: boardInterface = await axios.get("http://127.0.0.1:80/searchBoardInvitado/").then();
+    switch(resultado.data.board.status) {
+      case -1:{
+        setMensajeBusqueda("Esta tabla no existe");
+        break;
+      }
+      case 0: {
+        setMensajeBusqueda("Esta tabla ya termino");
+        break;
+      }
+      case 1: {
+        navigate('/invitado/' + String(resultado.data.board.status));
+      }
+    }
   }
 
 
