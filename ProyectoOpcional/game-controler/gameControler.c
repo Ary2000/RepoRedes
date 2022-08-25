@@ -165,17 +165,23 @@ bool validateKingMove(piece *p, int newRow, int newColumn){
     return column <= 1 && row <= 1 && -1 <= column && -1 <= row;
 }
 
-bool movePiece(piece *p, int newRow, int newColumn){
-    if(p->column == newColumn && p->row == newRow){
+bool validateMove(piece *p, int newRow, int newColumn){
+    if(p->white != whiteTurn){
+        return false;
+    }else if(p->column == newColumn && p->row == newRow){
         return false;
     }
     int temp = board[newRow][newColumn];
     /*printf("temp = %i \n", temp);*/
+    //check if occupied and same color
     if (temp != 0){
         if(chessPieces[temp]->white == p->white){
             return false;
         }
+    }else if (8 < newRow || 8 < newColumn || newRow < 1 || newColumn < 1){
+        /* code */
     }
+    
     enum pieceType pt = p->pieceType;
     bool valid = false;
     switch (pt)
@@ -199,18 +205,69 @@ bool movePiece(piece *p, int newRow, int newColumn){
         valid = validatePawnMove(p, newRow, newColumn, temp != 0);
         break;
     }
-    if(valid){
-        board[p->row][p->column] = 0;
-        newPosition(p, newRow, newColumn);
-        board[newRow][newColumn] = p->id;
-        whiteTurn = !whiteTurn;
+    return valid;
+}
+
+bool kingAtRisk(){
+    int adjustment = 0;
+    int pieceId = 1;
+    piece* king;
+    if(!whiteTurn){
+        adjustment = 16;
+        king = chessPieces[16+adjustment];
+    }
+    bool valid = false;
+    piece* p = chessPieces[pieceId];
+    while(pieceId <= 15){
+        switch (p->pieceType){
+        case Bishop:
+            valid = validateBishopMove(p,king->row,king->column);
+            break;
+        case Knight:
+            valid = validateKnightMove(p, king->row,king->column);
+            break;
+        case Rook:
+            valid = validateRookMove(p, king->row,king->column);
+            break;
+        case Queen:
+            valid = validateBishopMove(p, king->row,king->column) || validateRookMove(p, king->row,king->column);
+            break;
+        default:
+            if(whiteTurn && (p->column +1 == king->column || p->column -1 == king->column) && king->row == p->row+1){
+                valid = true;
+            }else if (whiteTurn && fabs(p->column-king->column) == 1 && king->row == p->row-1){
+                valid = true;
+            }
+            break;
+        }
+        pieceId++;
     }
     return valid;
 }
 
-bool upgradePiece();
+void upgradePiece(piece *p){
+    enum pieceType pt = Queen;
+    promote(p, pt);
+}
+
+bool movePiece(piece *p, int newRow, int newColumn){
+    if(board[newRow][newColumn] != 0){
+        piece* enemyPiece = chessPieces[board[newRow][newColumn]];
+        newPosition(enemyPiece, 0, 0);
+    }
+    enum pieceType pt = Pawn;
+    if(p->pieceType == pt && (newRow == 8 || newRow == 1)){
+        upgradePiece(p);
+    }
+    board[p->row][p->column] = 0;
+    newPosition(p, newRow, newColumn);
+    board[newRow][newColumn] = p->id;
+    whiteTurn = !whiteTurn;
+    return kingAtRisk();
+}
 
 void newGame(){
+    boardID = rand() % 1000;
     enum pieceType pt = Pawn;
     whiteTurn = true;
     int id = 1;
