@@ -27,7 +27,7 @@ client = Elasticsearch(
     verify_certs=False
 )
 
-client.info()
+#client.info()
 
 # Members API Route
 
@@ -153,8 +153,11 @@ def searchBoardGuest():
 
 if __name__ == "__main__":
     # client.info()
+    HOST = "localhost"  # The server's hostname or IP address
+    PORT = 6666  # The port used by the server
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((HOST, PORT))
+        s.sendall(b"Hello, world")
+        data = s.recv(1024)
     app.run(host='0.0.0.0', port=PORT)
-    #ADDR = (SERVER, PORT)
-    #client = socket.socket(socket.AF_INET)
-    # client.connect(ADDR)
-    # app.run(debug=True)
