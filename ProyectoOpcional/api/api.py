@@ -87,10 +87,10 @@ def searchBoard(id_board):
             index="boards",
             id=id_board
         )
-        s.sendall("Load Board")
-        s.recv(1024)
-        s.sendall(id_board)
-        s.recv(1024)
+        #s.sendall("Load Board")
+        # s.recv(1024)
+        # s.sendall(id_board)
+        # s.recv(1024)
         return query.body["_source"]
     return {
         "board": {
@@ -121,7 +121,12 @@ def searchBoardGuest():
         }
     )
     if len(query._body["hits"]["hits"]) > 0:
-        return query._body["hits"]["hits"][0]["_source"]
+        return {
+            "_id": query._body["hits"]["hits"][0]["_id"],
+            "board": {
+                "status": query._body["hits"]["hits"][0]["_source"]["board"]["status"]
+            }
+        }
     return {
         "board": {
             "status": -1
@@ -142,7 +147,7 @@ if __name__ == "__main__":
 
     #s.connect((HOST, PORT))
     # client.info()
-    HOST = "localhost"  # The server's hostname or IP address
-    PORT = 6666  # The port used by the server
+    # HOST = "localhost"  # The server's hostname or IP address
+    # PORT = 6666  # The port used by the server
 
     app.run(host='0.0.0.0', port=PORT)

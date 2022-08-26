@@ -16,7 +16,8 @@ export const Anfitrion = (props) => {
 
   const { idTablero } = useParams();
 
-  function onDrop(sourceSquare, targetSquare) {
+  function onDrop(sourceSquare, targetSquare, piece) {
+    if (piece[0] == "b") return false;
     console.log(idTablero);
     return false;
   }

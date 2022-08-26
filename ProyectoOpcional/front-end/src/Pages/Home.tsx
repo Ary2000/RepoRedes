@@ -3,17 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 // Tutorial de routing https://www.youtube.com/watch?v=2aumoR0-jmQ&ab_channel=TheNerdyCanuck
-
-export interface createBoardInterface {
-  data:{
-    _id: string
-  }
-}
-
 export interface boardInterface {
   data:{
+    _id: string,
     board: {
-      id_board?: number,
       status: number;
     }
   }
@@ -25,7 +18,7 @@ export const Home = () => {
   let codigo = "";
 
   async function crearPartida() {
-    let resultado: createBoardInterface = await axios.get("http://localhost:80/crear").then();
+    let resultado: boardInterface = await axios.get("http://localhost:80/crear").then();
     navigate('/anfitrion/' + resultado.data._id);
   }
 
@@ -47,10 +40,10 @@ export const Home = () => {
   }
 
   async function buscarPartida() {
-    let resultado: boardInterface = await axios.get("http://127.0.0.1:80/searchBoardInvitado/").then();
+    let resultado: boardInterface = await axios.get("http://127.0.0.1:80/searchBoardInvitado").then();
     switch(resultado.data.board.status) {
       case -1:{
-        setMensajeBusqueda("Esta tabla no existe");
+        setMensajeBusqueda("No hay tabla disponible");
         break;
       }
       case 0: {
@@ -58,7 +51,7 @@ export const Home = () => {
         break;
       }
       case 1: {
-        navigate('/invitado/' + String(resultado.data.board.status));
+        navigate('/invitado/' + String(resultado.data._id));
       }
     }
   }
