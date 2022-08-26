@@ -16,10 +16,18 @@ export const Anfitrion = (props) => {
 
   const { idTablero } = useParams();
 
-  function onDrop(sourceSquare, targetSquare, piece) {
+  async function onDrop(sourceSquare, targetSquare, piece) {
     if (piece[0] == "b") return false;
-    console.log(idTablero);
-    return false;
+    let res = await axios.get(
+      "http://127.0.0.1:80/verificar/" + sourceSquare + "/" + targetSquare
+    );
+    if (res.data.res == "1") {
+      let tempPositions = positions;
+      delete tempPositions[sourceSquare];
+      tempPositions[targetSquare] = piece;
+      setPositions(tempPositions);
+      return true;
+    } else return false;
   }
 
   async function getBoard() {
@@ -43,7 +51,7 @@ export const Anfitrion = (props) => {
           break;
         }
         case 2: {
-          typePiece += "K";
+          typePiece += "N";
           break;
         }
         case 3: {

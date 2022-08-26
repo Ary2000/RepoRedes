@@ -348,7 +348,7 @@ bool movePiece(int currentRow, int currentColumn, int newRow, int newColumn)
 
 void newGame(/*char boardid[15]*/)
 {
-    //strcpy(boardID, boardid);
+    // strcpy(boardID, boardid);
     enum pieceType pt = Pawn;
     whiteTurn = true;
     status = false;
@@ -403,20 +403,21 @@ void newGame(/*char boardid[15]*/)
     pt = Queen;
     chessPieces[id] = newPieces(id, 4, whiteLine, pt, true);
     chessPieces[id + 16] = newPieces(id + 16, 4, blackLine, pt, false);
+    column--;
     board[whiteLine][column] = id;
     board[blackLine][column] = id + 16;
     id++;
     pt = King;
     chessPieces[id] = newPieces(id, 5, whiteLine, pt, true);
     chessPieces[id + 16] = newPieces(id + 16, 5, blackLine, pt, false);
+    column--;
     board[whiteLine][column] = id;
     board[blackLine][column] = id + 16;
 }
 
 bool loadGame(/*char boardid[15]*/)
 {
-    //strcpy(boardID, boardid);
-
+    // strcpy(boardID, boardid);
 }
 
 void clearBoard()
@@ -538,14 +539,39 @@ int main()
                 clearBoard();
                 break;
             }
-            if(memcmp(recvbuf, "Create Board", sizeof("Create Board"))){
+            if (!memcmp(recvbuf, "Create Board", sizeof("Create Board")))
+            {
                 newGame();
-            }else if (memcmp(recvbuf, "Load Board", sizeof("Load Board"))){
-                loadGame();
-            }else if(memcmp(recvbuf, "Move", sizeof("Move"))){
-                //validateMove();
             }
-            
+            else if (!memcmp(recvbuf, "Load Board", sizeof("Load Board")))
+            {
+                loadGame();
+            }
+            else if (!memcmp(recvbuf, "Move", sizeof("Move")))
+            {
+                res = recv(client, recvbuf, BUFLEN, 0);
+                int currentColumn = (int)recvbuf[0];
+                currentColumn -= (int)'a';
+                currentColumn++;
+                int currentRow = (int)recvbuf[1];
+                currentRow -= (int)'0';
+                sendRes = send(client, recvbuf, res, 0);
+                res = recv(client, recvbuf, BUFLEN, 0);
+                int newColumn = (int)recvbuf[0];
+                newColumn -= (int)'a';
+                newColumn++;
+                int newRow = (int)recvbuf[1];
+                newRow -= (int)'0';
+                bool respuesta = validateMove(currentRow, currentColumn, newRow, newColumn);
+                if (respuesta == true)
+                {
+                    movePiece(currentRow, currentColumn, newRow, newColumn);
+                    sendRes = send(client, "1", 1, 0);
+                }
+                else
+                    sendRes = send(client, "0", 1, 0);
+            }
+
             // echo message back
             sendRes = send(client, recvbuf, res, 0);
             if (sendRes != res)
@@ -594,12 +620,6 @@ int main()
 
     printf("Shutting down.\nGood night.\n");
 
-    return 0;
-}
-
-int main()
-{
-    crearSocker();
     return 0;
 }
 

@@ -1,5 +1,6 @@
 from http import client
 from logging import BASIC_FORMAT
+import string
 from sys import flags
 from flask import Flask, render_template, request
 import socket
@@ -63,11 +64,11 @@ def members():
 # https://stackoverflow.com/questions/66049377/insert-new-document-using-python-elastic-client-raises-illegal-argument-exceptio
 def crearJuego():
     bodyTable = BASETABLE
-    res = client.index(index="boards", body=bodyTable)
     s.sendall(b"Create Board")
     s.recv(1024)
-    s.sendall(res.body._id)
-    s.recr(1024)
+    res = client.index(index="boards", body=bodyTable)
+    # s.sendall(res.body["_id"])
+    # s.recv(1024)
     return res._body
 
 
@@ -134,6 +135,17 @@ def searchBoardGuest():
     }
 
 
+@app.route("/verificar/<sourceSquare>/<destinationSquare>")
+def verifyMove(sourceSquare, destinationSquare):
+    s.sendall(b"Move")
+    s.recv(1024)
+    s.sendall(bytes(sourceSquare, "utf-8"))
+    s.recv(1024)
+    s.sendall(bytes(destinationSquare, "utf-8"))
+    res = s.recv(1024)
+    return {"res": res.decode("utf-8")}
+
+
 # @app.route("admin/<juego>")
 # def conseguirJuego(juego):
 #    # Aqui se escribira el codigo para conseguir el juego deseado
@@ -142,12 +154,9 @@ def searchBoardGuest():
 
 if __name__ == "__main__":
     client.info()
-    # HOST = "localhost"  # The server's hostname or IP address
-    # PORT = 6666  # The port used by the server
+    HOST = "localhost"  # The server's hostname or IP address
+    PORT = 6666  # The port used by the server
 
-    #s.connect((HOST, PORT))
-    # client.info()
-    # HOST = "localhost"  # The server's hostname or IP address
-    # PORT = 6666  # The port used by the server
+    s.connect((HOST, PORT))
 
-    app.run(host='0.0.0.0', port=PORT)
+    app.run(host='0.0.0.0', port=80)
