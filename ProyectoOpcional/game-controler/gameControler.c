@@ -14,10 +14,11 @@
 
 #pragma comment(lib, "ws2_32.lib") // Winsock Library
 
-int boardID;
+char boardID[15];
 int board[9][9] = {0};
 piece *chessPieces[33];
 bool whiteTurn;
+bool status;
 
 #define BUFLEN 512
 #define PORT 6666
@@ -345,11 +346,12 @@ bool movePiece(int currentRow, int currentColumn, int newRow, int newColumn)
     return kingAtRisk();
 }
 
-void newGame()
+void newGame(/*char boardid[15]*/)
 {
-    boardID = rand() % 1000;
+    //strcpy(boardID, boardid);
     enum pieceType pt = Pawn;
     whiteTurn = true;
+    status = false;
     int id = 1;
     int column = 1;
     int whiteLine = 2;
@@ -411,7 +413,11 @@ void newGame()
     board[blackLine][column] = id + 16;
 }
 
-bool loadGame();
+bool loadGame(/*char boardid[15]*/)
+{
+    //strcpy(boardID, boardid);
+
+}
 
 void clearBoard()
 {
@@ -529,9 +535,17 @@ int main()
             {
                 // received quit command
                 printf("Closing connection.\n");
+                clearBoard();
                 break;
             }
-
+            if(memcmp(recvbuf, "Create Board", sizeof("Create Board"))){
+                newGame();
+            }else if (memcmp(recvbuf, "Load Board", sizeof("Load Board"))){
+                loadGame();
+            }else if(memcmp(recvbuf, "Move", sizeof("Move"))){
+                //validateMove();
+            }
+            
             // echo message back
             sendRes = send(client, recvbuf, res, 0);
             if (sendRes != res)
