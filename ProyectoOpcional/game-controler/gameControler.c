@@ -332,6 +332,10 @@ bool movePiece(int currentRow, int currentColumn, int newRow, int newColumn)
     if (board[newRow][newColumn] != 0)
     {
         piece *enemyPiece = chessPieces[board[newRow][newColumn]];
+        if(enemyPiece->pieceType == King){
+            status = true;
+            return false;
+        }
         newPosition(enemyPiece, 0, 0);
     }
     enum pieceType pt = Pawn;
