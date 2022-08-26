@@ -229,7 +229,8 @@ bool validateKingMove(piece *p, int newRow, int newColumn){
     return column <= 1 && row <= 1 && -1 <= column && -1 <= row;
 }
 
-bool validateMove(piece *p, int newRow, int newColumn){
+bool validateMove(int currentRow, int currentColumn, int newRow, int newColumn){
+    piece *p = chessPieces[board[currentRow][currentColumn]];
     if(p->white != whiteTurn){
         return false;
     }else if(p->column == newColumn && p->row == newRow){
@@ -314,7 +315,8 @@ void upgradePiece(piece *p){
     promote(p, pt);
 }
 
-bool movePiece(piece *p, int newRow, int newColumn){
+bool movePiece(int currentRow, int currentColumn, int newRow, int newColumn){
+    piece *p = chessPieces[board[currentRow][currentColumn]];
     if(board[newRow][newColumn] != 0){
         piece* enemyPiece = chessPieces[board[newRow][newColumn]];
         newPosition(enemyPiece, 0, 0);
