@@ -333,7 +333,7 @@ bool movePiece(int currentRow, int currentColumn, int newRow, int newColumn)
     {
         piece *enemyPiece = chessPieces[board[newRow][newColumn]];
         if(enemyPiece->pieceType == King){
-            status = true;
+            status = false;
             return false;
         }
         newPosition(enemyPiece, 0, 0);
@@ -355,7 +355,7 @@ void newGame(/*char boardid[15]*/)
     // strcpy(boardID, boardid);
     enum pieceType pt = Pawn;
     whiteTurn = true;
-    status = false;
+    status = true;
     int id = 1;
     int column = 1;
     int whiteLine = 2;
