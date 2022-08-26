@@ -27,7 +27,9 @@ client = Elasticsearch(
     verify_certs=False
 )
 
-client.info()
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# client.info()
 
 # Members API Route
 
@@ -63,6 +65,10 @@ def members():
 def crearJuego():
     bodyTable = BASETABLE
     res = client.index(index="boards", body=bodyTable)
+    s.sendall(b"Create Board")
+    s.recv(1024)
+    s.sendall(res.body._id)
+    s.recr(1024)
     return res._body
 
 
@@ -73,31 +79,6 @@ def boardExist(id_board):
         return query._body["hits"]["hits"][0]["_source"]["board"]["status"]
     return -1
 
-# query = client.search(
-    #     index="boards",
-    #     query={
-    #         "bool": {
-    #             "must": [
-    #                 {
-    #                     "match": {
-    #                         "board.id_board": id_board
-    #                     }
-    #                 },
-    #                 {
-    #                     "match": {
-    #                         "board.status": 1
-    #                     }
-    #                 },
-    #                 {
-    #                     "match": {
-    #                         "board.whiteTurn": 1
-    #                     }
-    #                 }
-    #             ]
-    #         }
-    #     }
-    # )
-
 
 @app.route("/searchBoardAnfitrion/<id_board>")
 def searchBoard(id_board):
@@ -107,6 +88,10 @@ def searchBoard(id_board):
             index="boards",
             id=id_board
         )
+        s.sendall("Load Board")
+        s.recv(1024)
+        s.sendall(id_board)
+        s.recv(1024)
         return query.body["_source"]
     return {
         "board": {
@@ -152,9 +137,9 @@ def searchBoardGuest():
 
 
 if __name__ == "__main__":
-    # client.info()
+    client.info()
+    # HOST = "localhost"  # The server's hostname or IP address
+    # PORT = 6666  # The port used by the server
+
+    #s.connect((HOST, PORT))
     app.run(host='0.0.0.0', port=PORT)
-    #ADDR = (SERVER, PORT)
-    #client = socket.socket(socket.AF_INET)
-    # client.connect(ADDR)
-    # app.run(debug=True)
