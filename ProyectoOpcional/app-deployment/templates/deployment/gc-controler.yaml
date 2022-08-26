@@ -1,0 +1,21 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gc-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gc-app
+  template:
+    metadata:
+      labels:
+        app: gc-app
+    spec:
+      containers:
+        - name: react-app
+          image: proyectoopcional_game-controller
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 6666

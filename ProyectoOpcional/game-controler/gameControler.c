@@ -8,9 +8,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <windows.h>
+//#include <winsock2.h>
+//#include <ws2tcpip.h>
+//#include <windows.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 
 #pragma comment(lib, "ws2_32.lib") // Winsock Library
 
@@ -435,102 +437,72 @@ void clearBoard()
     }
 }
 
-// https://stackoverflow.com/questions/1981459/using-threads-in-c-on-windows-simple-example
-DWORD WINAPI ThreadFunc(void *data)
-{
-    return 0;
-}
 
 // https://github.com/michaelg29/yt-challenges/blob/master/29%20-%20Winsock/29.1%20-%20Server/main.c
 int main()
 {
     printf("Hello, world!\n");
-    HANDLE thread = CreateThread(NULL, 0, ThreadFunc, NULL, 0, NULL);
     int res, sendRes;
-
-    // INITIALIZATION ===========================
-    WSADATA wsaData; // configuration data
-    res = WSAStartup(MAKEWORD(2, 2), &wsaData);
-    if (res)
-    {
-        printf("Startup failed: %d\n", res);
-        return 1;
-    }
-    // ==========================================
-
-    // SETUP SERVER =============================
-
-    // construct socket
-    SOCKET listener;
-    listener = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (listener == INVALID_SOCKET)
-    {
-        printf("Error with construction: %d\n", WSAGetLastError());
-        WSACleanup();
-        return 1;
-    }
-
-    // bind to address
+    // https://www.geeksforgeeks.org/socket-programming-cc/
+    int server_fd, new_socket, valread;
     struct sockaddr_in address;
+    int opt = 1;
+    int addrlen = sizeof(address);
+    char buffer[1024] = { 0 };
+    char* hello = "Hello from server";
+  
+    // Creating socket file descriptor
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0))
+        == 0) {
+        perror("socket failed");
+        exit(EXIT_FAILURE);
+    }
+  
+    // Forcefully attaching socket to the port 8080
+    if (setsockopt(server_fd, SOL_SOCKET,
+                   SO_REUSEADDR | SO_REUSEPORT, &opt,
+                   sizeof(opt))) {
+        perror("setsockopt");
+        exit(EXIT_FAILURE);
+    }
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = inet_addr(ADDRESS);
+    address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(PORT);
-    res = bind(listener, (struct sockaddr *)&address, sizeof(address));
-    if (res == SOCKET_ERROR)
-    {
-        printf("Bind failed: %d\n", WSAGetLastError());
-        closesocket(listener);
-        WSACleanup();
-        return 1;
+  
+    // Forcefully attaching socket to the port 8080
+    if (bind(server_fd, (struct sockaddr*)&address,
+             sizeof(address))
+        < 0) {
+        perror("bind failed");
+        exit(EXIT_FAILURE);
     }
-
-    // set as a listener
-    res = listen(listener, SOMAXCONN);
-    if (res == SOCKET_ERROR)
-    {
-        printf("Listen failed: %d\n", WSAGetLastError());
-        closesocket(listener);
-        WSACleanup();
-        return 1;
+    if (listen(server_fd, 3) < 0) {
+        perror("listen");
+        exit(EXIT_FAILURE);
     }
-    // ==========================================
-
-    printf("Accepting on %s:%d\n", ADDRESS, PORT);
-
-    // HANDLE A CLIENT ==========================
-
-    // accept client socket
-    SOCKET client;
-    struct sockaddr_in clientAddr;
-    int clientAddrlen;
-    client = accept(listener, NULL, NULL);
-    if (client == INVALID_SOCKET)
-    {
-        printf("Could not accept: %d\n", WSAGetLastError());
-        closesocket(listener);
-        WSACleanup();
-        return 1;
+    if ((new_socket
+         = accept(server_fd, (struct sockaddr*)&address,
+                  (socklen_t*)&addrlen))
+        < 0) {
+        perror("accept");
+        exit(EXIT_FAILURE);
     }
-
-    // get client information
-    getpeername(client, (struct sockaddr *)&clientAddr, &clientAddrlen);
-    printf("Client connected at %s:%d\n", inet_ntoa(address.sin_addr), ntohs(address.sin_port));
 
     // send welcome message
     char *welcome = "Welcome to the server :)";
-    sendRes = send(client, welcome, strlen(welcome), 0);
+    sendRes = send(new_socket, welcome, strlen(welcome), 0);
     if (sendRes != strlen(welcome))
     {
-        printf("Error sending: %d\n", WSAGetLastError());
-        shutdown(client, SD_BOTH);
-        closesocket(client);
+        printf("Error sending a message\n");
+        shutdown(server_fd, SHUT_RDWR);
+        close(new_socket);
     }
 
     // receive messages
     char recvbuf[BUFLEN];
     do
     {
-        res = recv(client, recvbuf, BUFLEN, 0);
+        res = recv(new_socket, recvbuf, BUFLEN, 0);
         if (res > 0)
         {
             recvbuf[res] = '\0';
@@ -553,14 +525,14 @@ int main()
             }
             else if (!memcmp(recvbuf, "Move", sizeof("Move")))
             {
-                res = recv(client, recvbuf, BUFLEN, 0);
+                res = recv(new_socket, recvbuf, BUFLEN, 0);
                 int currentColumn = (int)recvbuf[0];
                 currentColumn -= (int)'a';
                 currentColumn++;
                 int currentRow = (int)recvbuf[1];
                 currentRow -= (int)'0';
-                sendRes = send(client, recvbuf, res, 0);
-                res = recv(client, recvbuf, BUFLEN, 0);
+                sendRes = send(new_socket, recvbuf, res, 0);
+                res = recv(new_socket, recvbuf, BUFLEN, 0);
                 int newColumn = (int)recvbuf[0];
                 newColumn -= (int)'a';
                 newColumn++;
@@ -570,19 +542,18 @@ int main()
                 if (respuesta == true)
                 {
                     movePiece(currentRow, currentColumn, newRow, newColumn);
-                    sendRes = send(client, "1", 1, 0);
+                    sendRes = send(new_socket, "1", 1, 0);
                 }
                 else
-                    sendRes = send(client, "0", 1, 0);
+                    sendRes = send(new_socket, "0", 1, 0);
             }
 
             // echo message back
-            sendRes = send(client, recvbuf, res, 0);
+            sendRes = send(new_socket, recvbuf, res, 0);
             if (sendRes != res)
             {
-                printf("Error sending: %d\n", WSAGetLastError());
-                shutdown(client, SD_BOTH);
-                closesocket(client);
+                printf("Error sending\n");
+                close(new_socket);
                 break;
             }
         }
@@ -594,32 +565,22 @@ int main()
         }
         else
         {
-            printf("Receive failed: %d\n", WSAGetLastError());
+            printf("Receive failed\n");
             break;
         }
     } while (res > 0);
 
     // shutdown client
-    res = shutdown(client, SD_BOTH);
-    if (res == SOCKET_ERROR)
-    {
-        printf("Client shutdown failed: %d\n", WSAGetLastError());
-    }
-    closesocket(client);
+    shutdown(server_fd, SHUT_RDWR);
+    close(new_socket);
 
     // ==========================================
 
     // CLEANUP ==================================
     // shut down server socket
-    closesocket(listener);
+    close(server_fd);
 
-    // cleanup WSA
-    res = WSACleanup();
-    if (res)
-    {
-        printf("Cleanup failed: %d\n", res);
-        return 1;
-    }
+
     // ==========================================
 
     printf("Shutting down.\nGood night.\n");
