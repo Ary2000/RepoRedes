@@ -30,7 +30,6 @@ client = Elasticsearch(
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # client.info()
-
 # Members API Route
 
 HEADER = 64
@@ -142,4 +141,8 @@ if __name__ == "__main__":
     # PORT = 6666  # The port used by the server
 
     #s.connect((HOST, PORT))
+    # client.info()
+    HOST = "localhost"  # The server's hostname or IP address
+    PORT = 6666  # The port used by the server
+
     app.run(host='0.0.0.0', port=PORT)

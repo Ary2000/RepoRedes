@@ -583,4 +583,10 @@ int main()
     return 0;
 }
 
+int main()
+{
+    crearSocker();
+    return 0;
+}
+
 #endif
