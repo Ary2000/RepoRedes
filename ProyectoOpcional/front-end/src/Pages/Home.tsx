@@ -18,12 +18,12 @@ export const Home = () => {
   let codigo = "";
 
   async function crearPartida() {
-    let resultado: boardInterface = await axios.get("http://localhost:80/crear").then();
+    let resultado: boardInterface = await axios.get("http://127.0.0.1:31000/crear").then();
     navigate('/anfitrion/' + resultado.data._id);
   }
 
   async function unirsePartida() {
-    let resultado: boardInterface = await axios.get("http://127.0.0.1:80/searchBoardAnfitrion/" + codigo).then();
+    let resultado: boardInterface = await axios.get("http://127.0.0.1:31000/searchBoardAnfitrion/" + codigo).then();
     switch(resultado.data.board.status) {
       case -1:{
         setMensajeBusqueda("Esta tabla no existe");
@@ -40,7 +40,7 @@ export const Home = () => {
   }
 
   async function buscarPartida() {
-    let resultado: boardInterface = await axios.get("http://127.0.0.1:80/searchBoardInvitado").then();
+    let resultado: boardInterface = await axios.get("http://127.0.0.1:31000/searchBoardInvitado").then();
     switch(resultado.data.board.status) {
       case -1:{
         setMensajeBusqueda("No hay tabla disponible");

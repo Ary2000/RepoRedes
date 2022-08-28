@@ -24,7 +24,7 @@ export const Invitado = (props) => {
 
   async function getBoard() {
     let board = await axios
-      .get("http://127.0.0.1:80/searchBoardAnfitrion/" + idTablero)
+      .get("http://127.0.0.1:31000/searchBoardAnfitrion/" + idTablero)
       .then();
     let pieces = board.data.board.piece;
     let positionsTemp = {};
