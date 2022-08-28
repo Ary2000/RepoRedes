@@ -19,3 +19,4 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 6666
+              protocol: UDP
