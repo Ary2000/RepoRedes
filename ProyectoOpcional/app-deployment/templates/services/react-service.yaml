@@ -5,8 +5,10 @@ metadata:
 spec:
   selector:
     app: react-app
+  type: NodePort
   ports:
-    - protocol: "TCP"
-      port: 443
+    - name: http
+      port: 3000
       targetPort: 3000
-  type: ClusterIP
+      nodePort: 30000
+      protocol: TCP

@@ -1,7 +1,7 @@
 from http import client
 from logging import BASIC_FORMAT
 import string
-from sys import flags
+import sys
 from flask import Flask, render_template, request
 import socket
 import threading
@@ -21,10 +21,17 @@ CORS(app)
 #     basic_auth=("elastic", ELASTIC_PASSWORD)
 # )
 
+
+## Get elastic credentials
+file_name = sys.argv[1]
+with open(file_name) as f:
+    ELASTIC_PASS = f.readline()
+
+
 client = Elasticsearch(
     "https://localhost:9200",
-    ca_certs="C:/Users/aryel/OneDrive/Desktop/TEC/http_ca.crt",
-    basic_auth=("elastic", "5X4s2E9ImjCX35eZl97cS1i4"),
+    ca_certs="/http_ca.crt",
+    basic_auth=("elastic", ELASTIC_PASS),
     verify_certs=False
 )
 
@@ -154,9 +161,10 @@ def verifyMove(sourceSquare, destinationSquare):
 
 if __name__ == "__main__":
     client.info()
+
     HOST = "localhost"  # The server's hostname or IP address
     PORT = 6666  # The port used by the server
-
+    print("Waiting socket connection")
     s.connect((HOST, PORT))
 
     app.run(host='0.0.0.0', port=80)

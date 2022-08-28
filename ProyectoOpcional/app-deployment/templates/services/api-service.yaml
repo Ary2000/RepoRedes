@@ -5,8 +5,10 @@ metadata:
 spec:
   selector:
     app: flask-api
+  type: NodePort
   ports:
-    - protocol: "TCP"
-      port: 8443
+    - name: http
+      port: 5000
       targetPort: 5000
-  type: ClusterIP
+      nodePort: 30001
+      protocol: TCP
