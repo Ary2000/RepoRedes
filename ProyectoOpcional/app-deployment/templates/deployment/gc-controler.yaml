@@ -7,14 +7,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: gc-app
+      app: gc-deployment
   template:
     metadata:
       labels:
-        app: gc-app
+        app: gc-deployment
     spec:
       containers:
-        - name: react-app
+        - name: gc-deployment
           image: proyectoopcional_game-controller
           imagePullPolicy: Never
           ports:
