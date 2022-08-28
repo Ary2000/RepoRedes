@@ -2,6 +2,7 @@ from http import client
 from logging import BASIC_FORMAT
 import string
 import sys
+import os
 from flask import Flask, render_template, request
 import socket
 import threading
@@ -22,16 +23,10 @@ CORS(app)
 # )
 
 
-## Get elastic credentials
-file_name = sys.argv[1]
-with open(file_name) as f:
-    ELASTIC_PASS = f.readline()
-
-
 client = Elasticsearch(
-    "https://localhost:9200",
-    ca_certs="/http_ca.crt",
-    basic_auth=("elastic", ELASTIC_PASS),
+    "https://quickstart-es-default:9200",
+    ca_certs=os.getenv("ELASTIC_CERT"),
+    basic_auth=("elastic", os.getenv("ELASTIC_PASS")),
     verify_certs=False
 )
 
@@ -41,7 +36,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Members API Route
 
 HEADER = 64
-PORT = 80
+PORT = 6666
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
@@ -58,7 +53,7 @@ def prueba(info):
 
 @app.route("/")
 def index():
-    pass
+    return "Welcome to the Flask API"
 
 
 @app.route("/members")
@@ -162,9 +157,9 @@ def verifyMove(sourceSquare, destinationSquare):
 if __name__ == "__main__":
     client.info()
 
-    HOST = "localhost"  # The server's hostname or IP address
+    HOST = "cg-service"  # The server's hostname or IP address
     PORT = 6666  # The port used by the server
     print("Waiting socket connection")
     s.connect((HOST, PORT))
 
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=5000)
