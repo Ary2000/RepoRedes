@@ -51,8 +51,8 @@ Para acceder a kibana, se debe hacer port-forwarding con `kubectl` o hacerlo por
 Luego, va a aparecer un log-in, el usuario es **elastic** y la contraseña puede averiguarse corriendo el siguiente comando: `kubectl get secret quickstart-es-elastic-user -o=jsonpath='{.data.elastic}' | base64 --decode; echo`. Si está en Windows, se recomienda correrlo en una terminal de WSL o de Unix.
 
 Si quiere detener los pods, vaya a la carpeta **db** y corra los siguientes comandos.
-> `docker delete -f elastic.yaml` \
-> `docker delete -f kibana.yaml`
+> `kubectl delete -f elastic.yaml` \
+> `kubectl delete -f kibana.yaml`
 
 #### Creación de imágenes
 
@@ -79,20 +79,20 @@ Lo anterior va a levantar múltiples pods y servicios relacionados al proyecto. 
 Si todo salió bien, le aparecerá el menú principal de la aplicación.
 
 ### Recomendaciones
-1. 
-2. 
-3. 
-4. 
-5. 
-6. 
-7. 
+1. Hacer la integración de kubernetes con las aplicaciones en una etapa temprana para evitar contratiempos por conexiones fallidas.
+2. Medir mejor el tiempo entre etapas para mejorar la etapa de desarrollo del proyecto.
+3. Investigar más las funciones de Kubernetes en cuestiones de redes para conocer lo necesario para las conexiones entre pods para que en el futuro no haya atrasos.
+4. La etapa de investigación de herramientas debe ser de menor tiempo a lo planeado e incluir código inicial para probar lo básico de esas herramientas. 
+5. Utilizar con más frecuencia las ayudas externas (como el profesor) para despejar las dudas en un menor tiempo que tratando de buscarlo en internet por varios días.
+6. Apuntar a una mejor fecha para tener un producto preliminar para luego hacer las respectivas pruebas unitarias ya que, por el tiempo, no se pudieron enfocar en este aspecto.
+7. Coordinar mejor el tiempo entre las asignaciones de otras materias ya que hubieron comflictos en la elaboración de avances para este proyecto.
 8. 
 9. 
 10. 
 
 ### Conclusiones
-1. 
-2. 
+1. Se utilizaron las herramientas de Docker, Helm y Kubernetes para lograr la automatización de varias aplicaciones al levantar pods con varios programas, entre ellos react, flask api, c y elasticsearch.
+2. Se aprendió que Docker es una herramienta muy útil para estandarizar el despliegue de un programa completo ya que este permite correrlo en cualquier computadora que tenga los programas necesarios para usar Docker.
 3. 
 4. 
 5. 
