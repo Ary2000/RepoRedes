@@ -10,14 +10,15 @@ export const Anfitrion = (props) => {
   const [mensaje, setMensaje] = useState(mensajeDefault);
   const [positions, setPositions] = useState({});
 
-  useEffect(() => {
-    getBoard();
-  }, []);
-
   const { idTablero } = useParams();
 
+  useEffect(() => {
+    getBoard().then((actualPositions) => {
+      setPositions(actualPositions);
+    });
+  }, []);
+
   async function onDrop(sourceSquare, targetSquare, piece) {
-    if (piece[0] == "b") return false;
     let res = await axios.get(
       "http://127.0.0.1:31000/verificar/" + sourceSquare + "/" + targetSquare
     );
@@ -104,7 +105,8 @@ export const Anfitrion = (props) => {
       positionPiece += piece.row.toString();
       positionsTemp[positionPiece] = typePiece;
     });
-    setPositions(positionsTemp);
+    return positionsTemp;
+    // setPositions(positionsTemp);
   }
 
   return (
