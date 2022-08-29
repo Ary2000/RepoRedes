@@ -31,7 +31,7 @@ Los comandos se pueden dividir en dos partes: la creación de las imágenes y la
 
 Se va a instalar de primero Elasticsearch y Kibana ya que se ocupan las credenciales de acceso para su uso. Se usará como base la guía [Quickstart](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-quickstart.html) de Elastic Cloud en Kubernetes, pero se van a mostrar los comandos necesarios. Para una explicación más detallada, vea el link anterior. Los siguientes  comandos son para una primera instalación.
 
-> `kubectl create -f https://download.elastic.co/downloads/eck/2.4.0/crds.yaml`
+> `kubectl create -f https://download.elastic.co/downloads/eck/2.4.0/crds.yaml` \
 > `kubectl apply -f https://download.elastic.co/downloads/eck/2.4.0/operator.yaml`
 
 Luego, se usarán los archivos ubicados en la carpeta **db**, elastic.yaml y kibana.yaml. En una terminal, ubíquese en la carpeta **db**, luego haga pull a las imágenes si se requieren.
@@ -51,7 +51,7 @@ Para acceder a kibana, se debe hacer port-forwarding con `kubectl` o hacerlo por
 Luego, va a aparecer un log-in, el usuario es **elastic** y la contraseña puede averiguarse corriendo el siguiente comando: `kubectl get secret quickstart-es-elastic-user -o=jsonpath='{.data.elastic}' | base64 --decode; echo`. Si está en Windows, se recomienda correrlo en una terminal de WSL o de Unix.
 
 Si quiere detener los pods, vaya a la carpeta **db** y corra los siguientes comandos.
-> `docker delete -f elastic.yaml`
+> `docker delete -f elastic.yaml` \
 > `docker delete -f kibana.yaml`
 
 #### Creación de imágenes
