@@ -96,19 +96,19 @@ Si todo salió bien, le aparecerá el menú principal de la aplicación.
 5. Utilizar con más frecuencia las ayudas externas (como el profesor) para despejar las dudas en un menor tiempo que tratando de buscarlo en internet por varios días.
 6. Apuntar a una mejor fecha para tener un producto preliminar para luego hacer las respectivas pruebas unitarias ya que, por el tiempo, no se pudieron enfocar en este aspecto.
 7. Coordinar mejor el tiempo entre las asignaciones de otras materias ya que hubieron comflictos en la elaboración de avances para este proyecto.
-8. Separar el trabajo por funcionalidad ya que hubieron muchas pausas para esperar que un compañero terminara una parte específica
-9. Trabajar con la arquitectura lo más parecida posible a la que van a correr los pods para evitar problemas durante deployment
-10. Usar mejor la seguridad que provee Elasticsearch
+8. Separar el trabajo por funcionalidad ya que hubieron muchas pausas para esperar que un compañero terminara una parte específica.
+9. Trabajar con la arquitectura lo más parecida posible a la que van a correr los pods para evitar problemas durante deployment.
+10. Usar mejor la seguridad que provee Elasticsearch.
 
 ### Conclusiones
 
 1. Se utilizaron las herramientas de Docker, Helm y Kubernetes para lograr la automatización de varias aplicaciones al levantar pods con varios programas, entre ellos react, flask api, c y elasticsearch.
 2. Se aprendió que Docker es una herramienta muy útil para estandarizar el despliegue de un programa completo ya que este permite correrlo en cualquier computadora que tenga los programas necesarios para usar Docker.
-3. Flask es una herramienta que hace la creación de una RESTful API increiblemente sencilla
-4. Los sockets nos permiten la comunicación de varios programas que estan incluso en diferentes lenguajes sencilla
-5. Libcurl nos permitira usar restful apis que no tienen alguna biblioteca para armar las conexiones, hacerlas de manera manual
-6.
-7.
-8.
-9.
-10.
+3. Flask es una herramienta que hace la creación de una RESTful API increiblemente sencilla.
+4. Los sockets nos permiten la comunicación de varios programas que estan incluso en diferentes lenguajes sencilla.
+5. Libcurl nos permitira usar restful apis que no tienen alguna biblioteca para armar las conexiones, hacerlas de manera manual.
+6. Se observó la facilidad de levantar una estructura completa de software por medio de pods ya que estos son reemplazables y fácilmente instalados por medio de kubernetes y helms. 
+7. Se vio que los Secrets de Kubernetes facilitaron el manejo de credenciales personales como las de ElasticSearch sin tener que revelarlos de forma obvia.
+8. Los servicios que se usan para comunicar varias réplicas de pods son servibles para coordinar las cargas de cada aplicación y asegurar su soporte a fallas.
+9. Se lograron levantar diferentes pods con sus propios servicios para que puedan ser levantados en una máquina local y funcionar como si se hubiera instalado en la propia máquina.
+10. Lastimosamente, no se logró completar la funcionalidad completa ya que faltan las interacciones entre el game controller y la base de datos por medio de curl debido a que no se logró implementar su uso.
