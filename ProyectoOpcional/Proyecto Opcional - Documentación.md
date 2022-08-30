@@ -144,9 +144,9 @@ Este no se encuentra implementado.
 
 ### Referencias bibliográficas
 
-https://www.geeksforgeeks.org/socket-programming-cc/
-https://www.aprenderaprogramar.com/index.php?option=com_content&view=article&id=909:funciones-matematicas-en-c-redondeo-valor-absoluto-potencia-trigonometricas-raiz-cuadrada-cu00520f&catid=82&Itemid=210
-https://curl.se/libcurl/c/http3.html
-https://stackoverflow.com/questions/66049377/insert-new-document-using-python-elastic-client-raises-illegal-argument-exceptio
-https://www.youtube.com/watch?v=2aumoR0-jmQ&ab_channel=TheNerdyCanuck
+https://www.geeksforgeeks.org/socket-programming-cc/ \
+https://www.aprenderaprogramar.com/index.php?option=com_content&view=article&id=909:funciones-matematicas-en-c-redondeo-valor-absoluto-potencia-trigonometricas-raiz-cuadrada-cu00520f&catid=82&Itemid=210 \
+https://curl.se/libcurl/c/http3.html \
+https://stackoverflow.com/questions/66049377/insert-new-document-using-python-elastic-client-raises-illegal-argument-exceptio \
+https://www.youtube.com/watch?v=2aumoR0-jmQ&ab_channel=TheNerdyCanuck \
 https://daveceddia.com/usestate-hook-examples/
