@@ -87,6 +87,35 @@ Ahora, se van a levantar los pods en Kubernetes con las imágenes apropiadas uti
 Lo anterior va a levantar múltiples pods y servicios relacionados al proyecto. Espere unos segundos y para utilizar CrazyChess, abra su navegador y escriba `http://localhost:30000/` para abrir la UI. Si desea ver la API, la url es la siguiente: `http://localhost:31000/`
 Si todo salió bien, le aparecerá el menú principal de la aplicación.
 
+### Pruebas Unitarias
+
+#### Creación de PODS
+
+Los pods se crean de manera exitosa y si uno muere estos seran reemplazados por sus replicas.
+![Crear de PODs](./assets/Prueba%20Unitaria%20Creacion%20de%20PODs.png)
+
+#### Creación de tabla
+
+El anfitrión puede crear una tabla cuando quiera.
+![Creación de tabla](./assets/Prueba%20Unitaria%20Creaci%C3%B3n%20de%20tabla.png)
+
+#### Movimiento
+
+El anfotrión puede realizar el primer movimiento pero después de eso ya no se puede avanzar
+![Movimiento](./assets/Prueba%20Unitaria%20Realizar%20movimiento.png)
+
+#### Buscar partida
+
+El buscar partida se encuentra incompleto por falta de actualizar los documentos en elasticsearch
+
+#### Unirse a partida
+
+El unirse a una partida ya existente se encuentra incompleto al cargar la partida, si se asegura de no cargar tablas que no existan o que se encuentran terminadas
+
+#### Buscar partida como anfitrión/invitado
+
+Este no se encuentra implementado.
+
 ### Recomendaciones
 
 1. Hacer la integración de kubernetes con las aplicaciones en una etapa temprana para evitar contratiempos por conexiones fallidas.
@@ -107,7 +136,7 @@ Si todo salió bien, le aparecerá el menú principal de la aplicación.
 3. Flask es una herramienta que hace la creación de una RESTful API increiblemente sencilla.
 4. Los sockets nos permiten la comunicación de varios programas que estan incluso en diferentes lenguajes sencilla.
 5. Libcurl nos permitira usar restful apis que no tienen alguna biblioteca para armar las conexiones, hacerlas de manera manual.
-6. Se observó la facilidad de levantar una estructura completa de software por medio de pods ya que estos son reemplazables y fácilmente instalados por medio de kubernetes y helms. 
+6. Se observó la facilidad de levantar una estructura completa de software por medio de pods ya que estos son reemplazables y fácilmente instalados por medio de kubernetes y helms.
 7. Se vio que los Secrets de Kubernetes facilitaron el manejo de credenciales personales como las de ElasticSearch sin tener que revelarlos de forma obvia.
 8. Los servicios que se usan para comunicar varias réplicas de pods son servibles para coordinar las cargas de cada aplicación y asegurar su soporte a fallas.
 9. Se lograron levantar diferentes pods con sus propios servicios para que puedan ser levantados en una máquina local y funcionar como si se hubiera instalado en la propia máquina.

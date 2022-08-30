@@ -34,7 +34,7 @@ export const Home = () => {
         break;
       }
       case 1: {
-        navigate('/anfitrion/' + String(resultado.data.board.status))
+        navigate('/anfitrion/' + String(resultado.data._id))
       }
     }
   }
