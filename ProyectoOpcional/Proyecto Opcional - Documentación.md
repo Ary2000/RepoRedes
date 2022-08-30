@@ -141,3 +141,12 @@ Este no se encuentra implementado.
 8. Los servicios que se usan para comunicar varias réplicas de pods son servibles para coordinar las cargas de cada aplicación y asegurar su soporte a fallas.
 9. Se lograron levantar diferentes pods con sus propios servicios para que puedan ser levantados en una máquina local y funcionar como si se hubiera instalado en la propia máquina.
 10. Lastimosamente, no se logró completar la funcionalidad completa ya que faltan las interacciones entre el game controller y la base de datos por medio de curl debido a que no se logró implementar su uso.
+
+### Referencias bibliográficas
+
+https://www.geeksforgeeks.org/socket-programming-cc/
+https://www.aprenderaprogramar.com/index.php?option=com_content&view=article&id=909:funciones-matematicas-en-c-redondeo-valor-absoluto-potencia-trigonometricas-raiz-cuadrada-cu00520f&catid=82&Itemid=210
+https://curl.se/libcurl/c/http3.html
+https://stackoverflow.com/questions/66049377/insert-new-document-using-python-elastic-client-raises-illegal-argument-exceptio
+https://www.youtube.com/watch?v=2aumoR0-jmQ&ab_channel=TheNerdyCanuck
+https://daveceddia.com/usestate-hook-examples/

@@ -12,12 +12,13 @@ export const Anfitrion = (props) => {
 
   const { idTablero } = useParams();
 
+  // Carga las posiciones de las fichas en la tabla
   useEffect(() => {
     getBoard().then((actualPositions) => {
       setPositions(actualPositions);
     });
   }, []);
-
+  // Revisa si el movimiento hecho es lega;
   async function onDrop(sourceSquare, targetSquare, piece) {
     let res = await axios.get(
       "http://127.0.0.1:31000/verificar/" + sourceSquare + "/" + targetSquare
@@ -30,7 +31,8 @@ export const Anfitrion = (props) => {
       return true;
     } else return false;
   }
-
+  // Consigue los datos de la tabla en elasticsearch para poder cargar
+  // las fichas bien
   async function getBoard() {
     let board = await axios
       .get("http://127.0.0.1:31000/searchBoardAnfitrion/" + idTablero)
