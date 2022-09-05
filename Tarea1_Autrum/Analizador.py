@@ -7,9 +7,12 @@ from scipy.fftpack import fft
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from tkinter import messagebox
+from zipfile import ZipFile
+import json
+import os
 
-filename = "output.wav"
-
+default_filename_wav = "output.wav"
+default_filename_json = "puntos.json"
 class Recorder_UI:
     def __init__(self):
         self.ui = tk.Tk()
@@ -95,7 +98,7 @@ class Analizer:
         self.p = None
 
         self.window = Recorder_UI()
-        self.window.buttons[0].configure(command = lambda: self.record(filename))
+        self.window.buttons[0].configure(command = lambda: self.record(default_filename_wav))
         self.window.buttons[1].configure(command = lambda: self.pause())
         self.window.buttons[2].configure(command = lambda: self.unpause())
         self.window.buttons[3].configure(command = lambda: self.stop())
@@ -148,8 +151,8 @@ class Analizer:
         self.p.terminate()
         print('Finished recording')
         self.window.playerlabel['text'] = 'Finished recording, in seconds the output.wav will be available'
-        self.save_file(filename, self.frames, self.p)
-        self.play(filename)
+        self.save_file(default_filename_wav, self.frames, self.p)
+        self.play(default_filename_wav)
 
     
     def save_file(self, filename, frames, stream):
@@ -159,6 +162,41 @@ class Analizer:
         wf.setsampwidth(stream.get_sample_size(self.sample_format))
         wf.setframerate(self.fs)
         wf.writeframes(b''.join(frames))
+        wf.close()
+
+    def create_atm_file(self, filename):
+        wf = wave.open(filename, 'rb')
+
+        data = wf.readframes(self.chunk)
+
+        fft_list = []
+        audio_list = []
+
+        while len(data) > 0:
+            data_int = struct.unpack(str(self.chunk) + 'h', data)
+            y_fft = fft(data_int)
+
+            audio_list.append(data_int)
+            fft_list.append((np.abs(y_fft[0:self.chunk]) * 2 / (256 * self.chunk)).tolist()) # de np.array a array
+
+            data = wf.readframes(self.chunk)
+        
+        data_json = {
+              "puntosFFT": fft_list,
+              "puntosAudio": audio_list
+        }
+
+        data_serialized = json.dumps(data_json, indent=2)
+        with open(default_filename_json, 'w') as f:
+            f.write(data_serialized)
+            print("New json file is created")
+        print()
+        with ZipFile(filename[:len(filename)-4]+'.atm','w') as zip:
+            # writing each file one by one
+            zip.write(filename) 
+            zip.write(default_filename_json)
+
+        os.remove(default_filename_json)
         wf.close()
 
     def play(self, file):
@@ -192,6 +230,9 @@ class Analizer:
 
             p.terminate()
 
+            self.create_atm_file(file)
+            wf.close()
+
         except FileNotFoundError:
             messagebox.showinfo("Error", "No existe el archivo puesto. Formato name.wav")
 
@@ -201,4 +242,3 @@ if __name__ == "__main__":
     channels = 1 # canal stereo
     rate = 44100
     analizer = Analizer(chunk, sample_format, channels, rate)
-
