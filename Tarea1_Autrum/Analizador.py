@@ -10,6 +10,8 @@ from tkinter import messagebox
 from zipfile import ZipFile
 import json
 import os
+from queue import Queue
+from threading import Thread
 
 default_filename_wav = "output.wav"
 default_filename_json = "puntos.json"
@@ -49,12 +51,12 @@ class Recorder_UI:
 
         x = np.arange(0, 2 * chunk, 2)
         self.line, = ax.plot(x, np.random.rand(chunk), '-')
-        ax.set_ylim(-1*chunk, chunk)
+        ax.set_ylim(0, 255)
         ax.set_xlim(0, chunk)
 
         x_fft = np.linspace(0, rate, chunk)
         self.line_fft, = ax2.semilogx(x_fft, np.random.rand(chunk), '-')
-        #ax2.set_xlim(20, rate)
+        ax2.set_xlim(20, rate/2)
         
         graph1 = FigureCanvasTkAgg(self.fig, self.ui)
         graph1.get_tk_widget().grid(row=2, column=1)
@@ -94,6 +96,7 @@ class Analizer:
         self.stream = None
         self.stop_callback = False
         self.data = b''
+        self.queue = Queue()
 
         self.p = None
 
@@ -109,7 +112,9 @@ class Analizer:
 
     def callback(self, in_data, frame_count, time_info, status):
         self.frames.append(in_data)
+        self.queue.put(in_data)
         return (in_data, pyaudio.paContinue)
+        
 
     # https://www.youtube.com/watch?v=jbKJaHw0yo8
     def record(self, filename):
@@ -128,7 +133,29 @@ class Analizer:
 
         self.frames = []  # Initialize array to store frames
         self.stream.start_stream()
+
+        self.plot_thread = Thread(target=self.graph_plot, args=(self.queue,))
+        self.plot_thread.start()
     
+    def graph_plot(self, queue):
+        try: 
+            while self.stream and self.stream.is_active():
+                if queue.empty():
+                    continue
+                data = queue.get()
+                data_int = struct.unpack(str(self.chunk) + 'h', data)
+                y_fft = fft(data_int)
+
+                self.window.line.set_ydata(data_int)
+                self.window.line_fft.set_ydata(np.abs(y_fft[0:self.chunk]) * 2 / (256 * self.chunk))
+
+                self.window.fig.canvas.draw()
+                self.window.fig.canvas.flush_events()
+                queue.task_done()
+        except OSError:
+            print("Retornar")
+            return 
+
     def pause(self):
         self.stream.stop_stream()
         self.window.pause_button()
@@ -144,9 +171,9 @@ class Analizer:
         print("Stopping --------------------------------------------------")
         self.window.stop_button()
         # Stop and close the stream 
-        #while self.stream.is_active():
-        #    time.sleep(0.1)
+
         self.stream.stop_stream()
+
         self.stream.close()
         self.p.terminate()
         print('Finished recording')
@@ -173,7 +200,7 @@ class Analizer:
         audio_list = []
 
         while len(data) > 0:
-            data_int = struct.unpack(str(self.chunk) + 'h', data)
+            data_int = struct.unpack(str(self.chunk) + 'h', data) 
             y_fft = fft(data_int)
 
             audio_list.append(data_int)
