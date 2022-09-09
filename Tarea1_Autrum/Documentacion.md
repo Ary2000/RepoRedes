@@ -1,7 +1,7 @@
 # Instituto Tecnológico de Costa Rica  
 ## Escuela de Computación  
-## Redes GR 2  
-## Tarea Corta 1: ¿Por qué las voces de los integrantes son diferentes?  
+## IC 7602 - Redes - GR 2  
+## Tarea Corta 1: Autrum
 ## Profesor Gerardo Nereo Campos Araya  
 ## Estudiantes
 
@@ -9,7 +9,7 @@
 - Isaac David Ortega Arguedas | 2018189196
 - Zhong Jie Liu Guo | 2018319114
 
-## Fecha de Entrega 8/9/2022
+## Fecha de Entrega 9/9/2022
 ---
 
 ## Objetivos
@@ -51,10 +51,14 @@ Para correr el programa deseado abralo en su editor de preferencia y luego ejecu
 * Pause: pausa la grabación.
 * Unpause: reanua la grabación
 * Stop: terminar la grabación
+* Select a file name(.wav): habre una nueva ventana con la cual se puede buscar un archivo .wav a analizar.
 ### Reproductor
+Una vez se corra el programa, este leerá los datos del archivo output.atm, archivo generado tras analizar un archivo .wav. Con los datos leidos reproducirá el audio guardado y al mismo tiempo mostrará en una nueva los gráficos en dominio del tiempo y dominio de frecuencia.
 ## ¿Por qué las voces de los integrantes son diferentes?
 
 Las voces de las personas son diferentes porque no todas llegan a las mismas notas, para esto esta el concepto de rango de voz, algunos pueden llegar a notas más graves mientras otros llegan a notas más agudas.
+
+<div style="page-break-after: always;"></div>
 
 ## Bibliografia
 Adi's Technical Aid. (10 de setiembre del 2021). *Play audios using PYAUDIO || PYAUDIO || PYAUDIO tutorial || Adi's Technical Aid* [Video]. YouTube. https://www.youtube.com/watch?v=fVJTrcEqgIo
@@ -71,5 +75,5 @@ Python Tutorial. (S.F.). *Tkinter Open File Dialog*. https://www.pythontutorial.
 
 Stackoverflow. (febrero del 2022). *Python: Open file in zip without temporarily extracting it*. https://stackoverflow.com/questions/19371860/python-open-file-in-zip-without-temporarily-extracting-it
 
-W3 Schools. (). *Python JSON*. https://www.w3schools.com/python/python_json.asp
+W3 Schools. (S.F.). *Python JSON*. https://www.w3schools.com/python/python_json.asp
 
