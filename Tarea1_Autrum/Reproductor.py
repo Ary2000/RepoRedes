@@ -15,16 +15,19 @@ from tkinter import TclError
 # https://www.geeksforgeeks.org/working-zip-files-python/
 # https://stackoverflow.com/questions/19371860/python-open-file-in-zip-without-temporarily-extracting-it
 default_file_name = "output.atm"
-
-with ZipFile(default_file_name, 'r') as zip:
-    for info in zip.infolist():
-        print(info.filename)
-        print('\tModified:\t' + str(datetime.datetime(*info.date_time)))
-        print('\tSystem:\t\t' + str(info.create_system) +
-              '(0 = Windows, 3 = Unix)')
-        print('\tZIP version:\t' + str(info.create_version))
-        print('\tCompressed:\t' + str(info.compress_size) + ' bytes')
-        print('\tUncompressed:\t' + str(info.file_size) + ' bytes')
+try:
+    with ZipFile(default_file_name, 'r') as zip:
+        for info in zip.infolist():
+            print(info.filename)
+            print('\tModified:\t' + str(datetime.datetime(*info.date_time)))
+            print('\tSystem:\t\t' + str(info.create_system) +
+                  '(0 = Windows, 3 = Unix)')
+            print('\tZIP version:\t' + str(info.create_version))
+            print('\tCompressed:\t' + str(info.compress_size) + ' bytes')
+            print('\tUncompressed:\t' + str(info.file_size) + ' bytes')
+except:
+    print("Archivo output.atm no existe")
+    exit()
 
 file = ""
 jsonFile = ""
@@ -77,9 +80,14 @@ data = wf.readframes(CHUNK)
 fig.show()
 
 frame_count = 0
-while len(data) > 0:
+indice = 0
+while len(data) > 0 and indice < len(puntosAudio):
     stream.write(data)
     data = wf.readframes(CHUNK)
+    line.set_ydata(puntosAudio[indice])
+    line_fft.set_ydata(puntosFFT[indice])
+
+    indice += 1
 
     # update figure canvas
     try:
@@ -97,24 +105,25 @@ p.terminate()
 
 class Player:
     def __init__(self, file_name, CHUNK):
-        self.file_name = file_name #nombre del archivo *.atm
-        self.WAV_name = (file_name[:len(file_name)-4]+'.wav') #nombre del archivo *.wav
+        self.file_name = file_name  # nombre del archivo *.atm
+        # nombre del archivo *.wav
+        self.WAV_name = (file_name[:len(file_name)-4]+'.wav')
         self.WAVfile = None
         self.JSONfile = None
-        self.json = None #json from the json file
+        self.json = None  # json from the json file
         self.CHUNK = CHUNK
 
-    #carga los datos almacenados en el archivo .atm
+    # carga los datos almacenados en el archivo .atm
     def loadFile(self):
         with ZipFile(self.file_name, 'r') as zip:
             self.WAVfile = zip.open(self.WAV_name)
             self.JSONfile = zip.open("puntos.json")
 
-    #carga los datos almacenados en el archivo .json que estaba dentro del .atm
+    # carga los datos almacenados en el archivo .json que estaba dentro del .atm
     def loadJSON(self):
         self.json = json.load(self.JSONfile)
 
-    #reproducir el .wav cargado del .atm
+    # reproducir el .wav cargado del .atm
     def play(self):
         wf = wave.open(self.WAVfile, 'rb')
         p = pyaudio.PyAudio()
