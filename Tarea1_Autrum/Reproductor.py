@@ -1,3 +1,4 @@
+import queue
 from zipfile import ZipFile
 import datetime
 import pyaudio
@@ -6,10 +7,14 @@ import json
 import matplotlib.pyplot as plt
 import numpy as np
 from tkinter import TclError
+from queue import Queue
+import threading
 
 # https://www.geeksforgeeks.org/working-zip-files-python/
 # https://stackoverflow.com/questions/19371860/python-open-file-in-zip-without-temporarily-extracting-it
 default_file_name = "output.atm"
+
+amplitud = 2**15
 
 # Se verifica si el archivo output.atm existe
 try:
@@ -52,13 +57,13 @@ fig, (ax, ax2) = plt.subplots(2, figsize=(15, 8))
 
 # Se le dan atributos a las gráficas
 x = np.arange(0, 2 * chunk, 2)
-xf = np.linspace(0, rate, chunk)     # frequencies (spectrum)
+xf = np.linspace(0, rate, chunk)
 line, = ax.plot(x, np.random.rand(chunk), '-', lw=2)
 ax.set_title('AUDIO WAVEFORM')
 ax.set_xlabel('samples')
 ax.set_ylabel('volume')
-ax.set_ylim(0, 255)
-ax.set_xlim(0, chunk)
+ax.set_ylim(-amplitud, amplitud)
+ax.set_xlim(0, chunk*2)
 plt.setp(ax, xticks=[0, chunk, 2 * chunk], yticks=[0, 128, 255])
 x_fft = np.linspace(0, rate, chunk)
 line_fft, = ax2.semilogx(xf, np.random.rand(chunk), '-', lw=2)
@@ -77,13 +82,14 @@ fig.show()
 
 frame_count = 0
 indice = 0
+
 # Loop que se encargara de reproducir el sonido y
 # dibujar las graficas
-while len(data) > 0 and indice < len(puntosAudio):
-    stream.write(data)
-    data = wf.readframes(chunk)
+while indice < len(puntosAudio) and indice < len(puntosAudio):
     line.set_ydata(puntosAudio[indice])
     line_fft.set_ydata(puntosFFT[indice])
+    stream.write(data)
+    data = wf.readframes(chunk)
 
     indice += 1
 
@@ -95,6 +101,7 @@ while len(data) > 0 and indice < len(puntosAudio):
 
     except TclError:
         break
+
 stream.stop_stream()
 stream.close()
 p.terminate()
