@@ -61,6 +61,10 @@ Adi's Technical Aid. (10 de setiembre del 2021). *Play audios using PYAUDIO || P
 
 Code With Aarohi. (18 de abril del 2020). *Record and Play Audios Using PyAudio* [Video]. YouTube. https://www.youtube.com/watch?v=jbKJaHw0yo8
 
+Mark Jay. (9 de setiembre del 2017). *Let's Build an Audio Spectrum Analizer i Python! (pt. 1) the waveform viewer*. Youtube. https://www.youtube.com/watch?v=AShHJdSIxkY
+
+Mark Jay. (10 de setiembre del 2017). *Let's Build an Audio Spectrum Analizer i Python! (pt. 2) the spectrum viewer*. Youtube. https://www.youtube.com/watch?v=jbKJaHw0yo8
+
 Nikhil Kumar. (22 de julio del 2018). *Working with zip files in Python*. GeeksforGeeks. https://www.geeksforgeeks.org/working-zip-files-python/
 
 Python Tutorial. (S.F.). *Tkinter Open File Dialog*. https://www.pythontutorial.net/tkinter/tkinter-open-file-dialog/
@@ -68,3 +72,4 @@ Python Tutorial. (S.F.). *Tkinter Open File Dialog*. https://www.pythontutorial.
 Stackoverflow. (febrero del 2022). *Python: Open file in zip without temporarily extracting it*. https://stackoverflow.com/questions/19371860/python-open-file-in-zip-without-temporarily-extracting-it
 
 W3 Schools. (). *Python JSON*. https://www.w3schools.com/python/python_json.asp
+
