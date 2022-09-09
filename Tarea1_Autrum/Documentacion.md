@@ -54,6 +54,12 @@ Para correr el programa deseado abralo en su editor de preferencia y luego ejecu
 * Select a file name(.wav): habre una nueva ventana con la cual se puede buscar un archivo .wav a analizar.
 ### Reproductor
 Una vez se corra el programa, este leerá los datos del archivo output.atm, archivo generado tras analizar un archivo .wav. Con los datos leidos reproducirá el audio guardado y al mismo tiempo mostrará en una nueva los gráficos en dominio del tiempo y dominio de frecuencia.
+
+## Pruebas unitarias
+![image](./Analizador.png)
+![image](./PruebaATM.png)
+![image](./DatosATM.png)
+
 ## ¿Por qué las voces de los integrantes son diferentes?
 
 Las voces de las personas son diferentes porque no todas llegan a las mismas notas, para esto esta el concepto de rango de voz, algunos pueden llegar a notas más graves mientras otros llegan a notas más agudas.
