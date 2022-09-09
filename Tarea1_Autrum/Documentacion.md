@@ -57,14 +57,14 @@ Para correr el programa deseado abralo en su editor de preferencia y luego ejecu
 Las voces de las personas son diferentes porque no todas llegan a las mismas notas, para esto esta el concepto de rango de voz, algunos pueden llegar a notas más graves mientras otros llegan a notas más agudas.
 
 ## Bibliografia
-Python Tutorial. (S.F.). *Tkinter Open File Dialog*. https://www.pythontutorial.net/tkinter/tkinter-open-file-dialog/
+Adi's Technical Aid. (10 de setiembre del 2021). *Play audios using PYAUDIO || PYAUDIO || PYAUDIO tutorial || Adi's Technical Aid* [Video]. YouTube. https://www.youtube.com/watch?v=fVJTrcEqgIo
 
-Code With Aarohi. (18 de abril del 2020). *Record and Play Audios Using PyAudio*. YouTube. https://www.youtube.com/watch?v=jbKJaHw0yo8
+Code With Aarohi. (18 de abril del 2020). *Record and Play Audios Using PyAudio* [Video]. YouTube. https://www.youtube.com/watch?v=jbKJaHw0yo8
 
 Nikhil Kumar. (22 de julio del 2018). *Working with zip files in Python*. GeeksforGeeks. https://www.geeksforgeeks.org/working-zip-files-python/
 
-Stackoverflow. (febrero del 2022). *Python: Open file in zip without temporarily extracting it*. https://stackoverflow.com/questions/19371860/python-open-file-in-zip-without-temporarily-extracting-it
+Python Tutorial. (S.F.). *Tkinter Open File Dialog*. https://www.pythontutorial.net/tkinter/tkinter-open-file-dialog/
 
-Adi's Technical Aid. (10 de setiembre del 2021). *Play audios using PYAUDIO || PYAUDIO || PYAUDIO tutorial || Adi's Technical Aid*. YouTube. https://www.youtube.com/watch?v=fVJTrcEqgIo
+Stackoverflow. (febrero del 2022). *Python: Open file in zip without temporarily extracting it*. https://stackoverflow.com/questions/19371860/python-open-file-in-zip-without-temporarily-extracting-it
 
 W3 Schools. (). *Python JSON*. https://www.w3schools.com/python/python_json.asp
