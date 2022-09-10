@@ -19,3 +19,15 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 5000
+              protocol: TCP
+          env:
+            - name: ELASTIC_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: quickstart-es-elastic-user
+                  key: elastic
+            - name: ELASTIC_CERT
+              valueFrom:
+                secretKeyRef:
+                  name: quickstart-es-http-certs-public
+                  key: ca.crt

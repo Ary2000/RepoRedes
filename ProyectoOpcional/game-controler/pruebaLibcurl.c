@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <curl/curl.h>
+//#include <curl/curl.h>
+#include "curl-7.84.0\include\curl\curl.h"
 
 int main()
 {

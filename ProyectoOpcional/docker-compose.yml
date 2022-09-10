@@ -3,12 +3,19 @@ services:
   frontend:
     build: ./front-end
     ports:
-      - "4001:3000"
+      - "3000:3000"
+    expose:
+      - "3000"
   api:
     build: ./api
     ports:
-      - "80:5000"
-#  game-controller:
-#    build: ./game-controller
-#    ports:
-#      - "6666"
+      - "80:80"
+    expose:
+      - "80"
+
+  game-controller:
+    build: ./game-controler
+    ports:
+      - "6666:6000"
+    expose:
+      - "6000"

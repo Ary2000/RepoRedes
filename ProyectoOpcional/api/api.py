@@ -1,6 +1,8 @@
 from http import client
 from logging import BASIC_FORMAT
-from sys import flags
+import string
+import sys
+import os
 from flask import Flask, render_template, request
 import socket
 import threading
@@ -20,19 +22,21 @@ CORS(app)
 #     basic_auth=("elastic", ELASTIC_PASSWORD)
 # )
 
+
 client = Elasticsearch(
-    "https://localhost:9200",
-    ca_certs="C:/Users/aryel/OneDrive/Desktop/TEC/http_ca.crt",
-    basic_auth=("elastic", "5X4s2E9ImjCX35eZl97cS1i4"),
+    "https://quickstart-es-default:9200",
+    ca_certs=os.getenv("ELASTIC_CERT"),
+    basic_auth=("elastic", os.getenv("ELASTIC_PASS")),
     verify_certs=False
 )
 
-#client.info()
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+# client.info()
 # Members API Route
 
 HEADER = 64
-PORT = 80
+PORT = 6666
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
@@ -49,7 +53,7 @@ def prueba(info):
 
 @app.route("/")
 def index():
-    pass
+    return "Welcome to the Flask API"
 
 
 @app.route("/members")
@@ -62,7 +66,11 @@ def members():
 # https://stackoverflow.com/questions/66049377/insert-new-document-using-python-elastic-client-raises-illegal-argument-exceptio
 def crearJuego():
     bodyTable = BASETABLE
+    s.sendall(b"Create Board")
+    s.recv(1024)
     res = client.index(index="boards", body=bodyTable)
+    # s.sendall(res.body["_id"])
+    # s.recv(1024)
     return res._body
 
 
@@ -73,31 +81,6 @@ def boardExist(id_board):
         return query._body["hits"]["hits"][0]["_source"]["board"]["status"]
     return -1
 
-# query = client.search(
-    #     index="boards",
-    #     query={
-    #         "bool": {
-    #             "must": [
-    #                 {
-    #                     "match": {
-    #                         "board.id_board": id_board
-    #                     }
-    #                 },
-    #                 {
-    #                     "match": {
-    #                         "board.status": 1
-    #                     }
-    #                 },
-    #                 {
-    #                     "match": {
-    #                         "board.whiteTurn": 1
-    #                     }
-    #                 }
-    #             ]
-    #         }
-    #     }
-    # )
-
 
 @app.route("/searchBoardAnfitrion/<id_board>")
 def searchBoard(id_board):
@@ -107,6 +90,10 @@ def searchBoard(id_board):
             index="boards",
             id=id_board
         )
+        #s.sendall("Load Board")
+        # s.recv(1024)
+        # s.sendall(id_board)
+        # s.recv(1024)
         return query.body["_source"]
     return {
         "board": {
@@ -137,12 +124,28 @@ def searchBoardGuest():
         }
     )
     if len(query._body["hits"]["hits"]) > 0:
-        return query._body["hits"]["hits"][0]["_source"]
+        return {
+            "_id": query._body["hits"]["hits"][0]["_id"],
+            "board": {
+                "status": query._body["hits"]["hits"][0]["_source"]["board"]["status"]
+            }
+        }
     return {
         "board": {
             "status": -1
         }
     }
+
+
+@app.route("/verificar/<sourceSquare>/<destinationSquare>")
+def verifyMove(sourceSquare, destinationSquare):
+    s.sendall(b"Move")
+    s.recv(1024)
+    s.sendall(bytes(sourceSquare, "utf-8"))
+    s.recv(1024)
+    s.sendall(bytes(destinationSquare, "utf-8"))
+    res = s.recv(1024)
+    return {"res": res.decode("utf-8")}
 
 
 # @app.route("admin/<juego>")
@@ -152,12 +155,11 @@ def searchBoardGuest():
 
 
 if __name__ == "__main__":
-    # client.info()
-    HOST = "localhost"  # The server's hostname or IP address
-    PORT = 6666  # The port used by the server
+    client.info()
 
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((HOST, PORT))
-        s.sendall(b"Hello, world")
-        data = s.recv(1024)
-    app.run(host='0.0.0.0', port=PORT)
+    HOST = "cg-service"  # The server's hostname or IP address
+    PORT = 6666  # The port used by the server
+    print("Waiting socket connection")
+    s.connect((HOST, PORT))
+
+    app.run(host='0.0.0.0', port=5000)

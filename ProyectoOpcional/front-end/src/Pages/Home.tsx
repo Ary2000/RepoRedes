@@ -3,17 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 // Tutorial de routing https://www.youtube.com/watch?v=2aumoR0-jmQ&ab_channel=TheNerdyCanuck
-
-export interface createBoardInterface {
-  data:{
-    _id: string
-  }
-}
-
 export interface boardInterface {
   data:{
+    _id: string,
     board: {
-      id_board?: number,
       status: number;
     }
   }
@@ -24,13 +17,17 @@ export const Home = () => {
   const navigate = useNavigate();
   let codigo = "";
 
+  // Esta funcion se encarga de crear la partida, va a devolver un objeto tipo
+  // boardInterface que nos va a permitir usar el _id para accedrla desde el menu
   async function crearPartida() {
-    let resultado: createBoardInterface = await axios.get("http://localhost:80/crear").then();
+    let resultado: boardInterface = await axios.get("http://127.0.0.1:31000/crear").then();
     navigate('/anfitrion/' + resultado.data._id);
   }
 
+  // Esta funcion va a usar el codigo que se encuentra en el search bar para bsucar la tabla
+  // que usa ese _id
   async function unirsePartida() {
-    let resultado: boardInterface = await axios.get("http://127.0.0.1:80/searchBoardAnfitrion/" + codigo).then();
+    let resultado: boardInterface = await axios.get("http://127.0.0.1:31000/searchBoardAnfitrion/" + codigo).then();
     switch(resultado.data.board.status) {
       case -1:{
         setMensajeBusqueda("Esta tabla no existe");
@@ -41,16 +38,17 @@ export const Home = () => {
         break;
       }
       case 1: {
-        navigate('/anfitrion/' + String(resultado.data.board.status))
+        navigate('/anfitrion/' + String(resultado.data._id))
       }
     }
   }
-
+// Esta funcion se encargara de buscar partidas que esten con el turno del invitado para poder
+// cargar esta en la interfaz
   async function buscarPartida() {
-    let resultado: boardInterface = await axios.get("http://127.0.0.1:80/searchBoardInvitado/").then();
+    let resultado: boardInterface = await axios.get("http://127.0.0.1:31000/searchBoardInvitado").then();
     switch(resultado.data.board.status) {
       case -1:{
-        setMensajeBusqueda("Esta tabla no existe");
+        setMensajeBusqueda("No hay tabla disponible");
         break;
       }
       case 0: {
@@ -58,7 +56,7 @@ export const Home = () => {
         break;
       }
       case 1: {
-        navigate('/invitado/' + String(resultado.data.board.status));
+        navigate('/invitado/' + String(resultado.data._id));
       }
     }
   }

@@ -6,7 +6,7 @@ spec:
   selector:
     app: flask-api
   ports:
-    - protocol: "TCP"
-      port: 8443
+    - name: http
+      port: 5000
       targetPort: 5000
-  type: ClusterIP
+      protocol: TCP

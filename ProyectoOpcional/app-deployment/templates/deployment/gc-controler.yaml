@@ -1,0 +1,22 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gc-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gc-deployment
+  template:
+    metadata:
+      labels:
+        app: gc-deployment
+    spec:
+      containers:
+        - name: gc-deployment
+          image: proyectoopcional_game-controller
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 6666
+              protocol: UDP

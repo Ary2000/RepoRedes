@@ -10,20 +10,32 @@ export const Anfitrion = (props) => {
   const [mensaje, setMensaje] = useState(mensajeDefault);
   const [positions, setPositions] = useState({});
 
-  useEffect(() => {
-    getBoard();
-  }, []);
-
   const { idTablero } = useParams();
 
-  function onDrop(sourceSquare, targetSquare) {
-    console.log(idTablero);
-    return false;
+  // Carga las posiciones de las fichas en la tabla
+  useEffect(() => {
+    getBoard().then((actualPositions) => {
+      setPositions(actualPositions);
+    });
+  }, []);
+  // Revisa si el movimiento hecho es lega;
+  async function onDrop(sourceSquare, targetSquare, piece) {
+    let res = await axios.get(
+      "http://127.0.0.1:31000/verificar/" + sourceSquare + "/" + targetSquare
+    );
+    if (res.data.res == "1") {
+      let tempPositions = positions;
+      delete tempPositions[sourceSquare];
+      tempPositions[targetSquare] = piece;
+      setPositions(tempPositions);
+      return true;
+    } else return false;
   }
-
+  // Consigue los datos de la tabla en elasticsearch para poder cargar
+  // las fichas bien
   async function getBoard() {
     let board = await axios
-      .get("http://127.0.0.1:80/searchBoardAnfitrion/" + idTablero)
+      .get("http://127.0.0.1:31000/searchBoardAnfitrion/" + idTablero)
       .then();
     let pieces = board.data.board.piece;
     let positionsTemp = {};
@@ -42,7 +54,7 @@ export const Anfitrion = (props) => {
           break;
         }
         case 2: {
-          typePiece += "K";
+          typePiece += "N";
           break;
         }
         case 3: {
@@ -95,7 +107,8 @@ export const Anfitrion = (props) => {
       positionPiece += piece.row.toString();
       positionsTemp[positionPiece] = typePiece;
     });
-    setPositions(positionsTemp);
+    return positionsTemp;
+    // setPositions(positionsTemp);
   }
 
   return (

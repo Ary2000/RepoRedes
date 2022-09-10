@@ -1,9 +1,9 @@
-FROM mwaeckerlin/mingw:latest
+FROM gcc:latest
 
-COPY . /game-controller
+COPY . /game-controler
 
-WORKDIR /game-controller
+WORKDIR /game-controler
 
-RUN gcc -o gc main.c 
+RUN gcc gameControler.c -o gc
 
-CMD [“./gc”]
+CMD ["./gc"]
