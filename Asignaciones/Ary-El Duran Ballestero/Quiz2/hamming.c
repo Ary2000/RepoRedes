@@ -272,8 +272,8 @@ unsigned decodificar(unsigned numero) {
     int bitParidadCuatro = p8ParidadR(numero);
     unsigned respuesta = bitParidadUno + bitParidadDos + bitParidadTres + bitParidadCuatro;
     if(respuesta > 0){
-        printf("Numero inpar en el bit de parity");
-        perror(0);
+        printf("Numero impar en el bit de parity\n");
+        exit(0);
     }
     int bitActual = (numero & ( 1 << 0 )) >> 0;
     respuesta ^= (-bitActual ^ respuesta) & (1UL << 0);
@@ -316,7 +316,7 @@ int main(int arcg, char *argv[]) {
         unsigned long hexadecimal = (unsigned long)strtoul(argv[3], NULL, 16);
         if(arcg > 5) {
             for(int indiceArgs = 5; indiceArgs < arcg; indiceArgs++) {
-                int posicionError = atoi(argv[5]);
+                int posicionError = atoi(argv[indiceArgs]);
                 hexadecimal ^= 1UL << posicionError;
             }
         } 
