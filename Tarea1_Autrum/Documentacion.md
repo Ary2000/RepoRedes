@@ -56,8 +56,26 @@ Para correr el programa deseado abralo en su editor de preferencia y luego ejecu
 Una vez se corra el programa, este leerá los datos del archivo output.atm, archivo generado tras analizar un archivo .wav. Con los datos leidos reproducirá el audio guardado y al mismo tiempo mostrará en una nueva los gráficos en dominio del tiempo y dominio de frecuencia.
 
 ## Pruebas unitarias
-![image](./Analizador.png)
+### Prueba 1: Grabar
+El programa empieza a grabar.
+### Prueba 2: Pausar
+El programa pausa la grabación, deja de captar entradas del microfono.
+### Prueba 3: Reanuar
+El programa reanua la grabación.
+### Prueba 4: Parar
+El programa finaliza la grabación. Genera el archivo .atm
+### Prueba 5: Seleccionar audio
+Despliga una nueva ventana con la cual se puede escoger el archivo
+
+![image](./PruebaAnalizador.png)
+### Prueba 6: Seleccionar .atm
+Desde una ventana que se despliega, se escoge el  archivo.
+Archivo incorrecto: aparece un mensaje de error.
+Archivo correcto: el programa continuna su ejecución
 ![image](./PruebaATM.png)
+### Prueba 7: Leer .atm
+Archivo incorrecto: mensaje de error
+Archivo correcto: El programa lee correctamente el archivo cargado
 ![image](./DatosATM.png)
 
 ## ¿Por qué las voces de los integrantes son diferentes?
