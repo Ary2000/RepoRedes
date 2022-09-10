@@ -47,6 +47,8 @@ class Recorder_UI:
         self.buttons[2].grid(row=2, column=0)
         self.buttons[3].grid(row=3, column=0)
         self.buttons[4].grid(row=4, column=0)
+
+        self.ui.protocol("WM_DELETE_WINDOW", self.on_closing)
     
     # Comienza el tkinter
     def start(self):
@@ -109,6 +111,9 @@ class Recorder_UI:
             filetypes=filetypes)
 
         return filedirectory
+
+    def on_closing (self):
+        self.ui.quit()
 
 # Analiza una grabacion o achivo .wav y produce un archivo .wav y .atm
 class Analizer:
@@ -312,6 +317,8 @@ class Analizer:
             data = wf.readframes(self.chunk)
             print(len(data))
 
+            
+
             while len(data) > 0:
                 
                 data_int = np.frombuffer(data, dtype = np.int16)
@@ -343,7 +350,7 @@ class Analizer:
 
 if __name__ == "__main__":
     # datos para la grabacion
-    chunk = 1024
+    chunk = 1024 * 2
     sample_format = pyaudio.paInt16 
     channels = 1 # canal mono
     rate = 44100
