@@ -16,7 +16,7 @@ int main()
 
     if (curl)
     {
-        curl_easy_setopt(curl, CURLOPT_URL, "https://localhost:9200/boards/_doc");
+        curl_easy_setopt(curl, CURLOPT_URL, "https://localhost:9200/boards/_doc"); //entra en http en vez de https
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
         curl_easy_setopt(curl, CURLOPT_USERPWD, "elastic:5X4s2E9ImjCX35eZl97cS1i4");
