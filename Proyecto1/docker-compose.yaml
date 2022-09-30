@@ -1,4 +1,33 @@
 version: '3.9'
 services:
-
+  router1:
+    build: ./routers/
+    container_name: router1
+    privileged: true
+    ports: 
+      - 8080:80/tcp
+    networks:
+      bridge:
+      lan01:
+        ipv4_address: 10.0.0.10
+    cap_add:
+      - NET_ADMIN
 networks:
+  bridge:
+    ipam:
+      driver: default
+  lan01:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: "10.0.0.0/24" 
+  lan02:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: "10.0.1.0/24"
+          gateway: "10.0.0.0"
