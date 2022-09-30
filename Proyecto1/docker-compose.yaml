@@ -10,5 +10,28 @@ services:
     container_name: httpd2
     ports:
       - 8081:80/tcp
+  dhcp1:
+    build: ./dhcp/dhcp1
+    container_name: dhcp1
+    privileged: true 
+    networks:
+      lan1:
+        ipv4_address: 10.0.0.4 
+networks:
+  lan1:
+      driver: macvlan
+      ipam:
+          driver: default
+          config:
+              - subnet: 10.0.0.0/24
+  lan2:
+      driver: macvlan
+      ipam:
+          driver: default
+          config:
+              - subnet: 10.0.1.0/24
+  bridge:
+      ipam:
+          driver: default
 
 # networks:
