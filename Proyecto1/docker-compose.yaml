@@ -1,4 +1,14 @@
 version: '3.9'
 services:
+  websrv1:
+    image: mariofernandez20/websrv1
+    container_name: httpd1
+    ports:
+      - 8080:80/tcp
+  websrv2:
+    image: mariofernandez20/websrv2
+    container_name: httpd2
+    ports:
+      - 8081:80/tcp
 
-networks:
+# networks:
