@@ -5,29 +5,41 @@ services:
     container_name: router1
     privileged: true
     ports: 
-      - 8080:80/tcp
+      - 8081:80/tcp
     networks:
       bridge:
       lan01:
         ipv4_address: 10.0.0.10
-    cap_add:
-      - NET_ADMIN
+  websrv1:
+    image: mariofernandez20/websrv1
+    container_name: httpd1
+    ports:
+      - 8080:80/tcp
+  websrv2:
+    image: mariofernandez20/websrv2
+    container_name: httpd2
+    ports:
+      - 8081:80/tcp
+  dhcp1:
+    build: ./dhcp/dhcp1
+    container_name: dhcp1
+    privileged: true 
+    networks:
+      lan1:
+        ipv4_address: 10.0.0.4 
 networks:
+  lan1:
+      driver: macvlan
+      ipam:
+          driver: default
+          config:
+              - subnet: 10.0.0.0/24
+  lan2:
+      driver: macvlan
+      ipam:
+          driver: default
+          config:
+              - subnet: 10.0.1.0/24
   bridge:
-    ipam:
-      driver: default
-  lan01:
-    driver: macvlan
-    driver_opts:
-      parent: eth0
-    ipam:
-      config:
-        - subnet: "10.0.0.0/24" 
-  lan02:
-    driver: macvlan
-    driver_opts:
-      parent: eth0
-    ipam:
-      config:
-        - subnet: "10.0.1.0/24"
-          gateway: "10.0.0.0"
+      ipam:
+          driver: default
