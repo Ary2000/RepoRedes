@@ -8,7 +8,7 @@ RUN > /etc/default/isc-dhcp-server
 RUN echo 'INTERFACESv4="eth0"\nINTERFACESv6=""' >> /etc/default/isc-dhcp-server
 #RUN IP=$(curl ifconfig.me)
 
-ARG IP=10.0.0.4
+ARG IP=10.0.0.0
 ARG IP_MIN=10.0.0.100
 ARG IP_MAX=10.0.0.150
 ARG ROUTER=10.0.0.1
