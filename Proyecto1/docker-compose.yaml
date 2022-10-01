@@ -20,6 +20,12 @@ services:
     container_name: httpd2
     ports:
       - 8081:80/tcp
+  dhcp2:
+    build: ./dhcp/dhcp2
+    privileged: true
+    networks:
+      lan2:
+        ipv4_address: 10.0.1.5
   dhcp1:
     build: ./dhcp/dhcp1
     container_name: dhcp1
