@@ -1,5 +1,15 @@
 version: '3.9'
 services:
+  router1:
+    build: ./routers/
+    container_name: router1
+    privileged: true
+    ports: 
+      - 8081:80/tcp
+    networks:
+      bridge:
+      lan01:
+        ipv4_address: 10.0.0.10
   websrv1:
     image: mariofernandez20/websrv1
     container_name: httpd1
@@ -33,5 +43,3 @@ networks:
   bridge:
       ipam:
           driver: default
-
-# networks:
