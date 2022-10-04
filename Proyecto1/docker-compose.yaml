@@ -22,13 +22,15 @@ services:
   websrv1:
     image: mariofernandez20/websrv1
     container_name: httpd1
-    ports:
-      - 8080:80/tcp
+    networks:
+      lan1:
+        ipv4_address: 10.0.0.21
   websrv2:
     image: mariofernandez20/websrv2
     container_name: httpd2
-    ports:
-      - 8081:80/tcp
+    networks:
+      lan2:
+        ipv4_address: 10.0.1.21
   dhcp2:
     image: ary2000/dhcp2
     container_name: dhcp2
