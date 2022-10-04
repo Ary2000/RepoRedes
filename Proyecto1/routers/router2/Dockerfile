@@ -1,8 +1,11 @@
 FROM ubuntu:latest
 
-WORKDIR /router1
+WORKDIR /router2
 
 COPY ./script.sh ./
+
+# limpia /r del script
+RUN sed -i 's/\r$//' script.sh
 
 # // https://www.hostinger.com/tutorials/iptables-tutorial
 RUN apt-get update && \
@@ -10,4 +13,6 @@ RUN apt-get update && \
 RUN apt-get -y install curl
 RUN apt-get install iptables sudo -y
 
-ENTRYPOINT [ "./script.sh" ]
+ENTRYPOINT ["./script.sh" ]
+
+#CMD [ "tail", "-f", "/dev/null" ]
