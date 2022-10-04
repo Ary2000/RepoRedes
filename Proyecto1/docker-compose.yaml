@@ -8,7 +8,7 @@ services:
       - 8081:80/tcp
     networks:
       bridge:
-      lan01:
+      lan1:
         ipv4_address: 10.0.0.10
   websrv1:
     image: mariofernandez20/websrv1
@@ -21,13 +21,14 @@ services:
     ports:
       - 8081:80/tcp
   dhcp2:
-    build: ./dhcp/dhcp2
+    image: ary2000/dhcp2
+    container_name: dhcp2
     privileged: true
     networks:
       lan2:
         ipv4_address: 10.0.1.5
   dhcp1:
-    build: ./dhcp/dhcp1
+    image: ary2000/dhcp1
     container_name: dhcp1
     privileged: true 
     networks:
