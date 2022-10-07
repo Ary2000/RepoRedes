@@ -13,6 +13,6 @@ RUN apt-get update && \
 RUN apt-get -y install curl
 RUN apt-get install iptables sudo -y
 
-ENTRYPOINT ["./script.sh" ]
+ENTRYPOINT [ "sh","script.sh" ]
 
 #CMD [ "tail", "-f", "/dev/null" ]
