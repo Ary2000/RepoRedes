@@ -45,6 +45,14 @@ services:
     networks:
       lan1:
         ipv4_address: 10.0.0.4 
+  dns:
+    build: ./dns/
+    container_name: dns
+    privileged: true
+    networks:
+      lan1: 
+        ipv4_address: 10.0.0.3
+
 networks:
   lan1:
       driver: macvlan
