@@ -1,5 +1,6 @@
 #!/bin/bash
-echo 1
+sudo ip route del default 
+sudo ip route add default via 10.0.0.10
 
 #LOCAL
 sudo iptables-legacy -A INPUT -i lo -j ACCEPT

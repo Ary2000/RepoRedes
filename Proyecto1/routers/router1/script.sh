@@ -1,5 +1,5 @@
 #!/bin/bash
-echo 1
+ip route add 10.0.1.0/24 via 10.0.0.2
 
 #LOCAL
 sudo iptables-legacy -A INPUT -i lo -j ACCEPT
@@ -31,6 +31,9 @@ sudo iptables-legacy -A FORWARD -p tcp -d 10.0.1.10 --dport 8443 -j ACCEPT
 #DNS
 sudo iptables-legacy -A FORWARD -p udp -d 10.0.0.3 --dport 53 -j ACCEPT
 sudo iptables-legacy -A FORWARD -p tcp -d 10.0.0.3 --dport 53 -j ACCEPT
+
+sudo iptables-legacy -A FORWARD -p tcp -s 10.0.1.0/24 -d 10.0.0.2 -j ACCEPT
+sudo iptables-legacy -A FORWARD -p udp -s 10.0.1.0/24 -d 10.0.0.2 -j ACCEPT
 
 #SALIDA
 sudo iptables-legacy -A OUTPUT -p udp -j ACCEPT

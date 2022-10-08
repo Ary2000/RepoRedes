@@ -4,6 +4,10 @@ RUN apt-get update
 RUN apt-get -y install systemctl
 RUN apt-get -y install isc-dhcp-server
 RUN apt-get -y install iproute2
+RUN apt-get install net-tools -y
+RUN apt-get install traceroute -y
+
+COPY ./script.sh ./
 
 RUN > /etc/default/isc-dhcp-server
 # https://askubuntu.com/questions/696159/isc-dhcp-server-start-error-dhcpd-cant-create-pid-file-run-dhcp-server-dhc
@@ -13,7 +17,7 @@ RUN echo 'DHCPD_PID=/var/run/dhcp-server/dhcpd.pid\nINTERFACESv4="eth0"\nINTERFA
 ARG IP=10.0.0.0
 ARG IP_MIN=10.0.0.100
 ARG IP_MAX=10.0.0.150
-ARG ROUTER=10.0.0.1
+ARG ROUTER=10.0.0.10
 ARG DNS=10.0.0.3
 ARG BROADCAST=10.0.0.255
 
@@ -28,7 +32,7 @@ RUN echo "[Unit]\nDescription=ISC DHCP IPv4 server\nDocumentation=man:dhcpd(8)\n
 RUN systemctl daemon-reload
 #RUN systemctl restart isc-dhcp-server
 
-CMD systemctl restart isc-dhcp-server; tail -f /dev/null
+CMD systemctl restart isc-dhcp-server; sh script.sh; tail -f /dev/null
 #RUN systemctl restart isc-dhcp-server
 #CMD ["systemctl", "restart isc-dhcp-server"]
 #RUN sudo systemctl restart isc-dhcp-server
