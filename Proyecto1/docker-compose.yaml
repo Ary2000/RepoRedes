@@ -19,6 +19,29 @@ services:
         ipv4_address: 10.0.0.2
       lan2:
         ipv4_address: 10.0.1.10
+  dns:
+    build: ./dns/
+    container_name: dns
+    privileged: true
+    networks:
+      lan1: 
+        ipv4_address: 10.0.0.3
+  dhcp2:
+    #image: ary2000/dhcp2
+    build: ./dhcp/dhcp2/
+    container_name: dhcp2
+    privileged: true
+    networks:
+      lan2:
+        ipv4_address: 10.0.1.5
+  dhcp1:
+    #image: ary2000/dhcp1
+    build: ./dhcp/dhcp1/
+    container_name: dhcp1
+    privileged: true 
+    networks:
+      lan1:
+        ipv4_address: 10.0.0.4 
   websrv1:
     image: mariofernandez20/websrv1
     container_name: httpd1
@@ -31,27 +54,6 @@ services:
     networks:
       lan2:
         ipv4_address: 10.0.1.21
-  dhcp2:
-    image: ary2000/dhcp2
-    container_name: dhcp2
-    privileged: true
-    networks:
-      lan2:
-        ipv4_address: 10.0.1.5
-  dhcp1:
-    image: ary2000/dhcp1
-    container_name: dhcp1
-    privileged: true 
-    networks:
-      lan1:
-        ipv4_address: 10.0.0.4 
-  dns:
-    build: ./dns/
-    container_name: dns
-    privileged: true
-    networks:
-      lan1: 
-        ipv4_address: 10.0.0.3
 
 networks:
   lan1:
