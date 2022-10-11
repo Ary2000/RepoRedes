@@ -35,6 +35,9 @@ sudo iptables-legacy -A FORWARD -p tcp -d 10.0.0.3 --dport 53 -j ACCEPT
 sudo iptables-legacy -A FORWARD -p tcp -s 10.0.1.0/24 -j ACCEPT
 sudo iptables-legacy -A FORWARD -p udp -s 10.0.1.0/24 -j ACCEPT
 
+truncate -s0 /etc/resolv.conf
+echo "nameserver 10.0.0.3" >> /etc/resolv.conf
+
 #SALIDA
 sudo iptables-legacy -A OUTPUT -p udp -j ACCEPT
 sudo iptables-legacy -A OUTPUT -p tcp --dport 80 -j ACCEPT

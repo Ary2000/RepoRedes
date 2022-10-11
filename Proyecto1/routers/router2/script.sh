@@ -20,6 +20,10 @@ sudo iptables-legacy -A FORWARD -p tcp -s 10.0.1.0/24 -d 10.0.0.0/24 --dport 80 
 sudo iptables-legacy -A FORWARD -p tcp -s 10.0.1.0/24 -d 10.0.0.0/24 --dport 443 -j ACCEPT
 sudo iptables-legacy -A FORWARD -p icmp -s 10.0.1.0/24 -d 10.0.0.0/24 -j ACCEPT
 
+#DNS
+truncate -s0 /etc/resolv.conf
+echo "nameserver 10.0.0.3" >> /etc/resolv.conf
+
 #SALIDA
 sudo iptables-legacy -A OUTPUT -p tcp -j ACCEPT
 sudo iptables-legacy -A OUTPUT -p udp -j ACCEPT
