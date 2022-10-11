@@ -26,6 +26,9 @@ services:
     ports: 
       - 53/tcp
       - 53/udp
+    depends_on:
+      - router1
+      - router2
     networks:
       lan1: 
         ipv4_address: 10.0.0.3
@@ -34,6 +37,8 @@ services:
     build: ./dhcp/dhcp2/
     container_name: dhcp2
     privileged: true
+    depends_on:
+      - dns
     networks:
       lan2:
         ipv4_address: 10.0.1.5
@@ -42,18 +47,26 @@ services:
     build: ./dhcp/dhcp1/
     container_name: dhcp1
     privileged: true 
+    depends_on:
+      - dns
     networks:
       lan1:
         ipv4_address: 10.0.0.4 
   websrv1:
     image: mariofernandez20/websrv1
     container_name: httpd1
+    depends_on:
+      - dhcp1
+      - dhcp2
     networks:
       lan1: 
         ipv4_address: 10.0.0.21
   websrv2:
     image: mariofernandez20/websrv2
     container_name: httpd2
+    depends_on:
+      - dhcp1
+      - dhcp2
     networks:
       lan2:
         ipv4_address: 10.0.1.21
@@ -61,6 +74,9 @@ services:
     build: ./cache/
     container_name: webcache
     privileged: true
+    depends_on:
+      - dhcp1
+      - dhcp2
     cap_add:
       - NET_ADMIN
     ports:
@@ -72,16 +88,22 @@ services:
     build: ./clients/client1
     container_name: cliente1
     privileged: true
+    depends_on:
+      - websrv1
+      - websrv2
+      - webcache
     networks:
-      lan1:
-        ipv4_address: 10.0.0.11
+      - lan1
   cliente2:
     build: ./clients/client2
     container_name: cliente2
     privileged: true
+    depends_on:
+      - websrv1
+      - websrv2
+      - webcache
     networks:
-      lan2:
-        ipv4_address: 10.0.1.11
+      - lan2
 networks:
   lan1:
       driver: macvlan
