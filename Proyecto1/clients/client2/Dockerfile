@@ -10,4 +10,6 @@ RUN apt-get install -y udhcpc
 RUN apt-get install -y dnsutils
 RUN apt-get install iputils-ping
 
+COPY ./script.sh ./
+
 CMD udhcpc;tail -f /dev/null

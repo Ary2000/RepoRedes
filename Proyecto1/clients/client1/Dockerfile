@@ -8,5 +8,9 @@ RUN apt-get install net-tools -y
 RUN apt-get install traceroute -y
 RUN apt-get install -y udhcpc
 RUN apt-get install -y dnsutils
+RUN apt-get install -y sudo
+RUN apt-get install -y iputils-ping
 
-CMD udhcpc;tail -f /dev/null
+COPY ./script.sh ./
+
+CMD udhcpc; sh script.sh;tail -f /dev/null
