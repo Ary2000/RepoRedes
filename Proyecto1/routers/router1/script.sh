@@ -28,7 +28,7 @@ sudo iptables-legacy -A INPUT -j DROP
 echo 1 > /proc/sys/net/ipv4/ip_forward
 sudo iptables-legacy -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
-sudo iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT
+sudo iptables-legacy -A FORWARD -i eth1 -o eth0 -j ACCEPT
 
 #PROXY REVERSO
 sudo iptables-legacy -A FORWARD -p tcp -s 10.0.0.20 --dport 80 -j ACCEPT
