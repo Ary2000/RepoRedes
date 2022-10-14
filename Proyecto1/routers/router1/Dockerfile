@@ -17,6 +17,7 @@ RUN apt-get install iproute2 -y
 RUN apt-get install net-tools -y
 RUN apt-get install traceroute -y
 RUN apt-get install -y iputils-ping
+RUN apt-get install dnsutils -y
 
 ENTRYPOINT [ "sh","script.sh" ]
 

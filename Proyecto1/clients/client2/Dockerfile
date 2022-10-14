@@ -9,6 +9,7 @@ RUN apt-get install traceroute -y
 RUN apt-get install -y udhcpc
 RUN apt-get install -y dnsutils
 RUN apt-get install iputils-ping
+RUN apt-get install -y curl
 
 COPY ./script.sh ./
 # limpia /r del script
