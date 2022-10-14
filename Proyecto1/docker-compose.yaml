@@ -5,7 +5,9 @@ services:
     container_name: router1
     privileged: true
     ports: 
-      - 10000:80/tcp
+      - 80:80/tcp
+      - 443:443/tcp
+      - 8443:8443/tcp
     networks:
       bridge:
       lan1:
@@ -14,6 +16,8 @@ services:
     build: ./routers/router2/
     container_name: router2
     privileged: true
+    depends_on:
+      - router1
     networks:
       lan1:
         ipv4_address: 10.0.0.2
@@ -24,8 +28,8 @@ services:
     container_name: dns
     privileged: true
     ports: 
-      - 53/tcp
-      - 53/udp
+      - 53:53/tcp
+      - 53:53/udp
     depends_on:
       - router1
       - router2
@@ -80,7 +84,7 @@ services:
     cap_add:
       - NET_ADMIN
     ports:
-      - 3128/tcp
+      - 3128:3128/tcp
     networks:
       lan1:
         ipv4_address: 10.0.0.7
