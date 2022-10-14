@@ -19,11 +19,13 @@ ARG IP_MIN=10.0.1.200
 ARG IP_MAX=10.0.1.250
 ARG ROUTER=10.0.1.10
 ARG BROADCAST=10.0.1.255
+ARG DNS=10.0.0.3
 
 #RUN mkdir /etc/dhcp
 #RUN touch dhcpd.conf
 RUN > /etc/dhcp/dhcpd.conf
-RUN echo 'subnet '${IP} 'netmask 255.255.255.0 {\n  range '${IP_MIN} ${IP_MAX}';\n  option domain-name "example.org";\n  option subnet-mask 255.255.255.0;\n  option routers '${ROUTER}';\n  option broadcast-address '${BROADCAST}';\n  default-lease-time 600;\n  max-lease-time 7200;\n}' >> /etc/dhcp/dhcpd.conf
+RUN echo 'subnet '${IP} 'netmask 255.255.255.0 {\n  range '${IP_MIN} ${IP_MAX}';\n  option domain-name-servers '${DNS}';\n  option domain-name "lan02.io";\n  option subnet-mask 255.255.255.0;\n  option routers '${ROUTER}';\n  option broadcast-address '${BROADCAST}';\n  default-lease-time 600;\n  max-lease-time 7200;\n}' >> /etc/dhcp/dhcpd.conf
+
 
 RUN > /lib/systemd/system/isc-dhcp-server.service
 RUN echo "[Unit]\nDescription=ISC DHCP IPv4 server\nDocumentation=man:dhcpd(8)\nWants=network-online.target\nAfter=network-online.target\nAfter=time-sync.target\nConditionPathExists=/etc/default/isc-dhcp-server\nConditionPathExists=|/etc/ltsp/dhcpd.conf\nConditionPathExists=|/etc/dhcp/dhcpd.conf\n\n[Service]\nEnvironmentFile=/etc/default/isc-dhcp-server\nRuntimeDirectory=dhcp-server\n# The leases files need to be root:dhcpd even when dropping privileges\nExecStart=/bin/sh -ec '\\ \n    CONFIG_FILE=/etc/dhcp/dhcpd.conf; \\ \n    if [ -f /etc/ltsp/dhcpd.conf ]; then CONFIG_FILE=/etc/ltsp/dhcpd.conf; fi; \\ \n    [ -e /var/lib/dhcp/dhcpd.leases ] || touch /var/lib/dhcp/dhcpd.leases; \\ \n    chown root:dhcpd /var/lib/dhcp /var/lib/dhcp/dhcpd.leases; \\ \n    chmod 775 /var/lib/dhcp ; chmod 664 /var/lib/dhcp/dhcpd.leases; \\ \n    exec dhcpd -user dhcpd -group dhcpd -f -4 -pf $DHCPD_PID -cf $CONFIG_FILE $INTERFACESv4'\n\n[Install]\nWantedBy=multi-user.target" >> /lib/systemd/system/isc-dhcp-server.service
