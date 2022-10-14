@@ -7,7 +7,7 @@ bash -c 'echo "domain lan01.io" >> /etc/resolv.conf' && bash -c 'echo "nameserve
 sudo iptables-legacy -A INPUT -i lo -j ACCEPT
 #ENTRADA
 sudo iptables-legacy -A INPUT -p tcp --sport 80 -j ACCEPT
-sudo iptables-legacy -A INPUT -p tcp --sport 443-j ACCEPT
+sudo iptables-legacy -A INPUT -p tcp --sport 443 -j ACCEPT
 sudo iptables-legacy -A INPUT -p tcp --sport 3128 -j ACCEPT
 sudo iptables-legacy -A INPUT -p tcp --sport 8443 -j ACCEPT
 sudo iptables-legacy -A INPUT -p udp --sport 53 -j ACCEPT
