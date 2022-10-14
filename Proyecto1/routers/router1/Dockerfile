@@ -10,7 +10,7 @@ RUN sed -i 's/\r$//' script.sh
 # // https://www.hostinger.com/tutorials/iptables-tutorial
 RUN apt-get update && \
       apt-get -y install sudo && \ 
-      apt-get upgrade
+      apt-get -y upgrade
 RUN apt-get -y install curl
 RUN apt-get install iptables sudo -y
 RUN apt-get install iproute2 -y
