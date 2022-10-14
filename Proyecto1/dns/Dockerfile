@@ -9,6 +9,8 @@ RUN apt-get install traceroute -y
 RUN apt-get install -y systemctl
 
 COPY ./script.sh ./
+# limpia /r del script
+RUN sed -i 's/\r$//' script.sh
 COPY ./project-zones/. /etc/bind/
 
 CMD ["sh", "script.sh"]

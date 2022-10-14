@@ -12,5 +12,7 @@ RUN apt-get install -y sudo
 RUN apt-get install -y iputils-ping
 
 COPY ./script.sh ./
+# limpia /r del script
+RUN sed -i 's/\r$//' script.sh
 
 CMD udhcpc; sh script.sh;tail -f /dev/null

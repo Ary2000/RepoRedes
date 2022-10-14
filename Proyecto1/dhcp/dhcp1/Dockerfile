@@ -8,6 +8,8 @@ RUN apt-get install net-tools -y
 RUN apt-get install traceroute -y
 
 COPY ./script.sh ./
+# limpia /r del script
+RUN sed -i 's/\r$//' script.sh
 
 RUN > /etc/default/isc-dhcp-server
 # https://askubuntu.com/questions/696159/isc-dhcp-server-start-error-dhcpd-cant-create-pid-file-run-dhcp-server-dhc

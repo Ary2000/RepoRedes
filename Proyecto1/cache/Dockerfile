@@ -10,6 +10,8 @@ RUN apt-get install nano
 RUN apt-get install -y sudo
 
 COPY ./script.sh ./
+# limpia /r del script
+RUN sed -i 's/\r$//' script.sh
 
 COPY ./squid.conf ./etc/squid/
 RUN echo "5885" >> /run/squid.pid
