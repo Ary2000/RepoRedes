@@ -74,3 +74,5 @@ Los pods se crean de manera exitosa y en el orden especificado por el profesor.
 1.
 
 ## Referencias bibliográficas
+
+https://ubuntu.com/server/docs/service-domain-name-service-dns
