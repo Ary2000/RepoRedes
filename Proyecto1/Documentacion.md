@@ -25,7 +25,23 @@ Se encargan de darle internet a su respectiva LAN Virtual, se encargan del tráf
 ### DNS
 Implementa tres zonas. Cada componente en las redes tendrá una entrada en su respectiva zona. Como forwarder, se utilizarán los 8.8.8.8 y 8.8.4.4. Esto cambio se realizó pues se presentaron ciertos problemas que se arreglaron al cambiar el 8.8.8.9 por el 8.8.4.4
 ### DHCPs
-
+Ambos componentes prestan el servicio de configuración dinámica de host en sus respectivas redes, entre 
+los parámetros a ofrecer se encuentra el IP, configuración de red, DNS y default gateway. 
+### Clientes
+Al iniciar un cliente en alguna de las redes, estos deberán poder configurar su red automáticamente,
+obtener un nombre de dominio y tener acceso a la red, también deben poder validar las reglas definidas 
+por todos los demás componentes.
+### Web Servers
+Se deberán implementar un Web Server en Apache, el mismo expone una simple página.
+### Proxy Reverso
+Implementará un ruteo por hostname, cuando alguien ingrese a www.google.com/web1
+mostrará la página de Web Server1 y cuando lo haga a la página www.google.com/web2 mostrará la 
+página de Web Serever2.
+### VPN
+Se deberá implementar con la tecnología OpenVPN, el mismo permitirá acceder a los recursos internos de ambas redes y permitirá realizar el enrutamiento de todo el tráfico de Internet.
+### Web Cache
+Actuará como un Web Proxy Cache transparente, este mantendrá un cache con políticas de expiración de 
+todo el trafico HTTP y HTTPs, estará configurado automáticamente para todos los clientes de la red.
 ## Diagramas 
 ### Diagramas de arquitectura
 La base de este programa se tomó de la especificación del proyecto. Es bastante similar en el sentido de los puertos y las conexiones.
