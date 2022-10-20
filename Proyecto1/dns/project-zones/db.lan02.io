@@ -17,5 +17,5 @@ router2	IN	A	10.0.1.10
 dhcp2	IN	A	10.0.1.5
 vpn	IN	A	10.0.1.15
 apache	IN	A	10.0.1.21
-www	IN	A	10.0.1.20
+www	IN	A	10.0.0.20
 web	IN	A	10.0.1.21
