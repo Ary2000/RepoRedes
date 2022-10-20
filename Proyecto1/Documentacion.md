@@ -23,7 +23,7 @@ Se cuenta con dos redes, cauna tiene se respectivo nombre, número de red y más
 ### Routers
 Se encargan de darle internet a su respectiva LAN Virtual, se encargan del tráfico de salida permitido. Permite el acceso externo mediante puertos especificados en la asignación.
 ### DNS
-Implementa tres zonas. Cada componente en las redes tendrá una entrada en su respectiva zona. Como forwarder, se utilizarán los 8.8.8.8 y 8.8.4.4 esto pues se presentaron ciertos problemas que se arreglaron al cambiar el 8.8.8.9 por el 8.8.4.4
+Implementa tres zonas. Cada componente en las redes tendrá una entrada en su respectiva zona. Como forwarder, se utilizarán los 8.8.8.8 y 8.8.4.4. Esto cambio se realizó pues se presentaron ciertos problemas que se arreglaron al cambiar el 8.8.8.9 por el 8.8.4.4
 ## Diagramas 
 ### Diagramas de arquitectura
 ![image](./arquitectura)
