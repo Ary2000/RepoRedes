@@ -21,7 +21,7 @@ Con el fin de lograr el objetivo, se deben implementar dos pequeñas redes virtu
 ### Redes 
 Se cuenta con dos redes, cada una tiene su respectivo nombre, número de red y máscara.
 ### Routers
-Se encargan de darle acceso a internet a su respectiva LAN Virtual, además manejan el tráfico de salida permitido. Permiten el acceso externo mediante puertos especificados en la asignación.
+Se encargan de darle acceso a internet a su respectiva LAN Virtual, además manejan el tráfico de salida permitido. Permiten el acceso externo mediante puertos especificados en la asignación. Se decidio usar las direcciones ```10.0.0.10``` y ```10.0.1.10``` para los routers 1 y 2 respectivamente, esto se debe a que por defecto, docker utiliza la primer dirección (X.X.X.1).
 ### DNS
 Implementa tres zonas. Cada componente en las redes tendrá una entrada en su respectiva zona. Como forwarder, se utilizarán los ```8.8.8.8``` y ```8.8.4.4```. Esto cambio, pues se presentaron ciertos problemas con el forwarder ```8.8.4.4``` por lo que se decidió utilizar el ```8.8.8.9``` sustituyendo a ```8.8.4.4```.
 ### DHCPs
