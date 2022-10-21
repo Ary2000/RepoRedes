@@ -1,7 +1,8 @@
 version: '3.9'
 services:
   router1:
-    build: ./routers/router1/
+    #build: ./routers/router1/
+    image: tifan12/router1
     container_name: router1
     privileged: true
     ports: 
@@ -13,7 +14,8 @@ services:
       lan1:
         ipv4_address: 10.0.0.10
   router2:
-    build: ./routers/router2/
+    #build: ./routers/router2/
+    image: tifan12/router2
     container_name: router2
     privileged: true
     depends_on:
@@ -24,7 +26,8 @@ services:
       lan2:
         ipv4_address: 10.0.1.10
   dns:
-    build: ./dns/
+    #build: ./dns/
+    image: irsacfac/dns
     container_name: dns
     privileged: true
     ports: 
@@ -110,6 +113,17 @@ services:
       - webcache
     networks:
       - lan2
+  vpn:
+    #build: ./vpn
+    image: tifan12/vpn
+    container_name: vpn
+    privileged: true
+    depends_on:
+      - dns
+      - dhcp2
+    networks:
+      lan2:
+        ipv4_address: 10.0.1.15
 networks:
   lan1:
       driver: macvlan
