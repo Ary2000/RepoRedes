@@ -19,3 +19,4 @@ vpn	IN	A	10.0.1.15
 apache	IN	A	10.0.1.21
 www	IN	A	10.0.0.20
 web	IN	A	10.0.1.21
+web	IN	A	10.0.0.21

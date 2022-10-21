@@ -22,3 +22,4 @@ cache	IN	A	10.0.0.7
 router2	IN	A	10.0.0.2
 www	IN	A	10.0.0.20
 web	IN	A	10.0.0.21
+web	IN	A	10.0.1.21
