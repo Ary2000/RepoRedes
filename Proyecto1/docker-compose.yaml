@@ -26,7 +26,8 @@ services:
       lan2:
         ipv4_address: 10.0.1.10
   dns:
-    build: ./dns/
+    #build: ./dns/
+    image: irsacfac/dns
     container_name: dns
     privileged: true
     ports: 
