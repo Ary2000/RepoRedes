@@ -9,6 +9,12 @@ RUN apt-get -y install iptables
 RUN apt-get install nano
 RUN apt-get install -y sudo
 
+RUN apt-get -y install curl
+RUN apt-get install net-tools -y
+RUN apt-get install traceroute -y
+RUN apt-get install -y iputils-ping
+RUN apt-get install dnsutils -y
+
 COPY ./script.sh ./
 # limpia /r del script
 RUN sed -i 's/\r$//' script.sh

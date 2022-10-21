@@ -37,9 +37,10 @@ services:
       lan1: 
         ipv4_address: 10.0.0.3
   dhcp2:
-    #image: ary2000/dhcp2
-    build: ./dhcp/dhcp2/
+    image: ary2000/dhcp2
+    #build: ./dhcp/dhcp2/
     container_name: dhcp2
+    #image: ary2000/dhcp2
     privileged: true
     depends_on:
       - dns
@@ -47,9 +48,10 @@ services:
       lan2:
         ipv4_address: 10.0.1.5
   dhcp1:
-    #image: ary2000/dhcp1
-    build: ./dhcp/dhcp1/
+    image: ary2000/dhcp1
+    #build: ./dhcp/dhcp1/
     container_name: dhcp1
+    #image: ary2000/dhcp1
     privileged: true 
     depends_on:
       - dns
@@ -75,16 +77,16 @@ services:
       lan2:
         ipv4_address: 10.0.1.21
   webcache:
-    build: ./cache/
+    image: ary2000/cache
+    #build: ./cache/
     container_name: webcache
+    #image: ary2000/cache
     privileged: true
     depends_on:
       - dhcp1
       - dhcp2
     cap_add:
       - NET_ADMIN
-    ports:
-      - 3128:3128/tcp
     networks:
       lan1:
         ipv4_address: 10.0.0.7
