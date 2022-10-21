@@ -61,17 +61,33 @@ Los pods se crean de manera exitosa y en el orden especificado por el profesor.
 ![Crear de PODs](./assets/Prueba%20Unitaria%20Creacion%20de%20PODs.png)
 ### Clientes reciben IPs correctos
 ### Corridas del comando PING en ambos clientes
+- Cliente 1
+![Corridas PING Cliente 1](./PING-cliente1.png)
+- Cliente 2
+![Corridas PING Cliente 2](./PING-cliente2.png)
 ### Corrida de TRACEROUTE para asegurarse de que se esten tomando las rutas correctamente
+- Cliente 1
+![Corridas TRACEROUTE Cliente 1](./traceroute-cliente1.png)
+- Cliente 2
+![Corridas TRACEROUTE Cliente 2](./traceroute-cliente2.png)
 ### Corridas del comando NSLOOKUP en ambos clientes
+- Cliente 1
+![Corridas NSLOOKUP Cliente 1](./nslookup-cliente1.png)
+- Cliente 2
+![Corridas NSLOOKUP Cliente 2](./nslookup-cliente2.png)
 ### Salvado de los CURLs en el web cachce
 ### Pruebas realizadas con TELNET
 ## Recomendaciones
 
-1.
+1. Al momento de implementar zonas, se debe de tener cuidado al momento de realizar la configuracion de estas. Ya que es sencillo cometer un error y ser incapaz de encontrar el origen de este.
+2. Utilizar traceroute si se desea saber si un componente, del cual conocemos su IP esta conectado a la red.
+3. 
 
 ## Conclusiones
 
-1.
+1. Este proyecto es de gran utilidad para conecer en mayor profundidad como funcionan las redes locales.
+2. El uso del cache puede llegar a ser vastante provechoso ya que estos pueden ayudar a disminur el consumo de ancho de banda.
+3. El equilibrio de carga puede ser util si se desea evitar sobrecargar una pagina y/o servidor. No obstante Round Robin no es el mejor metodo para esto. 
 
 ## Referencias bibliográficas
 
