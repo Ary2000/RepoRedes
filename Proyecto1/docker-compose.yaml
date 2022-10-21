@@ -108,6 +108,16 @@ services:
       - webcache
     networks:
       - lan2
+  vpn:
+    build: ./vpn
+    container_name: vpn
+    privileged: true
+    depends_on:
+      - dns
+      - dhcp2
+    networks:
+      lan2:
+        ipv4_address: 10.0.1.15
 networks:
   lan1:
       driver: macvlan
