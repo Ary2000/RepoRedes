@@ -2,6 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <netdb.h>
+#include <errno.h>
+
+#define MAX 80
+#define PORT 9666
+#define SA struct sockaddr
+
 int BIT_MAX = 32;
 
 int IP_MAX_SIZE = 15; // len 255.255.255.255
@@ -157,11 +167,116 @@ int get_broadcast(char* p_ip, char* p_mask){
     
 }
 
+void get_hosts_range(char* p_ip, char* p_mask) {
+    int maximo = get_broadcast(p_ip, p_mask) - 1;
+    //int min = ;
+    char* maximoString = int_to_ip(maximo);
+    printf("Rango de Host IPs de %s %s es: %s\n", p_ip, p_mask, maximoString);
+}
+
+void comunication(int connfd) {
+    char buff[MAX];
+    int n;
+    char delim[] = " ";
+    // infinite loop for chat
+    for (;;) {
+        bzero(buff, MAX);
+   
+        // read the message from client and copy it in buffer
+        read(connfd, buff, sizeof(buff));
+        // print buffer which contains the client contents
+        printf("From client: %s\t To client : ", buff);
+        char* ptr = strtok(buff, delim);
+        if(strcmp(ptr, "GET") == 0){
+            ptr = strtok(NULL, delim);
+            if(strcmp(ptr, "BROADCAST") == 0) {
+                ptr = strtok(NULL, delim);
+                ptr = strtok(NULL, delim);
+                char* IP = strdup(ptr);
+                ptr = strtok(NULL, delim);
+                ptr = strtok(NULL, delim);
+                char* MASK = strdup(ptr);
+
+                bzero(buff, MAX);
+                
+                
+
+            }
+            else if (strcmp(ptr, "NETWORK") == 0) {
+                
+            }
+            else if (strcmp(ptr, "HOSTS") == 0) {
+
+            }
+            else if (strcmp(ptr, "RANDOM") == 0) {
+
+            }
+        }
+        // while(ptr != NULL) {
+        //     ptr = strok(NULL, delim);
+        // }
+        // and send that buffer to client
+        write(connfd, buff, sizeof(buff));
+   
+        // if msg contains "Exit" then server exit and chat ended.
+        if (strncmp("exit", buff, 4) == 0) {
+            printf("Server Exit...\n");
+            break;
+        }
+    }
+}
+
 int main(){
+    int sockfd, connfd, len;
+    struct sockaddr_in servaddr, cli;
+   
+    // socket create and verification
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd == -1) {
+        printf("socket creation failed...\n");
+        exit(0);
+    }
+    else
+        printf("Socket successfully created..\n");
+    bzero(&servaddr, sizeof(servaddr));
+   
+    // assign IP, PORT
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    servaddr.sin_port = htons(PORT);
+   
+    // Binding newly created socket to given IP and verification
+    if ((bind(sockfd, (SA*)&servaddr, sizeof(servaddr))) != 0) {
+        printf("socket bind failed...\n");
+        exit(0);
+    }
+    else
+        printf("Socket successfully binded..\n");
+   
+    // Now server is ready to listen and verification
+    if ((listen(sockfd, 5)) != 0) {
+        printf("Listen failed...\n");
+        exit(0);
+    }
+    else
+        printf("Server listening..\n");
+    len = sizeof(cli);
+   
+    // Accept the data packet from client and verification
+    connfd = accept(sockfd, (SA*)&cli, &len);
+    if (connfd < 0) {
+        printf("server accept failed...\n");
+        exit(0);
+    }
+    else
+        printf("server accept the client...\n");
+
+    comunication(connfd);
+
 	char* ip = "10.255.23.12";
 	char* mask = "/26";
 	char* mask1 = "255.255.255.0";
-	
+
 	int broadcast_ip = get_broadcast(ip, mask);
 	//printf ("'%s' %s is 0x%08x.\n", ip, mask, broadcast_ip);
 	char* f = int_to_ip(broadcast_ip);
@@ -172,6 +287,7 @@ int main(){
 	char* p = int_to_ip(broadcast_ip);
 	printf("broadcast_ip de %s %s es: %s\n", ip, mask1, p);
 	
+    get_hosts_range(ip, mask);
 
 	return 0;
 }
