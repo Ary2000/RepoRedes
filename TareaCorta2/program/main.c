@@ -151,7 +151,7 @@ int get_broadcast(char* p_ip, char* p_mask){
     } 
     
     mask = ~mask; // complemento de mask
-    integer = integer | mask; // ip || mask
+    integer = integer | mask; // ip OR mask
     
     return integer;
     
@@ -168,7 +168,7 @@ int get_network_number(char* p_ip, char* p_mask){
         check_mask_ip(mask, p_mask);
     } 
     
-    integer = integer & mask; // ip || mask
+    integer = integer & mask; // ip AND mask
     
     return integer;
     
