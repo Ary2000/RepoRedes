@@ -1,0 +1,9 @@
+replicas_number: 1
+
+deployment_name: tarea2-deployment
+
+image_name: tarea2_server
+
+port_number: 9666
+
+outside_port: 30000
