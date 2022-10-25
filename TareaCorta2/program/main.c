@@ -12,6 +12,8 @@
 #define PORT 9666
 #define SA struct sockaddr
 
+#define BUFFINT 20
+
 int BIT_MAX = 32;
 
 int IP_MAX_SIZE = 15; // len 255.255.255.255
@@ -176,19 +178,22 @@ int get_network_number(char* p_ip, char* p_mask){
     else { // formato 255.255.255.255
         mask = ip_to_int(p_mask);
         check_mask_ip(mask, p_mask);
-    } 
-    
+    }  
     integer = integer & mask; // ip AND mask
     
     return integer;
     
 }
 
-void get_hosts_range(char* p_ip, char* p_mask) {
+char* get_hosts_range(char* p_ip, char* p_mask) {
+    int minimo = get_network_number(p_ip, p_mask) + 1;
     int maximo = get_broadcast(p_ip, p_mask) - 1;
-    //int min = ;
+    char* respuesta = int_to_ip(minimo);
     char* maximoString = int_to_ip(maximo);
-    printf("Rango de Host IPs de %s %s es: %s\n", p_ip, p_mask, maximoString);
+    strcat(respuesta, "-");
+    strcat(respuesta, maximoString);
+    return respuesta;
+    //printf("Rango de Host IPs de %s %s es: %s\n", p_ip, p_mask, maximoString);
 }
 
 void comunication(int connfd) {
@@ -198,12 +203,13 @@ void comunication(int connfd) {
     // infinite loop for chat
     for (;;) {
         bzero(buff, MAX);
-   
         // read the message from client and copy it in buffer
         read(connfd, buff, sizeof(buff));
         // print buffer which contains the client contents
         printf("From client: %s\t To client : ", buff);
         char* ptr = strtok(buff, delim);
+        if(strncmp("EXIT", buff, 4) == 0)
+            break;
         if(strcmp(ptr, "GET") == 0){
             ptr = strtok(NULL, delim);
             if(strcmp(ptr, "BROADCAST") == 0) {
@@ -211,34 +217,46 @@ void comunication(int connfd) {
                 ptr = strtok(NULL, delim);
                 char* IP = strdup(ptr);
                 ptr = strtok(NULL, delim);
-                ptr = strtok(NULL, delim);
+                ptr = strtok(NULL, "\r");
                 char* MASK = strdup(ptr);
-
-                bzero(buff, MAX);
-                
-                
-
+                int respuesta = get_broadcast(IP, MASK);
+                char* respuestaString = int_to_ip(respuesta);
+                strcat(respuestaString, "\n\0");
+                write(connfd, respuestaString, MAX);
             }
             else if (strcmp(ptr, "NETWORK") == 0) {
-                
+                ptr = strtok(NULL, delim);
+                ptr = strtok(NULL, delim);
+                ptr = strtok(NULL, delim);
+                char* IP = strdup(ptr);
+                ptr = strtok(NULL, delim);
+                ptr = strtok(NULL, "\r");
+                char* MASK = strdup(ptr);
+                int respuesta = get_network_number(IP, MASK);
+                char* respuestaString = int_to_ip(respuesta);
+                strcat(respuestaString, "\n\0");
+                write(connfd, respuestaString, MAX);
             }
             else if (strcmp(ptr, "HOSTS") == 0) {
-
+                ptr = strtok(NULL, delim);
+                ptr = strtok(NULL, delim);
+                ptr = strtok(NULL, delim);
+                char* IP = strdup(ptr);
+                ptr = strtok(NULL, delim);
+                ptr = strtok(NULL, "\r");
+                char* MASK = strdup(ptr);
+                char* respuesta = get_hosts_range(IP, MASK);
+                strcat(respuesta, "\n\000");
+                write(connfd, respuesta, MAX);
             }
             else if (strcmp(ptr, "RANDOM") == 0) {
-
+                ptr = strtok(NULL, delim);
+                ptr = strtok(NULL, delim);
+                ptr = strtok(NULL, delim);
+                char* IP = strdup(ptr);
+                ptr = strtok(NULL, delim);
+                char* MASK = strdup(ptr);
             }
-        }
-        // while(ptr != NULL) {
-        //     ptr = strok(NULL, delim);
-        // }
-        // and send that buffer to client
-        write(connfd, buff, sizeof(buff));
-   
-        // if msg contains "Exit" then server exit and chat ended.
-        if (strncmp("exit", buff, 4) == 0) {
-            printf("Server Exit...\n");
-            break;
         }
     }
 }
@@ -322,7 +340,7 @@ int main(){
     */
 	
     // End of Get Network Number IP zone
-    get_hosts_range(ip, mask);
+    //get_hosts_range(ip, mask);
 
 	return 0;
 }
