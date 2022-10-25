@@ -269,6 +269,13 @@ void comunication(int connfd) {
                 char* IP = strdup(ptr);
                 ptr = strtok(NULL, delim);
                 char* MASK = strdup(ptr);
+                ptr = strtok(NULL, delim);
+                int NUM = atoi(strdup(ptr));
+                ptr = strtok(NULL, "\r");
+                char* respuesta[NUM];
+                get_random_subnet(IP, MASK, NUM, respuesta);
+                // strcat(result, "\n\000");
+                write(connfd, respuesta, MAX);
             }
         }
     }
@@ -281,72 +288,71 @@ int main(){
     char* mask1 = "255.255.255.248";
     int n = 3;
     
-    char* result[n];
+    // char* result[n];
 
-    get_random_subnet(ip, mask, n, result);
+    // get_random_subnet(ip, mask, n, result);
 
-    for (int i = 0; i < n; i++){
-        printf("%d -> %s\n", i, result[i]);
-    }
+    // for (int i = 0; i < n; i++){
+    //     printf("%d -> %s\n", i, result[i]);
+    // }
      
-    // int sockfd, connfd, len;
-    // struct sockaddr_in servaddr, cli;
+    int sockfd, connfd, len;
+    struct sockaddr_in servaddr, cli;
    
-    // // socket create and verification
-    // sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    // if (sockfd == -1) {
-    //     printf("socket creation failed...\n");
-    //     exit(0);
-    // }
-    // else
-    //     printf("Socket successfully created..\n");
-    // bzero(&servaddr, sizeof(servaddr));
+    // socket create and verification
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd == -1) {
+        printf("socket creation failed...\n");
+        exit(0);
+    }
+    else
+        printf("Socket successfully created..\n");
+    bzero(&servaddr, sizeof(servaddr));
    
-    // // assign IP, PORT
-    // servaddr.sin_family = AF_INET;
-    // servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    // servaddr.sin_port = htons(PORT);
+    // assign IP, PORT
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    servaddr.sin_port = htons(PORT);
    
-    // // Binding newly created socket to given IP and verification
-    // if ((bind(sockfd, (SA*)&servaddr, sizeof(servaddr))) != 0) {
-    //     printf("socket bind failed...\n");
-    //     exit(0);
-    // }
-    // else
-    //     printf("Socket successfully binded..\n");
+    // Binding newly created socket to given IP and verification
+    if ((bind(sockfd, (SA*)&servaddr, sizeof(servaddr))) != 0) {
+        printf("socket bind failed...\n");
+        exit(0);
+    }
+    else
+        printf("Socket successfully binded..\n");
    
-    // // Now server is ready to listen and verification
-    // if ((listen(sockfd, 5)) != 0) {
-    //     printf("Listen failed...\n");
-    //     exit(0);
-    // }
-    // else
-    //     printf("Server listening..\n");
-    // len = sizeof(cli);
+    // Now server is ready to listen and verification
+    if ((listen(sockfd, 5)) != 0) {
+        printf("Listen failed...\n");
+        exit(0);
+    }
+    else
+        printf("Server listening..\n");
+    len = sizeof(cli);
    
-    // // Accept the data packet from client and verification
-    // connfd = accept(sockfd, (SA*)&cli, &len);
-    // if (connfd < 0) {
-    //     printf("server accept failed...\n");
-    //     exit(0);
-    // }
-    // else
-    //     printf("server accept the client...\n");
+    // Accept the data packet from client and verification
+    connfd = accept(sockfd, (SA*)&cli, &len);
+    if (connfd < 0) {
+        printf("server accept failed...\n");
+        exit(0);
+    }
+    else
+        printf("server accept the client...\n");
 
-    // comunication(connfd);
+    comunication(connfd);
   
   // Get Broadcast IP zone
-    /*
-	int broadcast_ip = get_broadcast(ip, mask);
-	//printf ("'%s' %s is 0x%08x.\n", ip, mask, broadcast_ip);
-	char* f = int_to_ip(broadcast_ip);
-	printf("broadcast_ip de %s %s es: %s\n", ip, mask, f);
+	// int broadcast_ip = get_broadcast(ip, mask);
+	// //printf ("'%s' %s is 0x%08x.\n", ip, mask, broadcast_ip);
+	// char* f = int_to_ip(broadcast_ip);
+	// printf("broadcast_ip de %s %s es: %s\n", ip, mask, f);
 	
-    broadcast_ip = get_broadcast(ip, mask1);
-	//printf ("'%s' %s is 0x%08x.\n", ip, mask1, broadcast_ip);
-	char* p = int_to_ip(broadcast_ip);
-	printf("broadcast_ip de %s %s es: %s\n", ip, mask1, p);    
-    */
+    // broadcast_ip = get_broadcast(ip, mask1);
+	// //printf ("'%s' %s is 0x%08x.\n", ip, mask1, broadcast_ip);
+	// char* p = int_to_ip(broadcast_ip);
+	// printf("broadcast_ip de %s %s es: %s\n", ip, mask1, p);    
+
     // End of Get Broadcast IP zone
 
 
