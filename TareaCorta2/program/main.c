@@ -161,7 +161,24 @@ int get_broadcast(char* p_ip, char* p_mask){
     } 
     
     mask = ~mask; // complemento de mask
-    integer = integer | mask; // ip || mask
+    integer = integer | mask; // ip OR mask
+    
+    return integer;
+    
+}
+
+// Obtiene el network number en int32 de un ip con su mascara
+int get_network_number(char* p_ip, char* p_mask){
+    int integer = ip_to_int(p_ip);
+    // mask
+    int mask;
+    if (p_mask[0] == '/') mask = mask_to_int(p_mask); // formato /mask
+    else { // formato 255.255.255.255
+        mask = ip_to_int(p_mask);
+        check_mask_ip(mask, p_mask);
+    } 
+    
+    integer = integer & mask; // ip AND mask
     
     return integer;
     
@@ -227,6 +244,11 @@ void comunication(int connfd) {
 }
 
 int main(){
+  
+    char* ip = "172.16.0.56";
+    char* mask = "/25";
+    char* mask1 = "255.255.255.128";
+     
     int sockfd, connfd, len;
     struct sockaddr_in servaddr, cli;
    
@@ -272,11 +294,9 @@ int main(){
         printf("server accept the client...\n");
 
     comunication(connfd);
-
-	char* ip = "10.255.23.12";
-	char* mask = "/26";
-	char* mask1 = "255.255.255.0";
-
+  
+  // Get Broadcast IP zone
+    /*
 	int broadcast_ip = get_broadcast(ip, mask);
 	//printf ("'%s' %s is 0x%08x.\n", ip, mask, broadcast_ip);
 	char* f = int_to_ip(broadcast_ip);
@@ -285,8 +305,23 @@ int main(){
     broadcast_ip = get_broadcast(ip, mask1);
 	//printf ("'%s' %s is 0x%08x.\n", ip, mask1, broadcast_ip);
 	char* p = int_to_ip(broadcast_ip);
-	printf("broadcast_ip de %s %s es: %s\n", ip, mask1, p);
+	printf("broadcast_ip de %s %s es: %s\n", ip, mask1, p);    
+    */
+    // End of Get Broadcast IP zone
+
+
+    // Get Network Number IP zone
+    /*
+    int network_number = get_network_number(ip, mask);
+	char* f = int_to_ip(network_number);
+	printf("network_number de %s %s es: %s\n", ip, mask, f);
 	
+    network_number = get_network_number(ip, mask1);
+	char* p = int_to_ip(network_number);
+	printf("network_number de %s %s es: %s\n", ip, mask1, p);
+    */
+	
+    // End of Get Network Number IP zone
     get_hosts_range(ip, mask);
 
 	return 0;
