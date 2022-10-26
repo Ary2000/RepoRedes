@@ -194,8 +194,9 @@ char* get_hosts_range(char* p_ip, char* p_mask) {
     return respuesta;
 }
 
-char** get_random_subnet(char* p_ip, char* p_mask, int n, char** result) {
+char* get_random_subnet(char* p_ip, char* p_mask, int n) {
 
+    char* result = "";
     int min = get_network_number(p_ip, p_mask) + 1;
     int max = get_broadcast(p_ip, p_mask) - 1;
     int total_hosts = max - min + 1;
@@ -203,8 +204,9 @@ char** get_random_subnet(char* p_ip, char* p_mask, int n, char** result) {
     for (int i = 1; i <= n; i++) {
         int r = rand() % total_hosts;
         char* rand_ip = int_to_ip(min + r);
-        result[i-1] = rand_ip;
-        printf("Randon subnet #%d -> %s\n", i, rand_ip);
+        strcat(result, rand_ip);
+        strcat(result, "\n");
+        //printf("Randon subnet #%d -> %s\n", i, rand_ip);
     }
     return result;
 }
@@ -266,14 +268,17 @@ void comunication(int connfd) {
                 ptr = strtok(NULL, delim);
                 ptr = strtok(NULL, delim);
                 ptr = strtok(NULL, delim);
+                ptr = strtok(NULL, delim);
                 char* IP = strdup(ptr);
+                ptr = strtok(NULL, delim);
                 ptr = strtok(NULL, delim);
                 char* MASK = strdup(ptr);
                 ptr = strtok(NULL, delim);
+                ptr = strtok(NULL, delim);
                 int NUM = atoi(strdup(ptr));
+                ptr = strtok(NULL, delim);
                 ptr = strtok(NULL, "\r");
-                char* respuesta[NUM];
-                get_random_subnet(IP, MASK, NUM, respuesta);
+                char* respuesta = get_random_subnet(IP, MASK, NUM);
                 // strcat(result, "\n\000");
                 write(connfd, respuesta, MAX);
             }
@@ -341,7 +346,7 @@ int main(){
         printf("server accept the client...\n");
 
     comunication(connfd);
-  
+    close(sockfd);
   // Get Broadcast IP zone
 	// int broadcast_ip = get_broadcast(ip, mask);
 	// //printf ("'%s' %s is 0x%08x.\n", ip, mask, broadcast_ip);
