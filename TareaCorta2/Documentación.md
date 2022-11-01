@@ -15,7 +15,7 @@
 - Mario Fernández Robert | 2018163975
 - Zhong Jie Liu Guo | 2018319114
 
-## Fecha de Entrega 25/10/2022
+## Fecha de Entrega 1/11/2022
 
 ---
 
@@ -56,7 +56,7 @@ Con el fin de lograr los objetivos, se debe de implementar una solución de soft
 
 Para levantar el servidor, primero debe ubicarse en la carpeta principal. En el caso que **NO** haya una imagen en docker hub, se puede crear usando el comando `docker build -t tarea2_server ./program"`. En el caso **usual**, solo se debe ejecutar el helm charts usando el comando `helm install app-deployment ./app-deployment`. Si desea bajar el servidor, se usa el comando `helm delete app-deployment`.
 
-Para la conexión con el servidor se usará el comando `telnet <ip> <port>` o `telnet localhost 9666` para conectar con el servidor.
+Para la conexión con el servidor se usará el comando `telnet <ip> <port>` o `telnet localhost 9666` (si esto fuera de forma normal) para conectar con el servidor. Pero, como se debe hacer un port forwarding y kubernetes solo permite puertos altos, el comando que se **tiene** que utilizar es `telnet localhost 30000` con el puerto 30.000.
 
 ## Pruebas unitarias
 
@@ -66,11 +66,16 @@ Para la conexión con el servidor se usará el comando `telnet <ip> <port>` o `t
 
 ### Prueba 2: GET BROADCAST ERROR
 
+![image](./broadcast_error1.png)
+![image](./broadcast_error2.png)
+
 ### Prueba 3: GET NETWORK NUMBER CORRECTO
 
 ![image](./GETNETWORKNUMBEROK.PNG)
 
 ### Prueba 4: GET NETWORK NUMBER ERROR
+![image](./number_error_1.png)
+![image](./number_error_2.png)
 
 ### Prueba 5: GET HOSTS RANGE CORRECTO
 
@@ -78,14 +83,20 @@ Para la conexión con el servidor se usará el comando `telnet <ip> <port>` o `t
 
 ### Prueba 6: GET HOSTS RANGE ERROR
 
+![image](./range_error_1.png)
+
 ### Prueba 7: GET RANDOM SUBNETS NETWORK CORRECTO
 
+![image](./GETRANDOM.PNG)
+
 ### Prueba 8: GET RANDOM SUBNETS NETWORK ERROR
+
+![image](./random_error_1.png)
+![image](./random_error_2.png)
 
 <div style="page-break-after: always;"></div>
 
 ## Bibliografia
+Geeksforgeeks. (2022). *TCP Server-Client implementation in C*. https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/
 
-https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/
-
-https://www.lemoda.net/c/ip-to-integer/
+Lemoda. (2022). *Convert an IP address to an integer in C*. https://www.lemoda.net/c/ip-to-integer/
