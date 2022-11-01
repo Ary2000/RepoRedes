@@ -17,6 +17,9 @@ int BIT_MAX = 32;
 
 int IP_MAX_SIZE = 15; // len 255.255.255.255
 
+char error_message [MAX]; 
+int ERROR_APPEAR;
+
 // Original tomado de: https://www.lemoda.net/c/ip-to-integer/
 // Modificado para propósitos de la tarea
 // Transforma un char* a int32 de un ip
@@ -51,13 +54,17 @@ unsigned int ip_to_int(char *ip)
             else
             {
                 printf("Mal formato de ip: %s\n", ip);
-                exit(0);
+                ERROR_APPEAR = 1;
+                strcpy(error_message, "Mal formato de ip");
+                return -1;
             }
         }
         if (n >= 256)
         {
             printf("Rango ip no aceptado (0-255): %s\n", ip);
-            exit(0);
+            strcpy(error_message, "Rango ip no aceptado (0-255)");
+            ERROR_APPEAR = 1;
+            return -1;
         }
         value *= 256;
         value += n;
@@ -115,6 +122,8 @@ unsigned int mask_to_int(char *mask)
 {
     if (strlen(mask) == 0 || strlen(mask) > 3 || mask[0] != '/')
     {
+        strcpy(error_message, "Mal formato de mask");
+        ERROR_APPEAR = 1;
         return -1;
     }
 
@@ -126,14 +135,18 @@ unsigned int mask_to_int(char *mask)
         if (mask[i] < '0' || mask[i] > '9')
         {
             printf("Mal formato de mask : %s\n", mask);
-            exit(0);
+            strcpy(error_message, "Mal formato de mask");
+            ERROR_APPEAR = 1;
+            return -1;
         }
         mask_number = mask_number * 10 + (mask[i] - '0');
     }
     if (mask_number > 30 || mask_number < 8)
     {
         printf("Numero no aceptado de mask (se espera 8-30) : %s\n", mask);
-        exit(0);
+        strcpy(error_message, "Numero no aceptado de mask (se espera 8-30)");
+        ERROR_APPEAR = 1;
+        return -1;
     }
 
     v = 1;
@@ -165,7 +178,10 @@ int check_mask_ip(int mask, char *mask_ori)
         if (bit == 0)
         {
             printf("Mal formato ip mask: %s\n", mask_ori);
-            exit(0);
+            
+            strcpy(error_message, "Mal formato ip mask");
+            ERROR_APPEAR = 1;
+            return -1;
         }
         mask = mask >> 1; // corre un bit
         bit = mask & 1;   // mask 1
@@ -177,10 +193,12 @@ int check_mask_ip(int mask, char *mask_ori)
 int get_broadcast(char *p_ip, char *p_mask)
 {
     int integer = ip_to_int(p_ip);
+    if (integer < 0) return -1;
     // mask
     int mask;
-    if (p_mask[0] == '/')
+    if (p_mask[0] == '/'){
         mask = mask_to_int(p_mask); // formato /mask
+    }
     else
     { // formato 255.255.255.255
         mask = ip_to_int(p_mask);
@@ -197,6 +215,7 @@ int get_broadcast(char *p_ip, char *p_mask)
 int get_network_number(char *p_ip, char *p_mask)
 {
     int integer = ip_to_int(p_ip);
+    if (integer < 0) return -1;
     // mask
     int mask;
     if (p_mask[0] == '/')
@@ -214,7 +233,9 @@ int get_network_number(char *p_ip, char *p_mask)
 char *get_hosts_range(char *p_ip, char *p_mask)
 {
     int minimo = get_network_number(p_ip, p_mask) + 1;
+    if (minimo <= 0) return "";
     int maximo = get_broadcast(p_ip, p_mask) - 1;
+    if (maximo <= 0) return "";
     char *respuesta = int_to_ip(minimo);
     char *maximoString = int_to_ip(maximo);
     strcat(respuesta, "-");
@@ -225,7 +246,9 @@ char *get_hosts_range(char *p_ip, char *p_mask)
 char **get_random_subnet(char *p_ip, char *p_mask, int n, char *size, char *result[])
 {
     int min = get_network_number(p_ip, p_mask) + 1;
+    if (min <= 0) return "";
     int max = get_broadcast(p_ip, p_mask) - 1;
+    if (max <= 0) return "";
     int total_hosts = max - min + 1;
 
     for (int i = 1; i <= n; i++)
@@ -246,6 +269,8 @@ void comunication(int connfd)
     // infinite loop for chat
     for (;;)
     {
+        memset(error_message, 0, MAX);
+        ERROR_APPEAR = 0;
         bzero(buff, MAX);
         // read the message from client and copy it in buffer
         read(connfd, buff, sizeof(buff));
@@ -266,7 +291,12 @@ void comunication(int connfd)
                 ptr = strtok(NULL, "\r");
                 char *MASK = strdup(ptr);
                 int respuesta = get_broadcast(IP, MASK);
-                char *respuestaString = int_to_ip(respuesta);
+                char *respuestaString;
+                if (respuesta > 0 && ERROR_APPEAR == 0){
+                    respuestaString = int_to_ip(respuesta);
+                } else{
+                    respuestaString = error_message;
+                }
                 strcat(respuestaString, "\n\0");
                 write(connfd, respuestaString, strlen(respuestaString));
             }
@@ -280,7 +310,12 @@ void comunication(int connfd)
                 ptr = strtok(NULL, "\r");
                 char *MASK = strdup(ptr);
                 int respuesta = get_network_number(IP, MASK);
-                char *respuestaString = int_to_ip(respuesta);
+                char *respuestaString;
+                if (respuesta > 0 && ERROR_APPEAR == 0){
+                    respuestaString = int_to_ip(respuesta);
+                } else{
+                    respuestaString = error_message;
+                }
                 strcat(respuestaString, "\n\0");
                 write(connfd, respuestaString, strlen(respuestaString));
             }
@@ -293,7 +328,10 @@ void comunication(int connfd)
                 ptr = strtok(NULL, delim);
                 ptr = strtok(NULL, "\r");
                 char *MASK = strdup(ptr);
-                char *respuesta = get_hosts_range(IP, MASK);
+                char *respuesta = get_hosts_range(IP, MASK);;
+                if (ERROR_APPEAR==1){
+                    respuesta = error_message;
+                }
                 strcat(respuesta, "\n\0");
                 write(connfd, respuesta, strlen(respuesta));
             }
@@ -316,10 +354,18 @@ void comunication(int connfd)
                 ptr = strtok(NULL, "\r");
                 char *respuesta[NUM];
                 get_random_subnet(IP, MASK, NUM, SIZE, respuesta);
-                for (int i = 0; i < NUM; i++)
-                {
-                    write(connfd, respuesta[i], strlen(respuesta[i]));
-                    write(connfd, "\n", sizeof(char));
+                if (ERROR_APPEAR==1){
+                    char * respuestaString = error_message;
+                    strcat(respuestaString, "\n\0");
+                    write(connfd, respuestaString, strlen(respuestaString));
+
+                } else {
+                    for (int i = 0; i < NUM; i++)
+                    {
+                        write(connfd, respuesta[i], strlen(respuesta[i]));
+                        write(connfd, "\n", sizeof(char));
+                    }
+                    
                 }
             }
         }
