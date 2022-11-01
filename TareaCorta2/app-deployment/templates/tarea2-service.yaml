@@ -10,4 +10,5 @@ spec:
     - name: http
       port: {{.Values.port_number}}
       targetPort: {{.Values.port_number}}
+      nodePort: {{.Values.outside_port}}
       protocol: TCP

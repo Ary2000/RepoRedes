@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: {{.Values.deployment_name}}
-          image: {{.Values.image_name}}
-          imagePullPolicy: Never
+          image: {{.Values.image_dochub_name}}
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: {{.Values.port_number}}
               protocol: TCP
