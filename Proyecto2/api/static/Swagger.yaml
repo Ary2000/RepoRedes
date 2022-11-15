@@ -1,0 +1,24 @@
+openapi: 3.0.0
+info:
+  title: DNS API
+  description: Esta es la documentación para el DNS API del proyecto 2 del curso de redes.
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:5000
+    description: "Aquí se corre el API"
+paths:
+  /api/dns_resolver/{dns_package}:
+    post:
+      summary: Este se encarga de conseguir un DNS package, enviarselo a un DNS y devolvere la repsuesta al cliente que le dio el request original.
+      parameters:
+        - name: dns_package
+          in: path
+          required: true
+          description: Este es el paquete que le envia el cliente, en este caso es www.google.com en base64
+          schema:
+            type: string
+            format: string
+            minimum: 1
+      responses:
+        "Respuesta correcta":
+          description: Esto se actualiza cuando ya se tenga toda la información
