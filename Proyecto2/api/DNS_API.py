@@ -7,7 +7,6 @@ from flask import Flask, render_template, request
 import socket
 import threading
 from flask_cors import CORS
-from elasticsearch import Elasticsearch
 import base64
 from flask_swagger_ui import get_swaggerui_blueprint
 
@@ -29,23 +28,15 @@ UDP_Client = socket.socket(
 # Se va a recibir un paquete DNS RFC2929 codificado en base64
 # Recordad lo del bit que hay que cambiar
 def dns_resolver(dns_package):
-    decoded_package = base64.b64decode(dns_package)
-    header = '00000000000000010000000000000000000000000000000100000000000000000000000000000000000000000000000000000000'
-    v = int(header, 2)
-    b = bytearray()
-    while v:
-        b.append(v & 0xff)
-        v >>= 8
-    header = bytes(b[::-1])
-    tail = '000000000000000000010000000000000001'
+    #decoded_package = base64.b64decode(dns_package)
     # decoded_package = header + decoded_package
-    request = b"".join([header, decoded_package])
-    #send = UDP_Client.sendto(request, server_address_port)
+    #request = b"".join([header, decoded_package])
+    send = UDP_Client.sendto(dns_package, server_address_port)
     reply = UDP_Client.recvfrom(1024)
-    reply_info = reply[0].decode()
+    #reply_info = reply[0].decode()
     # return base64.b64encode(reply_info)
-    return decoded_package
-
+    #return decoded_package
+    return reply[0]
 
 SWAGGER_ULR = "/swagger"
 API_URL = '/static/Swagger.yaml'
@@ -65,5 +56,30 @@ if __name__ == "__main__":
     if(len(sys.argv) != 2):
         print("Por favor mandar el ip del DNS")
     else:
-        server_address_port = (sys.argv[1], 53)
-        app.run(host='0.0.0.0', port=5000)
+        localIP     = "localhost"
+        localPort   = 2000
+        bufferSize  = 1024
+
+        msgFromServer       = "Hello UDP Client"
+        bytesToSend         = str.encode(msgFromServer)
+
+        # Create a datagram socket
+        UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+        # Bind to address and ip
+        UDPServerSocket.bind((localIP, localPort))
+        print("UDP server up and listening")
+        # Listen for incoming datagrams
+        while(True):
+            bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
+            message = bytesAddressPair[0]
+            address = bytesAddressPair[1]
+            clientMsg = "Message from Client:{}".format(message)
+            clientIP  = "Client IP Address:{}".format(address)
+            print(clientMsg)
+            print(clientIP)
+            # Sending a reply to client
+            respuesta = dns_resolver(bytesAddressPair[0])
+            UDPServerSocket.sendto(respuesta, address)
+            break
+        #server_address_port = (sys.argv[1], 53)
+        #app.run(host='0.0.0.0', port=5000)
