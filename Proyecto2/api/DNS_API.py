@@ -4,6 +4,11 @@ import socket
 from flask_cors import CORS
 import base64
 from flask_swagger_ui import get_swaggerui_blueprint
+import os
+
+PORT_API = int(os.environ['PORT_API'])
+IP_GOOGLE = os.environ['IP_GOOGLE']
+PORT_GOOGLE = int(os.environ['PORT_GOOGLE'])
 
 # Python flask
 app = Flask(__name__)
@@ -11,7 +16,7 @@ CORS(app)
 
 # UDP Socket
 # https://pythontic.com/modules/socket/udp-client-server-example
-server_address_port = ("8.8.8.8", 53)
+server_address_port = (IP_GOOGLE, PORT_GOOGLE)
 buffer_size = 1024
 
 UDP_Client = socket.socket(
@@ -42,10 +47,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_ULR)
 
 if __name__ == "__main__":
-    if(len(sys.argv) != 2):
-        print("Por favor mandar el ip del DNS")
-    else:
-        app.run(host='0.0.0.0', port=5000, ssl_context='adhoc')
+    app.run(host='0.0.0.0', port=PORT_API, ssl_context='adhoc')
 
 # Comandos de api
 # pip install flask

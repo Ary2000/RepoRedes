@@ -1,0 +1,29 @@
+## Tomado de https://faun.pub/run-your-flask-app-on-kubernetes-ff03854db842
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-api
+  template:
+    metadata:
+      labels:
+        app: flask-api
+    spec:
+      containers:
+        - name: flask-api
+          image: api-server
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          env:
+            - name: PORT_API
+              value: "5000"
+            - name: IP_GOOGLE
+              value: '8.8.8.8'
+            - name: PORT_GOOGLE
+              value: "53"
