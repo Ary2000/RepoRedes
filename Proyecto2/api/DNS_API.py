@@ -7,7 +7,6 @@ from flask import Flask, render_template, request
 import socket
 import threading
 from flask_cors import CORS
-from elasticsearch import Elasticsearch
 import base64
 from flask_swagger_ui import get_swaggerui_blueprint
 
