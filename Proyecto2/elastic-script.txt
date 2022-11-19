@@ -1,0 +1,67 @@
+// crear indexes
+PUT /zones
+{
+	"mappings":{
+		"properties": {
+			"hostname": {"type": "text"},
+			"TTL": {"type": "integer"},
+			"IP": {"type": "text"},
+			"index": {"type": "integer"}
+		}
+	}
+}
+
+// POST docs
+POST /zones/_doc/
+{
+	"hostname": "www.google.com",
+	"TTL": 5,
+	"IP": "8.9.8.9",
+	"index": 0
+}
+
+POST /zones/_doc/
+{
+	"hostname": "www.facebook.com",
+	"TTL": 5,
+	"IP": ["10.12.41.1" , "192.12.3.244"],
+	"index": 0
+}
+
+// Gets
+GET /zones/_search
+{
+	"query": {
+		"query_string": {
+			"query": "www.facebook.com",
+			"default_field": "hostname"
+		}
+	}
+}
+
+GET /_search
+{
+  "query": {
+    "match": {
+      "hostname": {
+        "query": "www.outlook.com"
+      }
+    }
+  },
+  "fields": [
+    "hostname",
+    "IP"         
+  ],
+  "_source": false
+}
+
+//Actualizar index para el round-robin por id de doc
+POST /zones/_update/vmQukYQBYIZLxsrnkzCl
+{
+  "script" : {
+    "source": "ctx._source.index += params.count",
+    "params" : {
+      "count" : 1
+    }
+  }
+}
