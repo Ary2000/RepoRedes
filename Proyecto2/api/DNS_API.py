@@ -6,9 +6,9 @@ import base64
 from flask_swagger_ui import get_swaggerui_blueprint
 import os
 
-PORT_API = int(os.environ['PORT_API'])
-IP_GOOGLE = os.environ['IP_GOOGLE']
-PORT_GOOGLE = int(os.environ['PORT_GOOGLE'])
+PORT_API = 5000 #int(os.environ['PORT_API'])
+IP_GOOGLE = "8.8.8.8" #os.environ['IP_GOOGLE']
+PORT_GOOGLE = 53 #int(os.environ['PORT_GOOGLE'])
 
 # Python flask
 app = Flask(__name__)

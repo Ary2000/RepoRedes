@@ -82,12 +82,11 @@ int main()
             // recibir respuesta, decodearla y enviarla al cliente solicitante
             // "responder nslookup"
 
-            encoded = base64_encode(buffer, n);
-
-            postToApi(encoded);
-
             decoded = base64_decode(encoded, 4 * ((n + 2) / 3));
         }
+
+        encoded = base64_encode(buffer, n);
+        postToApi(encoded);
     }
     return 0;
 }
