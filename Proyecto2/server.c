@@ -17,15 +17,13 @@
 int main()
 {
     int sockfd;
+    struct sockaddr_in servaddr, cliaddr;
+    
     unsigned char buffer[MAXLINE];
-    char *hello = "Hello from server";
-    char encodecontent[100];
+
     char *encoded;
     unsigned char *decoded;
-    struct sockaddr_in servaddr, cliaddr;
-
-    // archivo para guardar el request
-    FILE *log_file, log_file2;
+    
 
     // Creating socket file descriptor
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
@@ -51,19 +49,18 @@ int main()
     }
 
     int len, n;
-    size_t* outlen;
-    char *resultado;
 
     len = sizeof(cliaddr); // len is value/result
 
-    
-    //b64('e',"log.bin","output.txt",n);
+    printf("Server running... \n");
 
     while (1)
     {
         bzero(buffer, MAXLINE);
         n = recvfrom(sockfd, &buffer, MAXLINE, MSG_WAITALL, (struct sockaddr *)&cliaddr, &len);
-        printf("%i\n",n);
+
+        printf("Bytes received: %i\n", n);
+
         unsigned int number = (unsigned int)buffer[2];
         number = number << 24;
         number = number >> 31;
@@ -72,21 +69,9 @@ int main()
         number = number << 25;
         number = number >> 28;
         printf("OPCODE: %u \n", number);
-        b64('e',"log.bin","output.txt",n);
-        printf("Lei algo \n");
-        /*log_file = fopen("output.txt","r");
-        char c;
-        while( feof( log_file ) == 0 ) {
-            c = getc(log_file);
-            strncat(encodecontent, &c, 1);
-        }
-        fclose(log_file);
-        printf("%s\n",encodecontent);
-        memset(encodecontent, 0, sizeof encodecontent);*/
-        encoded = base64_encode(buffer,n);
-        printf("%s\n",encoded);
-        decoded = base64_decode(encoded,4 * ((n + 2) / 3));
-        printf("%s\n",decoded);
+
+        encoded = base64_encode(buffer, n);
+        decoded = base64_decode(encoded, 4 * ((n + 2) / 3));
+        return 0;
     }
-    return 0;
 }
