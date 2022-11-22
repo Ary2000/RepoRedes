@@ -84,7 +84,7 @@ int main()
 
             encoded = base64_encode(buffer, n);
 
-            post(encoded, 5000);
+            postToApi(encoded);
 
             decoded = base64_decode(encoded, 4 * ((n + 2) / 3));
         }
