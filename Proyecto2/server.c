@@ -1,4 +1,3 @@
-// Server side implementation of UDP client-server model
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -8,7 +7,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include "base64.c"
-//#include "other.c"
+#include "curlHandler.c"
 
 #define PORT 53
 #define MAXLINE 4096
@@ -18,12 +17,11 @@ int main()
 {
     int sockfd;
     struct sockaddr_in servaddr, cliaddr;
-    
+
     unsigned char buffer[MAXLINE];
 
     char *encoded;
     unsigned char *decoded;
-    
 
     // Creating socket file descriptor
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
@@ -54,6 +52,8 @@ int main()
 
     printf("Server running... \n");
 
+    int qr, opcode;
+
     while (1)
     {
         bzero(buffer, MAXLINE);
@@ -63,15 +63,31 @@ int main()
 
         unsigned int number = (unsigned int)buffer[2];
         number = number << 24;
-        number = number >> 31;
-        printf("QR : %u \n", number);
+        qr = number >> 31;
+
+        printf("QR : %u \n", qr);
+
         number = (unsigned int)buffer[2];
         number = number << 25;
-        number = number >> 28;
-        printf("OPCODE: %u \n", number);
+        opcode = number >> 28;
 
-        encoded = base64_encode(buffer, n);
-        decoded = base64_decode(encoded, 4 * ((n + 2) / 3));
-        return 0;
+        printf("OPCODE: %u \n", opcode);
+
+        if (qr != 0 || opcode != 0)
+        {
+            // caso paquete diferente a query estándar
+
+            // encodear a base 64
+            // enviar con lib curl a DNS API
+            // recibir respuesta, decodearla y enviarla al cliente solicitante
+            // "responder nslookup"
+
+            encoded = base64_encode(buffer, n);
+
+            post(encoded, 5000);
+
+            decoded = base64_decode(encoded, 4 * ((n + 2) / 3));
+        }
     }
+    return 0;
 }
