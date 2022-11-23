@@ -15,7 +15,7 @@ PUT /zones
 POST /zones/_doc/
 {
 	"hostname": "www.google.com",
-	"TTL": 5,
+	"TTL": 123,
 	"IP": "8.9.8.9",
 	"index": 0
 }
@@ -24,39 +24,31 @@ POST /zones/_doc/
 {
 	"hostname": "www.facebook.com",
 	"TTL": 5,
-	"IP": ["10.12.41.1" , "192.12.3.244"],
+	"IP": "10.12.41.1, 192.12.3.244, 123.0.23.12",
 	"index": 0
 }
 
 // Gets
-GET /zones/_search
-{
-	"query": {
-		"query_string": {
-			"query": "www.facebook.com",
-			"default_field": "hostname"
-		}
-	}
-}
-
 GET /_search
 {
   "query": {
     "match": {
       "hostname": {
-        "query": "www.outlook.com"
+        "query": "www.facebook.com"
       }
     }
   },
   "fields": [
     "hostname",
-    "IP"         
+    "index",
+    "IP",
+    "TTL"        
   ],
   "_source": false
 }
 
 //Actualizar index para el round-robin por id de doc
-POST /zones/_update/vmQukYQBYIZLxsrnkzCl
+POST /zones/_update/LLxKl4QBKe32UZtmlrXB
 {
   "script" : {
     "source": "ctx._source.index += params.count",
@@ -65,3 +57,7 @@ POST /zones/_update/vmQukYQBYIZLxsrnkzCl
     }
   }
 }
+
+kubectl port-forward service/quickstart-kb-kb-http 5601
+
+kubectl port-forward service/quickstart-es-http 9200
