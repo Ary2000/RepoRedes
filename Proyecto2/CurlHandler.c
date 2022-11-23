@@ -41,9 +41,9 @@ size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
 void postToKibana();
 
 // POST api/dns_resolver
-void postToApi(char *data)
+char* postToApi(char *data)
 {
-    char *URL = "https://localhost:5000/api/dns_resolver/";
+    char URL[255] = "https://localhost:5000/api/dns_resolver/";
     curl_global_init(CURL_GLOBAL_ALL);
     /*get a curl handle*/
     handle = curl_easy_init();
@@ -61,6 +61,8 @@ void postToApi(char *data)
         // Disable verification
         curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0L);
         curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0L);
+        // curl_easy_setopt(handle, CURLOPT_POST, 1);
+        curl_easy_setopt(handle, CURLOPT_HTTPHEADER, hs);
         // Write request response
         curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, writefunc);
         curl_easy_setopt(handle, CURLOPT_WRITEDATA, &s);
@@ -69,9 +71,14 @@ void postToApi(char *data)
         if (res != CURLE_OK)
             printf("Theres been an error: %s\n", curl_easy_strerror(res));
 
-        free(s.ptr);
+        char *ptr = s.ptr;
+        ptr = strstr(ptr, "\"response\"");
+        ptr = strchr(ptr, '\'');
+        ptr++;
+        char * paquete = strtok(ptr, "\'");
+        printf("response: %s\n", paquete);
+        curl_easy_cleanup(handle);
+        curl_global_cleanup();
+        return paquete;
     }
-
-    curl_easy_cleanup(handle);
-    curl_global_cleanup();
 }

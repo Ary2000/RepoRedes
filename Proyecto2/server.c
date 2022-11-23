@@ -7,9 +7,9 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include "base64.c"
-#include "curlHandler.c"
+#include "CurlHandler.c"
 
-#define PORT 53
+#define PORT 2000
 #define MAXLINE 4096
 
 // Driver code
@@ -73,6 +73,7 @@ int main()
 
         printf("OPCODE: %u \n", opcode);
 
+        encoded = base64_encode(buffer);
         if (qr != 0 || opcode != 0)
         {
             // caso paquete diferente a query estándar
@@ -82,11 +83,11 @@ int main()
             // recibir respuesta, decodearla y enviarla al cliente solicitante
             // "responder nslookup"
 
-            decoded = base64_decode(encoded, 4 * ((n + 2) / 3));
         }
-
-        encoded = base64_encode(buffer, n);
-        postToApi(encoded);
+        char* response = postToApi(encoded);
+        decoded = base64_decode(response);
+        printf("decoded: %s\n", decoded);
+        sendto(sockfd, decoded, strlen(decoded), 0, (struct sockaddr *)&cliaddr, len);
     }
     return 0;
 }
