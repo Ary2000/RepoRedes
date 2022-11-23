@@ -11,8 +11,13 @@ Paso 2. Configurar Elastic y Kibana
     * `docker pull docker.elastic.co/kibana/kibana:8.4.0`
 * Luego, se usa el siguiente comando (Puede tardar varios minutos):
 > helm install elastic-deployment ./elastic-deployment/
-* Se debe hacer port-forwarding de kibana para usarlo, usando Lens o usando el siguiente comando:
-> `kubectl port-forward service/quickstart-kb-kb-http 5601`
+* El servicio de kibana va a estar en la dirección `localhost:30601`.
+* Luego, va a aparecer un log-in, el usuario es **elastic** y la contraseña puede averiguarse corriendo el siguiente comando: `kubectl get secret quickstart-es-elastic-user -o=jsonpath='{.data.elastic}' | base64 --decode; echo`. Si está en Windows, se recomienda correrlo en una terminal de WSL o de Unix. También, se puede buscar en Lens con el nombre **quickstart-es-elastic-user**.
 
-Paso 3 (Pendiente). Configurar el DNS API y DNS Interceptor.
+Paso 3 (Pendiente). Configurar el DNS API, DNS Interceptor y cliente.
+Se instalan el API, el Interceptor y el cliente en el cluster de kubernetes
 > helm install app-deployment .\app-deployment\
+
+
+* Para probar el cliente, se debe acceder a un shell (recomendable usando Lens). Luego, ejecutar nslookup
+* Se expone un puerto a la máquina host en el puerto **30053** si se desea usar de modo local.

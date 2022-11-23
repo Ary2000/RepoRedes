@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubuntu-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubuntu-test
+  template:
+    metadata:
+      labels:
+        app: ubuntu-test
+    spec:
+      containers:
+        - name: ubuntu-test
+          image: ubuntu-test
+          imagePullPolicy: Never

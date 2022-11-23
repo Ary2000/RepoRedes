@@ -1,0 +1,36 @@
+## Tomado de https://faun.pub/run-your-flask-app-on-kubernetes-ff03854db842
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dns-interceptor-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dns-interceptor-deployment
+  template:
+    metadata:
+      labels:
+        app: dns-interceptor-deployment
+    spec:
+      containers:
+        - name: dns-interceptor-deployment
+          image: dns-interceptor
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 53
+              protocol: UDP
+          env:
+            - name: ELASTIC_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: quickstart-es-elastic-user
+                  key: elastic
+            - name: ECK_USER_PASS
+              value: "elastic:$(ELASTIC_PASS)"
+            - name: POST_INDEX
+              value: "{ \"script\" : { \"source\": \"ctx._source.index += params.count\", \"params\" : { \"count\" : 1}}}"
+            - name: POST_FIELD_1
+              value: "{\"query\": {\"match\": {\"hostname\": {\"query\": \""
+            - name: POST_FIELD_2
+              value: "\"}}},\"fields\": [\"hostname\",\"index\",\"IP\",\"TTL\" ],\"_source\": false}"

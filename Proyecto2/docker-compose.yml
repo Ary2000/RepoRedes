@@ -7,3 +7,16 @@ services:
       - "5000:5000"
     expose:
       - "5000"
+  test:
+    build: ./libcurltest
+    image: curl-test
+  client:
+    build: ./client
+    image: ubuntu-test
+  interceptor:
+    build: ./interceptor
+    image: dns-interceptor
+    ports:
+      - "53:53"
+    expose:
+      - "53"
