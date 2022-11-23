@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+//#include <b64/b64.h>
 #include "base64.c"
 #include "CurlHandler.c"
 
@@ -73,7 +74,7 @@ int main()
 
         printf("OPCODE: %u \n", opcode);
 
-        encoded = base64_encode(buffer);
+        encoded = base64_encode(buffer, n);
         if (qr != 0 || opcode != 0)
         {
             // caso paquete diferente a query estándar
@@ -85,9 +86,9 @@ int main()
 
         }
         char* response = postToApi(encoded);
-        decoded = base64_decode(response);
-        printf("decoded: %s\n", decoded);
-        sendto(sockfd, decoded, strlen(decoded), 0, (struct sockaddr *)&cliaddr, len);
+        //decoded = base64_decode(response);
+        //printf("decoded: %s\n", decoded);
+        //sendto(sockfd, decoded, strlen(decoded), 0, (struct sockaddr *)&cliaddr, len);
     }
     return 0;
 }
