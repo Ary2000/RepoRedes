@@ -1,0 +1,10 @@
+{
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "exception": "c",
+        "memory": "c",
+        "type_traits": "c",
+        "new": "c",
+        "xiosbase": "c"
+    }
+}
