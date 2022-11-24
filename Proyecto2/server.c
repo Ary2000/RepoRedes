@@ -6,8 +6,8 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
-//#include <b64/b64.h>
-#include "base64.c"
+#include "cdecoder.c"
+#include "cencoder.c"
 #include "CurlHandler.c"
 
 #define PORT 2000
@@ -73,8 +73,9 @@ int main()
         opcode = number >> 28;
 
         printf("OPCODE: %u \n", opcode);
+        encoded = base64_encode(buffer, n, NULL);
+        printf("encoded: %s\n", encoded);
 
-        encoded = base64_encode(buffer, n);
         if (qr != 0 || opcode != 0)
         {
             // caso paquete diferente a query estándar
@@ -86,9 +87,8 @@ int main()
 
         }
         char* response = postToApi(encoded);
-        //decoded = base64_decode(response);
-        //printf("decoded: %s\n", decoded);
-        //sendto(sockfd, decoded, strlen(decoded), 0, (struct sockaddr *)&cliaddr, len);
+        decoded = decode(response);
+        sendto(sockfd, decoded, MAXLINE, 0, (struct sockaddr *)&cliaddr, len);
     }
     return 0;
 }

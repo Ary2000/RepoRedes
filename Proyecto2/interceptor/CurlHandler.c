@@ -44,7 +44,7 @@ char* postToApi(char *data)
 {
     CURL *curl;
     CURLcode res;
-    char URL[255] = "https://localhost:30050/api/dns_resolver/";
+    char URL[255] = "https://flask-api-service:5000/api/dns_resolver/";
     curl_global_init(CURL_GLOBAL_ALL);
     /*get a curl curl*/
     curl = curl_easy_init();
