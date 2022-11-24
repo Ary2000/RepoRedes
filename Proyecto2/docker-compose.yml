@@ -7,9 +7,6 @@ services:
       - "5000:5000"
     expose:
       - "5000"
-  test:
-    build: ./libcurltest
-    image: curl-test
   client:
     build: ./client
     image: ubuntu-test
