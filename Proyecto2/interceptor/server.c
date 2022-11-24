@@ -8,6 +8,9 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <curl/curl.h>
+#include "cdecoder.c"
+#include "cencoder.c"
+#include "CurlHandler.c"
 
 #define PORT 53
 #define MAXLINE 4096
@@ -20,36 +23,6 @@ char* get_url = "https://quickstart-es-default:9200/zones/_search/";
 char* update_url = "https://quickstart-es-default:9200/zones/_update/";
 
 unsigned int static TTL = 0;
-
-struct string {
-    char * ptr;
-    size_t len;
-};
-
-void init_string(struct string *s) {
-  s->len = 0;
-  s->ptr = malloc(s->len+1);
-  if (s->ptr == NULL) {
-    fprintf(stderr, "malloc() failed\n");
-    exit(EXIT_FAILURE);
-  }
-  s->ptr[0] = '\0';
-}
-
-size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
-{
-  size_t new_len = s->len + size*nmemb;
-  s->ptr = realloc(s->ptr, new_len+1);
-  if (s->ptr == NULL) {
-    fprintf(stderr, "realloc() failed\n");
-    exit(EXIT_FAILURE);
-  }
-  memcpy(s->ptr+s->len, ptr, size*nmemb);
-  s->ptr[new_len] = '\0';
-  s->len = new_len;
-
-  return size*nmemb;
-}
 
 char *call_elastic(char* host_search){
     CURL *curl;
@@ -254,7 +227,7 @@ int main()
         opcode = opcode >> 28;
         printf("OPCODE: %u \n", opcode);
         
-        if (qr == 0 && opcode == 0 ){
+        if (qr == 0 && opcode == 0 ){ // send to elastic
           isFirstCase = 1;
           unsigned int hostname_index = 12; // start at hostname position
           int left = buffer[hostname_index++]; // size of first part
@@ -273,7 +246,9 @@ int main()
           hostname[i] = '\0';
 
           char *ip = call_elastic(hostname); // buscar el hostname en elastic
-          if (ip != NULL){ //entra si encontró hostname
+          if (ip == NULL) // no encuentra el hostname
+            isFirstCase = 0;
+          else { //entra si encontró hostname
             unsigned int mask = 1;
             mask = mask << 7;
             buffer[2] = buffer[2] | mask; // cambiar QR bit
@@ -322,13 +297,19 @@ int main()
             buffer[n++] = octet;
             buffer[n] = '\0';
             sendto(sockfd, buffer, n, 0, (struct sockaddr *)&cliaddr, len); 
-          } else {
-            isFirstCase = 0;
           }
-        }
+        } // other cases
         if (isFirstCase == 0){
           // caso donde QR o OPCODE no son 0 ó que no encontró el hostname en elastic
-          // enviar al API y reenviar al cliente
+          // send to API
+          char *encoded;
+          unsigned char *decoded;
+          encoded = base64_encode(buffer, n, NULL);
+          printf("encoded: %s\n", encoded);
+          char* response = postToApi(encoded);
+          decoded = decode(response);
+          // send to client
+          sendto(sockfd, decoded, MAXLINE, 0, (struct sockaddr *)&cliaddr, len);
         }
     }
     return 0;
