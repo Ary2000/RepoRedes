@@ -57,7 +57,3 @@ POST /zones/_update/LLxKl4QBKe32UZtmlrXB
     }
   }
 }
-
-kubectl port-forward service/quickstart-kb-kb-http 5601
-
-kubectl port-forward service/quickstart-es-http 9200
