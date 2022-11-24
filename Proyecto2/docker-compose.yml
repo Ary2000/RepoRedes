@@ -7,9 +7,9 @@ services:
       - "5000:5000"
     expose:
       - "5000"
-  client:
-    build: ./client
-    image: ubuntu-test
+#  client:
+#    build: ./client
+#    image: tifan12/ubuntu-test
   interceptor:
     build: ./interceptor
     image: dns-interceptor
