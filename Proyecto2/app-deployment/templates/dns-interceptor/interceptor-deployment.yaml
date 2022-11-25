@@ -4,21 +4,21 @@ kind: Deployment
 metadata:
   name: dns-interceptor-deployment
 spec:
-  replicas: 1
+  replicas: {{.Values.dns_interceptor_replicas}}
   selector:
     matchLabels:
-      app: dns-interceptor-deployment
+      app: {{.Values.name_dns_interceptor}}
   template:
     metadata:
       labels:
-        app: dns-interceptor-deployment
+        app: {{.Values.name_dns_interceptor}}
     spec:
       containers:
-        - name: dns-interceptor-deployment
-          image: dns-interceptor
-          imagePullPolicy: Never
+        - name: {{.Values.name_dns_interceptor}}
+          image: {{.Values.image_name_dns_interceptor}}
+          imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 53
+            - containerPort: {{.Values.dns_interceptor_port}}
               protocol: UDP
           env:
             - name: ELASTIC_PASS
@@ -34,3 +34,9 @@ spec:
               value: "{\"query\": {\"match\": {\"hostname\": {\"query\": \""
             - name: POST_FIELD_2
               value: "\"}}},\"fields\": [\"hostname\",\"index\",\"IP\",\"TTL\" ],\"_source\": false}"
+            - name: URL_GET_ELASTIC
+              value: "https://quickstart-es-default:9200/zones/_search/"
+            - name: URL_UPDATE_ELASTIC
+              value: "https://quickstart-es-default:9200/zones/_update/"
+            - name: URL_POST_API
+              value: "https://flask-api-service:5000/api/dns_resolver/"

@@ -1,0 +1,16 @@
+flask_api_port: 5000
+flask_api_port_out: 30050
+api_replicas: 1
+name_flask_api: flask-api
+
+clients_replicas: 1
+name_client: ubuntu-test
+
+dns_interceptor_port: 53
+dns_interceptor_port_out: 30053
+dns_interceptor_replicas: 1
+name_dns_interceptor: dns-interceptor-deployment
+
+image_name_api: tifan12/api-server
+image_name_client: tifan12/ubuntu-test
+image_name_dns_interceptor: tifan12/dns-interceptor
