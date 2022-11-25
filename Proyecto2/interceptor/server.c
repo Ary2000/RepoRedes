@@ -12,7 +12,6 @@
 #include "cencoder.c"
 #include "CurlHandler.c"
 
-#define PORT 53
 #define MAXLINE 4096
 #define MAX_LEN_HOSTNAME 253
 #define IP_LEN 18 
@@ -187,7 +186,7 @@ int main()
     // Filling server information
     servaddr.sin_family = AF_INET; // IPv4
     servaddr.sin_addr.s_addr = INADDR_ANY;
-    servaddr.sin_port = htons(PORT);
+    servaddr.sin_port = htons(atoi(getenv("DNS_INTERCEPTOR_PORT")));
 
     // Bind the socket with the server address
     if (bind(sockfd, (const struct sockaddr *)&servaddr,

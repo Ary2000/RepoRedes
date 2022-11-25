@@ -40,3 +40,5 @@ spec:
               value: "https://quickstart-es-default:9200/zones/_update/"
             - name: URL_POST_API
               value: "https://flask-api-service:5000/api/dns_resolver/"
+            - name: DNS_INTERCEPTOR_PORT
+              value: "53"
