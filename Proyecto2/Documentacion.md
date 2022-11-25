@@ -37,14 +37,6 @@ base64, este deberá ser decodificado y enviado a un servidor DNS remoto para su
 * Esta aplicación deberá soportar múltiples peticiones al mismo tiempo.
 ### Elasticsearch/Kibana:
 Es un componente que no se tiene que implementar pero que si debe instalarse y configurarse mediante el uso de Docker, Docker compose, Helm Charts y Kubernetes. En este componente deberán existir los siguientes recursos:
-* Un índice llamado zones.
-* Documentos dentro de este índice que representan hosts, estos tendrán el siguiente formato: `hay que agregar el formato`
-* Estos documentos se pueden crear, borrar o modificar en cualquier momento mediante Kibana.
-## Diagramas
-
-> Diagrama de arquitectura
-
-![](./assets/arquitectura-proy-2.png)
 
     * Un índice llamado zones. Este va a tener el siguiente formato:
     * Documentos dentro de este índice que representan hosts, estos tendrán el siguiente formato: 
@@ -55,6 +47,13 @@ Es un componente que no se tiene que implementar pero que si debe instalarse y c
             "index": 0
     }
     * Estos documentos se pueden crear, borrar o modificar en cualquier momento mediante Kibana.
+## Diagramas
+
+> Diagrama de arquitectura/flujo
+
+![](./assets/arquitectura-proy-2.png)
+
+
 
 ## Prerequisitos
 Para este proyecto, se asume que tiene instalado los siguientes programas:
