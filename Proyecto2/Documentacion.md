@@ -23,9 +23,24 @@ Este es un Deployment, cada pod tendrá una pequeña aplicación  C, que escucha
 
 1. **Paquete diferente a query estándar:** codifica el paquete a **base64** y via HTTPS se lo envia al NDS API, la respuesta recibida estara en **base64**, esta debe ser decodificada y enviada al cliente solicitante.
 
-2. **Paquete query estándar:**
+2. **Paquete query estándar:** examinarlo detenidamente e identificar el host que se esta tratando de resolver, una 
+vez que el host ha sido identificado, deberá buscar en Elasticsearch si un registro para este host existe y tomar alguna de las siguientes acciones:
+    
+    *  Si existe, deberá extraer la información de esta base de datos y retornar la información, este debe cumplir con la especificación del protocolo en RFC2929.
+    * En caso de no existir, la solicitud se trata como el primer caso.
 ### DNS API:
+Este es un Deployment, cada pod contiene container que ejecuta un REST API implementado en Python, que ejecuta un único método en un único verbo HTTP, este único método recibe en el data un paquete DNS (RFC2929) codificado en 
+base64, este deberá ser decodificado y enviado a un servidor DNS remoto para su resolución, esto implica lo siguiente:
+    
+    * Esta aplicación deberá implementar un REST API, que a su vez implemente un cliente UDP/DNS para enviar las solicitudes hacia el servidor DNS remoto.
+    * Esta aplicación deberá recibir como parámetro/archivo de configuración el IP de un servidor DNS remoto.
+    * Esta aplicación deberá soportar múltiples peticiones al mismo tiempo.
 ### Elasticsearch/Kibana:
+Es un componente que no se tiene que implementar pero que si debe instalarse y configurarse mediante el uso de Docker, Docker compose, Helm Charts y Kubernetes. En este componente deberán existir los siguientes recursos:
+
+    * Un índice llamado zones.
+    * Documentos dentro de este índice que representan hosts, estos tendrán el siguiente formato: `hay que agregar el formato`
+    * Estos documentos se pueden crear, borrar o modificar en cualquier momento mediante Kibana.
 ## Diagramas 
 ## Prerequisitos
 Para este proyecto, se asume que tiene instalado los siguientes programas:
