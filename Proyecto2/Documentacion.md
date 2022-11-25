@@ -52,6 +52,8 @@ Para este proyecto, se asume que tiene instalado los siguientes programas:
 - Docker Desktop(ver [link](https://www.docker.com/))
 - Lens(ver [link](https://k8slens.dev/))
 
+- Helm(ver [link](https://helm.sh/))
+
 ## Manual de usuario
 > Nota: README.md (ver [link](https://github.com/Ary2000/RepoRedes/tree/main/Proyecto2#readme)).
 ## Pruebas unitarias
@@ -66,8 +68,20 @@ Para este proyecto, se asume que tiene instalado los siguientes programas:
 - Utilizar el plugin flask-swagger-ui para la documentacion swagger de los endpoints creados.
 - Automatizar el proyecto mediante docker y helm.
 - Mantener separada cada parte del proyecto para facilitar la ejecución y comprención del código.
-- Utilizar una variable de entorno para facilitar el uso de elastic search.
+- Utilizar una variable de entorno para la contraseña de elastic search y asi facilitar su uso.
 - Revisar los elementos que las funciones esperan recibir o deben enviar.
 
 ## Conclusiones
+
+- Un DNS funciona escencialmente como una base de datos, la cual almacena informacion relevante para el cliente solicitante de una resolucion de un dominio.
+- Implementar un DNS con un round robin agrega flexibilidad al protocolo y nos deja expandir distintos domain names a un conjunto de ips.
+- Los estandares RFC detallan especificamente byte por byte y bit por bit el contenido de los paquetes, es muy importante familiarizarse con la nomenclatura para entender los ASCII tables.
+- La automatizacion de los proyectos mediante kubernetes y helm charts crean un beneficio considerable a la hora de expandir o compartir proyectos.
+- Para implementar un DNS la opcion mas viable es mantener un base de datos no relacional para mantenerse rapida en respuesta y flexible en forma.
+
+
 ## Referencias bibliográficas
+
+- libcurl - API. (s. f.). https://curl.se/libcurl/c/
+- Malinen, J. M. (2005). Base64 encoding/decoding. web MIT. https://web.mit.edu/freebsd/head/contrib/wpa/src/utils/base64.c
+- RFC 2929 - Domain Name System (DNS) IANA Considerations. (s. f.). https://datatracker.ietf.org/doc/html/rfc2929
