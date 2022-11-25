@@ -77,8 +77,9 @@ Para este proyecto, se asume que tiene instalado los siguientes programas:
 - Implementar un DNS con un round robin agrega flexibilidad al protocolo y nos deja expandir distintos domain names a un conjunto de ips.
 - Los estandares RFC detallan especificamente byte por byte y bit por bit el contenido de los paquetes, es muy importante familiarizarse con la nomenclatura para entender los ASCII tables.
 - La automatizacion de los proyectos mediante kubernetes y helm charts crean un beneficio considerable a la hora de expandir o compartir proyectos.
-- Para implementar un DNS la opcion mas viable es mantener un base de datos no relacional para mantenerse rapida en respuesta y flexible en forma.
-
+- Para implementar un DNS la opcion mas viable es mantener una base de datos no relacional para mantenerse rapida en respuesta y flexible en forma.
+- Base64 es util para el transporte de información que originalmente contenia el caracter "00".
+- La existencia de protocolos como el RFC2929 es util para la estandarización y con esto facilitar la creación de nuevavs aplicaciones o transferencia de información.
 
 ## Referencias bibliográficas
 
