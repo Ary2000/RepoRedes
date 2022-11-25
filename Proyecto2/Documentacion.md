@@ -32,15 +32,14 @@ vez que el host ha sido identificado, deberá buscar en Elasticsearch si un regi
 Este es un Deployment, cada pod contiene container que ejecuta un REST API implementado en Python, que ejecuta un único método en un único verbo HTTP, este único método recibe en el data un paquete DNS (RFC2929) codificado en 
 base64, este deberá ser decodificado y enviado a un servidor DNS remoto para su resolución, esto implica lo siguiente:
     
-    * Esta aplicación deberá implementar un REST API, que a su vez implemente un cliente UDP/DNS para enviar las solicitudes hacia el servidor DNS remoto.
-    * Esta aplicación deberá recibir como parámetro/archivo de configuración el IP de un servidor DNS remoto.
-    * Esta aplicación deberá soportar múltiples peticiones al mismo tiempo.
+* Esta aplicación deberá implementar un REST API, que a su vez implemente un cliente UDP/DNS para enviar las solicitudes hacia el servidor DNS remoto.
+* Esta aplicación deberá recibir como parámetro/archivo de configuración el IP de un servidor DNS remoto.
+* Esta aplicación deberá soportar múltiples peticiones al mismo tiempo.
 ### Elasticsearch/Kibana:
 Es un componente que no se tiene que implementar pero que si debe instalarse y configurarse mediante el uso de Docker, Docker compose, Helm Charts y Kubernetes. En este componente deberán existir los siguientes recursos:
-
-    * Un índice llamado zones.
-    * Documentos dentro de este índice que representan hosts, estos tendrán el siguiente formato: `hay que agregar el formato`
-    * Estos documentos se pueden crear, borrar o modificar en cualquier momento mediante Kibana.
+* Un índice llamado zones.
+* Documentos dentro de este índice que representan hosts, estos tendrán el siguiente formato: `hay que agregar el formato`
+* Estos documentos se pueden crear, borrar o modificar en cualquier momento mediante Kibana.
 ## Diagramas
 
 > Diagrama de arquitectura
@@ -67,6 +66,10 @@ Para este proyecto, se asume que tiene instalado los siguientes programas:
 - Preparar un script con querys de elastic search para seedear la base de datos cada vez que se realice una nueva instalacion del proyecto.
 - Utilizar los snippets de Postman para referencias de uso de libcurl en C.
 - Utilizar el plugin flask-swagger-ui para la documentacion swagger de los endpoints creados.
+- Automatizar el proyecto mediante docker y helm.
+- Mantener separada cada parte del proyecto para facilitar la ejecución y comprención del código.
+- Utilizar una variable de entorno para la contraseña de elastic search y asi facilitar su uso.
+- Revisar los elementos que las funciones esperan recibir o deben enviar.
 
 ## Conclusiones
 
