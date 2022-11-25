@@ -28,9 +28,6 @@ char *call_elastic(char* host_search){
     char* get_url = getenv("URL_GET_ELASTIC");
     char* update_url = getenv("URL_UPDATE_ELASTIC");
 
-    // Este espacio no es solo para post, es el espacio de corchetes que se ven en los queries
-    // Ejemplo de queries en el dev tools de kibana: https://www.youtube.com/watch?v=e5awiVnkuEc&t=605s&ab_channel=SoumilShah
-    //                                               Los ejemplos se encuentran alrededor de los 10 minutos
     char *postFields1 = getenv("POST_FIELD_1");
     char *postFields2 = getenv("POST_FIELD_2");
     char *postFields_updateIndex = getenv("POST_INDEX");
@@ -64,6 +61,7 @@ char *call_elastic(char* host_search){
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(request));
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, hs);
+
         // Salvar informacion
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
@@ -119,12 +117,6 @@ char *call_elastic(char* host_search){
               ip = strtok(NULL,", ");
             }
             ip_lists[len_ips-1][strlen(ip_lists[len_ips-1])-1] = '\0'; //remove " character from last ip
-            /**
-            printf("IPS a escoger\n");
-            for (int i=0; i< len_ips;i++){
-              printf("- Ip: %s\n",ip_lists[i]);
-            }
-            */
 
             // agarrar index para el round-robin
             ptr = strstr(ptr, "\"index\"");
@@ -147,7 +139,6 @@ char *call_elastic(char* host_search){
             // ROUND ROBIN
             char *ip_rr = malloc(IP_LEN);
             strcpy(ip_rr, ip_lists[index%len_ips]);
-            //ip = ip_lists[index%len_ips];
             printf("Ip a devolver: %s\n", ip_rr);
 
             char index_url[strlen(update_url)+strlen(id)];

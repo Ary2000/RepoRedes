@@ -36,8 +36,6 @@ size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
     return size * nmemb;
 }
 
-// Agregar metodo post para Kibana
-void postToKibana();
 
 // POST api/dns_resolver
 char* postToApi(char *data)
@@ -58,7 +56,6 @@ char* postToApi(char *data)
     {
         struct string s;
         init_string(&s);
-        //strcat(URL, data);
         // API url set
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
         curl_easy_setopt(curl, CURLOPT_URL, URL);

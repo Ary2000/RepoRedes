@@ -41,14 +41,30 @@ Es un componente que no se tiene que implementar pero que si debe instalarse y c
     * Un índice llamado zones.
     * Documentos dentro de este índice que representan hosts, estos tendrán el siguiente formato: `hay que agregar el formato`
     * Estos documentos se pueden crear, borrar o modificar en cualquier momento mediante Kibana.
-## Diagramas 
+## Diagramas
+
+> Diagrama de arquitectura
+
+![](./assets/arquitectura-proy-2.png)
+
 ## Prerequisitos
 Para este proyecto, se asume que tiene instalado los siguientes programas:
 
 - Docker Desktop(ver [link](https://www.docker.com/))
+- Lens(ver [link](https://k8slens.dev/))
 
 ## Manual de usuario
+> Nota: README.md (ver [link](https://github.com/Ary2000/RepoRedes/tree/main/Proyecto2#readme)).
 ## Pruebas unitarias
+
+
 ## Recomendaciones
+
+- Utilizar libb64 para el encoding a base64 de los paquetes en C.
+- Utilizar la implementacion del MIT para el decoder de base64 en C.
+- Preparar un script con querys de elastic search para seedear la base de datos cada vez que se realice una nueva instalacion del proyecto.
+- Utilizar los snippets de Postman para referencias de uso de libcurl en C.
+- Utilizar el plugin flask-swagger-ui para la documentacion swagger de los endpoints creados.
+
 ## Conclusiones
 ## Referencias bibliográficas
