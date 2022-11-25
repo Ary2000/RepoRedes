@@ -44,7 +44,9 @@ char* postToApi(char *data)
 {
     CURL *curl;
     CURLcode res;
-    char URL[255] = "https://flask-api-service:5000/api/dns_resolver/";
+
+    char* URL = getenv("URL_POST_API");
+
     curl_global_init(CURL_GLOBAL_ALL);
     /*get a curl curl*/
     curl = curl_easy_init();
@@ -60,7 +62,6 @@ char* postToApi(char *data)
         // API url set
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
         curl_easy_setopt(curl, CURLOPT_URL, URL);
-        //curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
         curl_easy_setopt(curl, CURLOPT_DEFAULT_PROTOCOL, "https");
         // Disable verification

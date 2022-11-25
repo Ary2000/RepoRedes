@@ -4,8 +4,8 @@ metadata:
   name: flask-api-service
 spec:
   selector:
-    app: flask-api
+    app: {{.Values.name_flask_api}}
   ports:
-    - port: 5000
-      targetPort: 5000
+    - port: {{.Values.flask_api_port}}
+      targetPort: {{.Values.flask_api_port}}
       protocol: TCP

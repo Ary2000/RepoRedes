@@ -24,11 +24,11 @@ Paso 2. Configurar Elastic y Kibana
 ------
 
 Paso 3 . Configurar el DNS API, DNS Interceptor y cliente.
-Primero, se ocupan construir las imagenes de los pods (se va a subir a docker hub despues) con el siguiente comando
+Las imágenes necesarias son sacadas de Docker Hub por lo que no es necesario hacer un build. Pero, si se desea usar imágenes locales se puede usar docker-compose para crear las imágenes con el siguiente comando:
 > docker-compose build
 
 Se instalan el API, el Interceptor y el cliente en el cluster de kubernetes
-> helm install app-deployment ./app-deployment/
+> helm install app-deployment ./app-deployment
 
 * Para probar el cliente, se debe acceder a un shell (recomendable usando Lens). Luego, ejecutar nslookup
     * en este caso, debe utilizar el *> server ip* ya que se realizó de forma transparente, solamente ponga la direccion que desea buscar. 

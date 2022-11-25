@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: ubuntu-test
 spec:
-  replicas: 1
+  replicas: {{.Values.clients_replicas}}
   selector:
     matchLabels:
-      app: ubuntu-test
+      app: {{.Values.name_client}}
   template:
     metadata:
       labels:
-        app: ubuntu-test
+        app: {{.Values.name_client}}
     spec:
       containers:
-        - name: ubuntu-test
-          image: tifan12/ubuntu-test
+        - name: {{.Values.name_client}}
+          image: {{.Values.image_name_client}}
           imagePullPolicy: IfNotPresent

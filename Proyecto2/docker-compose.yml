@@ -2,17 +2,17 @@ version: '3'
 services:
   api:
     build: ./api
-    image: api-server
+    image: tifan12/api-server
     ports:
       - "5000:5000"
     expose:
       - "5000"
-#  client:
-#    build: ./client
-#    image: tifan12/ubuntu-test
+  client:
+    build: ./client
+    image: tifan12/ubuntu-test
   interceptor:
     build: ./interceptor
-    image: dns-interceptor
+    image: tifan12/dns-interceptor
     ports:
       - "53:53"
     expose:
