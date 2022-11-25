@@ -20,7 +20,7 @@ Primero, se ocupan construir las imagenes de los pods (se va a subir a docker hu
 > docker-compose build
 
 Se instalan el API, el Interceptor y el cliente en el cluster de kubernetes
-> helm install app-deployment .\app-deployment\
+> helm install app-deployment ./app-deployment/
 
 * Para probar el cliente, se debe acceder a un shell (recomendable usando Lens). Luego, ejecutar nslookup
     * en este caso, debe utilizar el *> server ip* ya que se realizó de forma transparente, solamente ponga la direccion que desea buscar. 
