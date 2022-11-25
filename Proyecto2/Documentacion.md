@@ -13,8 +13,16 @@
 ## Fecha de Entrega 25/11/2022
 ---
 
-## Objetivo General
+## Objetivo
+El objetivo de este proyecto es el de implementar servicios de capa de aplicación sobre protocolos de transporte UDP y TCP. Para esto se debe desarrollar servidores UDP y TCP en lenguajes de programación C y Python respectivamente, además de, implementar el procesamiento de algunas peticiones DNS especificadas en RFC-2929. Todo esto teniendo que resultar en una solución automatizada mediante el uso de Docker, Docker Compose, Helm Charts y Kubernetes.
+
 ## Descripción
+El proyecto II busca profundizar los temas de capa de aplicación y capa de transporte mediante la 
+implementación de aplicaciones que utilicen protocolos TCP y UDP. Como parte de este ejercicio, se 
+deberá implementar los siguientes componentes:
+### DNS Interceptor:
+### DNS API:
+### Elasticsearch/Kibana:
 ## Diagramas 
 ## Prerequisitos
 Para este proyecto, se asume que tiene instalado los siguientes programas:
