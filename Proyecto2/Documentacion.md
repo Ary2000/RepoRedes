@@ -32,11 +32,19 @@ vez que el host ha sido identificado, deberá buscar en Elasticsearch si un regi
 Este es un Deployment, cada pod contiene container que ejecuta un REST API implementado en Python, que ejecuta un único método en un único verbo HTTP, este único método recibe en el data un paquete DNS (RFC2929) codificado en 
 base64, este deberá ser decodificado y enviado a un servidor DNS remoto para su resolución, esto implica lo siguiente:
     
-    * Esta aplicación deberá implementar un REST API, que a su vez implemente un cliente UDP/DNS para enviar las solicitudes hacia el servidor DNS remoto.
-    * Esta aplicación deberá recibir como parámetro/archivo de configuración el IP de un servidor DNS remoto.
-    * Esta aplicación deberá soportar múltiples peticiones al mismo tiempo.
+* Esta aplicación deberá implementar un REST API, que a su vez implemente un cliente UDP/DNS para enviar las solicitudes hacia el servidor DNS remoto.
+* Esta aplicación deberá recibir como parámetro/archivo de configuración el IP de un servidor DNS remoto.
+* Esta aplicación deberá soportar múltiples peticiones al mismo tiempo.
 ### Elasticsearch/Kibana:
 Es un componente que no se tiene que implementar pero que si debe instalarse y configurarse mediante el uso de Docker, Docker compose, Helm Charts y Kubernetes. En este componente deberán existir los siguientes recursos:
+* Un índice llamado zones.
+* Documentos dentro de este índice que representan hosts, estos tendrán el siguiente formato: `hay que agregar el formato`
+* Estos documentos se pueden crear, borrar o modificar en cualquier momento mediante Kibana.
+## Diagramas
+
+> Diagrama de arquitectura
+
+![](./assets/arquitectura-proy-2.png)
 
     * Un índice llamado zones. Este va a tener el siguiente formato:
     * Documentos dentro de este índice que representan hosts, estos tendrán el siguiente formato: 
@@ -47,7 +55,7 @@ Es un componente que no se tiene que implementar pero que si debe instalarse y c
             "index": 0
     }
     * Estos documentos se pueden crear, borrar o modificar en cualquier momento mediante Kibana.
-## Diagramas 
+
 ## Prerequisitos
 Para este proyecto, se asume que tiene instalado los siguientes programas:
 
@@ -115,5 +123,29 @@ Para las pruebas se va a usar el Client proporcionado (el programa 3 en la secci
 <img src="./assets/ut4.png" alt="drawing" width="400"/>
 
 ## Recomendaciones
+
+- Utilizar libb64 para el encoding a base64 de los paquetes en C.
+- Utilizar la implementacion del MIT para el decoder de base64 en C.
+- Preparar un script con querys de elastic search para seedear la base de datos cada vez que se realice una nueva instalacion del proyecto.
+- Utilizar los snippets de Postman para referencias de uso de libcurl en C.
+- Utilizar el plugin flask-swagger-ui para la documentacion swagger de los endpoints creados.
+- Automatizar el proyecto mediante docker y helm.
+- Mantener separada cada parte del proyecto para facilitar la ejecución y comprención del código.
+- Utilizar una variable de entorno para la contraseña de elastic search y asi facilitar su uso.
+- Revisar los elementos que las funciones esperan recibir o deben enviar.
+
 ## Conclusiones
+
+- Un DNS funciona escencialmente como una base de datos, la cual almacena informacion relevante para el cliente solicitante de una resolucion de un dominio.
+- Implementar un DNS con un round robin agrega flexibilidad al protocolo y nos deja expandir distintos domain names a un conjunto de ips.
+- Los estandares RFC detallan especificamente byte por byte y bit por bit el contenido de los paquetes, es muy importante familiarizarse con la nomenclatura para entender los ASCII tables.
+- La automatizacion de los proyectos mediante kubernetes y helm charts crean un beneficio considerable a la hora de expandir o compartir proyectos.
+- Para implementar un DNS la opcion mas viable es mantener una base de datos no relacional para mantenerse rapida en respuesta y flexible en forma.
+- Base64 es util para el transporte de información que originalmente contenia el caracter "00".
+- La existencia de protocolos como el RFC2929 es util para la estandarización y con esto facilitar la creación de nuevavs aplicaciones o transferencia de información.
+
 ## Referencias bibliográficas
+
+- libcurl - API. (s. f.). https://curl.se/libcurl/c/
+- Malinen, J. M. (2005). Base64 encoding/decoding. web MIT. https://web.mit.edu/freebsd/head/contrib/wpa/src/utils/base64.c
+- RFC 2929 - Domain Name System (DNS) IANA Considerations. (s. f.). https://datatracker.ietf.org/doc/html/rfc2929

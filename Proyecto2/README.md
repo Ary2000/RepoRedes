@@ -1,4 +1,8 @@
-### Configuración de proyecto
+# Manual de Usuario
+
+
+## Configuración de elastic
+----
 
 Ubicarse en la carpeta principal de Proyecto2
 
@@ -14,6 +18,10 @@ Paso 2. Configurar Elastic y Kibana
 * El servicio de kibana va a estar en la dirección `localhost:30601`.
 * Luego, va a aparecer un log-in, el usuario es **elastic** y la contraseña puede averiguarse corriendo el siguiente comando: `kubectl get secret quickstart-es-elastic-user -o=jsonpath='{.data.elastic}' | base64 --decode; echo`. Si está en Windows, se recomienda correrlo en una terminal de WSL o de Unix. También, se puede buscar en Lens con el nombre **quickstart-es-elastic-user**.
 * Luego en **Dev Tools**, se puede correr el *elastic-script.txt* en la consola proporcionada por kibana para crear y llenar la BD.
+
+------
+## Configuracion de API, DNS interceptor y cliente
+------
 
 Paso 3 . Configurar el DNS API, DNS Interceptor y cliente.
 Las imágenes necesarias son sacadas de Docker Hub por lo que no es necesario hacer un build. Pero, si se desea usar imágenes locales se puede usar docker-compose para crear las imágenes con el siguiente comando:
