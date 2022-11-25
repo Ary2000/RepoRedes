@@ -66,7 +66,8 @@ Para este proyecto, se asume que tiene instalado los siguientes programas:
 - Utilizar el plugin flask-swagger-ui para la documentacion swagger de los endpoints creados.
 - Automatizar el proyecto mediante docker y helm.
 - Mantener separada cada parte del proyecto para facilitar la ejecución y comprención del código.
-- Utilizar una variable de entorno para facilitar el uso de elastic search
+- Utilizar una variable de entorno para facilitar el uso de elastic search.
+- Revisar los elementos que las funciones esperan recibir o deben enviar.
 
 ## Conclusiones
 ## Referencias bibliográficas
