@@ -19,20 +19,21 @@
 #define MAX_IPS 30
 #define MAX_BODY_LEN 200
 
-char* get_url = "https://quickstart-es-default:9200/zones/_search/";
-char* update_url = "https://quickstart-es-default:9200/zones/_update/";
-
 unsigned int static TTL = 0;
 
 char *call_elastic(char* host_search){
     CURL *curl;
     CURLcode res;
+
+    char* get_url = getenv("URL_GET_ELASTIC");
+    char* update_url = getenv("URL_UPDATE_ELASTIC");
+
     // Este espacio no es solo para post, es el espacio de corchetes que se ven en los queries
     // Ejemplo de queries en el dev tools de kibana: https://www.youtube.com/watch?v=e5awiVnkuEc&t=605s&ab_channel=SoumilShah
     //                                               Los ejemplos se encuentran alrededor de los 10 minutos
     char *postFields1 = getenv("POST_FIELD_1");
     char *postFields2 = getenv("POST_FIELD_2");
-    char *postFields_updateIndex = "{ \"script\" : { \"source\": \"ctx._source.index += params.count\", \"params\" : { \"count\" : 1}}}";
+    char *postFields_updateIndex = getenv("POST_INDEX");
     
     curl_global_init(CURL_GLOBAL_ALL);
     curl = curl_easy_init();
@@ -50,10 +51,9 @@ char *call_elastic(char* host_search){
         // Desactivar verificaciones
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-        //curl_easy_setopt(curl, CURLOPT_PUT, 1);
+
         // Por aqui se pasa el usuario y la contrasena del elasticseearch
         curl_easy_setopt(curl, CURLOPT_USERPWD, getenv("ECK_USER_PASS"));
-        //curl_easy_setopt(curl, CURLOPT_USERPWD, getenv("elastic:tgrg72p2p3YoLG9Cu2i4f833"));
 
         // se arma el request con el hostname deseado
         char request[MAX_BODY_LEN] = {};
@@ -165,9 +165,7 @@ char *call_elastic(char* host_search){
             
             curl_easy_cleanup(curl);
             free(s.ptr);
-            
             return ip_rr;
-
           }    
         }
         curl_easy_cleanup(curl);
@@ -305,9 +303,9 @@ int main()
           char *encoded;
           unsigned char *decoded;
           encoded = base64_encode(buffer, n, NULL);
-          printf("encoded: %s\n", encoded);
           char* response = postToApi(encoded);
           decoded = decode(response);
+
           // send to client
           sendto(sockfd, decoded, MAXLINE, 0, (struct sockaddr *)&cliaddr, len);
         }
