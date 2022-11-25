@@ -64,8 +64,6 @@ Para este proyecto, se asume que tiene instalado los siguientes programas:
 - kubectl (Si no se instala por defecto, vea [link](https://kubernetes.io/docs/tasks/tools/))
 - (Opcional) Lens (ver [link](https://k8slens.dev/))
 
-- Helm(ver [link](https://helm.sh/))
-
 ## Manual de usuario
 ### Instalación
 La instalación del proyecto comenzará ubicándose en la carpeta principal **Proyecto2**. Para comprobar el buen estado de los pods, se usará Lens para verlo fácilmente. Luego, se siguen los siguientes pasos:
