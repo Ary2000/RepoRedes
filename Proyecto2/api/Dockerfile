@@ -6,4 +6,4 @@ RUN pip3 install -r requirements.txt
 COPY . /api
 EXPOSE 5000
 ENTRYPOINT [ "python" ]
-CMD [ "DNS_API.py", "8.8.8.8"]
+CMD [ "DNS_API.py"]

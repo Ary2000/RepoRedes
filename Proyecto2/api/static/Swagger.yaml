@@ -4,21 +4,25 @@ info:
   description: Esta es la documentación para el DNS API del proyecto 2 del curso de redes.
   version: 1.0.0
 servers:
-  - url: http://127.0.0.1:5000
+  - url: https://localhost:30050
     description: "Aquí se corre el API"
 paths:
-  /api/dns_resolver/{dns_package}:
+  /api/dns_resolver/:
     post:
       summary: Este se encarga de conseguir un DNS package, enviarselo a un DNS y devolvere la repsuesta al cliente que le dio el request original.
-      parameters:
-        - name: dns_package
-          in: path
-          required: true
-          description: Este es el paquete que le envia el cliente, en este caso es www.google.com en base64
-          schema:
-            type: string
-            format: string
-            minimum: 1
+      requestBody:
+        description: Paquete encriptado en base64
+        required: true
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                code:
+                  type: string
+              example:   # Sample object
+                code: aG9sYSBtdW5kbwo=
+
       responses:
-        "Respuesta correcta":
-          description: Esto se actualiza cuando ya se tenga toda la información
+        "response":
+          description: Paquete encriptado de la respuesta ("aG9sYSBtdW5kbyByZXNwdWVzdGEK")
