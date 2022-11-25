@@ -148,3 +148,6 @@ Para las pruebas se va a usar el Client proporcionado (el programa 3 en la secci
 - libcurl - API. (s. f.). https://curl.se/libcurl/c/
 - Malinen, J. M. (2005). Base64 encoding/decoding. web MIT. https://web.mit.edu/freebsd/head/contrib/wpa/src/utils/base64.c
 - RFC 2929 - Domain Name System (DNS) IANA Considerations. (s. f.). https://datatracker.ietf.org/doc/html/rfc2929
+- umil Shah. (2021, 3, 13). From 0 to Hero in Writing Elastic Search Query in 1 Hour | ELk | Kibana | Crash course [Video]. Youtube. https://www.youtube.com/watch?v=e5awiVnkuEc&t=605sab_channel=SoumilShah
+- Autor desconocido. UDP - Client And Server Example Programs In Python. https://pythontic.com/modules/socket/udp-client-server-example
+- Jasmin Alex. (2010, 2, 24). C libcurl get output into a string. Stack Overflow https://stackoverflow.com/questions/2329571/c-libcurl-get-output-into-a-string
