@@ -38,8 +38,8 @@ base64, este deberá ser decodificado y enviado a un servidor DNS remoto para su
 ### Elasticsearch/Kibana:
 Es un componente que no se tiene que implementar pero que si debe instalarse y configurarse mediante el uso de Docker, Docker compose, Helm Charts y Kubernetes. En este componente deberán existir los siguientes recursos:
 
-    * Un índice llamado zones. Este va a tener el siguiente formato:
-    * Documentos dentro de este índice que representan hosts, estos tendrán el siguiente formato: 
+    * Un índice llamado zones.
+    * Documentos dentro de este índice que representan hosts tendrán el siguiente formato: 
     {
             "hostname": "www.facebook.com",
             "TTL": 5,
