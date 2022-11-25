@@ -5,7 +5,9 @@ metadata:
 spec:
   selector:
     app: {{.Values.name_flask_api}}
+  type: NodePort
   ports:
     - port: {{.Values.flask_api_port}}
       targetPort: {{.Values.flask_api_port}}
+      nodePort: {{.Values.flask_api_port_out}}
       protocol: TCP

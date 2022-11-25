@@ -5,7 +5,9 @@ metadata:
 spec:
   selector:
     app: {{.Values.name_dns_interceptor}}
+  type: NodePort
   ports:
     - port: {{.Values.dns_interceptor_port}}
       targetPort: {{.Values.dns_interceptor_port}}
+      nodePort: {{.Values.dns_interceptor_port_out}}
       protocol: UDP
