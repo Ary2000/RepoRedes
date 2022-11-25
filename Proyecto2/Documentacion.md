@@ -46,18 +46,81 @@ Es un componente que no se tiene que implementar pero que si debe instalarse y c
 
 ![](./assets/arquitectura-proy-2.png)
 
+    * Un índice llamado zones. Este va a tener el siguiente formato:
+    * Documentos dentro de este índice que representan hosts, estos tendrán el siguiente formato: 
+    {
+            "hostname": "www.facebook.com",
+            "TTL": 5,
+            "IP": "10.12.41.1, 192.12.3.244, 123.0.23.12",
+            "index": 0
+    }
+    * Estos documentos se pueden crear, borrar o modificar en cualquier momento mediante Kibana.
+
 ## Prerequisitos
 Para este proyecto, se asume que tiene instalado los siguientes programas:
 
 - Docker Desktop(ver [link](https://www.docker.com/))
-- Lens(ver [link](https://k8slens.dev/))
-
-- Helm(ver [link](https://helm.sh/))
+- Kubernetes ([Habilitar Kubernetes desde Docker Desktop](https://docs.docker.com/desktop/kubernetes/))
+- Helm ([ver instalación](https://helm.sh/docs/intro/install/))
+- kubectl (Si no se instala por defecto, vea [link](https://kubernetes.io/docs/tasks/tools/))
+- (Opcional) Lens (ver [link](https://k8slens.dev/))
 
 ## Manual de usuario
-> Nota: README.md (ver [link](https://github.com/Ary2000/RepoRedes/tree/main/Proyecto2#readme)).
-## Pruebas unitarias
+### Instalación
+La instalación del proyecto comenzará ubicándose en la carpeta principal **Proyecto2**. Para comprobar el buen estado de los pods, se usará Lens para verlo fácilmente. Luego, se siguen los siguientes pasos:
+1. Configurar los operadores de ECK (si ya los tiene, omita este paso). Correr el siguiente comando:
+    > helm install eck-deployment ./eck-deployment/
 
+2. Configurar Elastic y Kibana
+    * Para facilitar su operación y no tener problemas de ErrPullImage, se recomienda hacer un pull a las imágenes de elastic y kibana usando:
+        * `docker pull docker.elastic.co/elasticsearch/elasticsearch:8.4.0`
+        * `docker pull docker.elastic.co/kibana/kibana:8.4.0`
+    * Luego, se usa el siguiente comando (Puede tardar varios minutos, comprobar en Lens para seguir con el siguiente paso):
+    > helm install elastic-deployment ./elastic-deployment/
+    * El servicio de kibana va a estar en la dirección `localhost:30601`.
+    * Luego, va a aparecer un log-in, el usuario es **elastic** y la contraseña puede averiguarse corriendo el siguiente comando: `kubectl get secret quickstart-es-elastic-user -o=jsonpath='{.data.elastic}' | base64 --decode; echo`. Si está en Windows, se recomienda correrlo en una terminal de WSL o de Unix. También, se puede buscar en Lens con el nombre **quickstart-es-elastic-user** en la sección de Secrets.
+    * Luego en **Dev Tools**, se debe correr el *elastic-script.txt* en la consola proporcionada por kibana para crear y llenar la BD.
+
+3. Configurar el DNS API, DNS Interceptor y cliente.
+
+    * (Opcional) Las imágenes necesarias son sacadas de Docker Hub por lo que no es necesario hacer un build. Pero, si se desea usar imágenes locales se puede usar docker-compose para crear las imágenes con el siguiente comando:
+    > docker-compose build
+
+    * Se instalan el API, el Interceptor y el cliente en el cluster de kubernetes
+    > helm install app-deployment ./app-deployment
+
+4. Si se desea hacer un cambio de configuración, se debe usar el comando `helm upgrade name-deployment ./name-deployment` (ej: `helm upgrade app-deployment ./app-deployment`).
+
+5. Si se eliminar un helm chart, se debe usar el comando `helm delete name-deployment` (ej: `helm delete app-deployment`).
+
+### Programas a utilizar (en localhost y/o port)
+1. Kibana: abrir un navegador y ingresar a `localhost:30601`. Con esto, se puede interactuar con Elasticsearch.
+2. DNS interceptor: se expone en el puerto `30053` en la máquina local. Para interactuar con este, se puede usar nslookup con el siguiente comando `nslookup -port=30053`. Luego, se ingresa los siguientes keywords `> server 127.0.0.1`. Luego, se ingresa los hostnames deseados.
+3. Client: Se le proporciona un cliente ubuntu en el cluster de Kubernetes. para usarlo se recomienda usar Lens para abrir un **Pod Shell** y usar el comando `nslookup`. Como se hizo transparente, solamente debe ingresar los hostnames que sea revisar.
+4. DNS API: el api tiene su propia documentación y se puede acceder al abrir un navegador e ingresar `https://localhost:30050/swagger`.
+
+## Pruebas unitarias
+Para las pruebas se va a usar el Client proporcionado (el programa 3 en la sección anterior). 
+
+1. Buscar un hostname en elasticsearch con solo un ip.
+
+<img src="./assets/ut1.png" alt="drawing" width="300"/>
+
+2. Buscar un hostname en elasticsearch con más de una ip.
+
+<img src="./assets/ut2.png" alt="drawing" width="200"/>
+
+3. Buscar un hostname que no está en elasticsearch.
+
+<img src="./assets/ut3.png" alt="drawing" width="400"/>
+
+4. Buscar un hostname que no está en elasticsearch.
+
+<img src="./assets/ut5.png" alt="drawing" width="250"/>
+
+5. Buscar un hostname raro.
+
+<img src="./assets/ut4.png" alt="drawing" width="400"/>
 
 ## Recomendaciones
 
